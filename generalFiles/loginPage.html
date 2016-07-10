@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="" ng-app="loginPage">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="loginPage.css" rel="stylesheet">
+    
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js"></script>
+     <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script src="loginPage.js"></script>
+</head>
+
+<body ng-controller="mainController">
+   
+   <h1>Company logo</h1>
+   <h2> Sign in to your account</h2>
+   
+   <input placeholder="email" ng-model="email">
+   <input placeholder="password" ng-model="password">
+   <button ng-click="signIn()">Sign in</button>
+   <button ng-click="createAccount()">Create account</button>
+   
+   
+   <!-- scripts section -->
+</body>
+</html>

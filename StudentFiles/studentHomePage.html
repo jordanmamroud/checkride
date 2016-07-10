@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="" ng-app="studentHomePage">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Home Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
+  
+    
+    <!-- scripts --> 
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-ui-calendar/src/calendar.js"></script>
+    <script type="text/javascript" src="../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="../bower_components/fullcalendar/dist/gcal.js"></script>
+    <script type="text/javascript" src="../practice.js"></script>
+    <script type="text/javascript" src="../studentHomePage.js"></script>
+</head>
+
+<body ng-controller="mainController">
+   <!-- comes from studentDirective in practice.js -->
+  <student-header></student-header>
+   
+    <h2>Upcoming Appointments</h2>
+     <table class="table">
+      <thead>
+        <tr>
+          <th>Examiner Name</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="appt in appointmentsList track by $index">
+          <td>{{appt.firstName +" " + appt.lastName}}</td>
+          <td>{{appt.start}}</td>
+          <td>{{appt.end}}</td>
+
+        </tr>
+      </tbody>
+    </table>
+    
+</body>
+</html>

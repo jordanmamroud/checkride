@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="" ng-app="instructorList">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstructorList</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script src="../practice.js"></script>
+    <script src="examinerList.js"></script>
+</head>
+
+<body ng-controller="mainController">
+       <!-- comes from studentDirective in practice.js -->
+      <student-header></student-header>
+   
+      <table class="table">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="user in list">
+          <td>{{user.userData.firstName}}</td>
+          <td>{{user.userData.lastName}}</td>
+          <td><button ng-click="scheduleButtonEvent($index)">Schedule</button></td>
+        </tr>
+          </tbody>
+        </table>
+   
+   
+       
+
+</body>
+</html>

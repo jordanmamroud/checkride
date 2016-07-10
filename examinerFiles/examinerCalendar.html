@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="" ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
+    <link rel="stylesheet" href="../generalFiles/myFullCalendar.css">
+    <!-- jquery, moment, and angular have to get included before fullcalendar -->
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-ui-calendar/src/calendar.js"></script>
+    <script type="text/javascript" src="../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="../bower_components/fullcalendar/dist/gcal.js"></script>
+    <script src="examinerCalendar.js"></script>
+
+</head>
+
+<body ng-controller="calendarController">
+   <!-- comes from studentDirective in practice.js -->
+  <student-header></student-header>
+   
+    
+    <div class="calendar" ng-model="eventSources" data-calendar="myCalendar" id="cal" data-config="uiConfig.calendar" data-ui-calendar="uiConfig.calendar"></div>
+
+
+<!-- Modal for adding events-->
+<div id="addEventModal" class="modal">
+      <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">x</span>
+            <h2>Event</h2><br>
+            <input type="text" placeholder="enter Your event" id="eventInput">
+            <h4>When:</h4>
+            <p id="eventStart"></p>
+            <p id="eventEnd"></p>
+            <button id="createEventButton">Create</button>
+        </div>
+    </div>
+    
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+             <span class="close">x</span>
+                <input type="text" id="calendarStartTime" placeholder="enter calendar start time">
+                <input type="text" id="calendarEndTime" placeholder="enter calendar end time">
+            <button id="saveButton" ng-click="saveCalSettings()">Save</button>
+        </div>
+    </div>
+    
+    <div id="eventDetailsModal" class="modal">
+      <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">x</span>
+            <h2 id="eventTitle">Event</h2><br>
+            <h4>When:</h4>
+            <p id="eventStart"></p>
+            <p id="eventEnd"></p>
+            <button id="deleteButton">Delete Event</button>
+        </div>
+    </div>
+    
+        <div id="pendingRequestsModal" class="modal">
+      <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">x</span>
+            <table class="table">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="request in requestsList track by $index">
+      <td>{{request.student}}</td>
+      <td>{{request.requestedStartTime}}</td>
+      <td>{{request.requestedEndTime}}</td>
+      <td><button ng-click="approveButtonEvent($index)">Approve</button></td>
+    </tr>
+      </tbody>
+    </table>
+           
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+h2{
+    font-size: 12px;
+}
+body{
+    text-align: center ;
+}
+
+#name input{
+    width: 15% ;
+}
+
+input{
+    width: 30% ;
+}
