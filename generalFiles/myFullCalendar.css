@@ -1,17 +1,15 @@
 
 .modal{
     
-   width: 300px;
-   height: 300px;
-   position: absolute;
-   left: 50%;
-   top: 50%; 
-   margin-left: -150px;
-   margin-top: -150px;
+    display: none;
 }
 
 .showing{
-    display: block ;
+    display: inline-block !important ;
+    margin: 0 auto ;
+    position: fixed;
+    width: 30%;
+    top: 40% ;
 }
 
 #pendingRequestsModal{
@@ -21,3 +19,4 @@
     width:auto;
     height: auto;
 }
+

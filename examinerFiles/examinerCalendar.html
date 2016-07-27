@@ -6,6 +6,7 @@
     <title></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
+    <link rel="stylesheet" href="../generalFiles/popUpBox.css">
     <link rel="stylesheet" href="../generalFiles/myFullCalendar.css">
     <!-- jquery, moment, and angular have to get included before fullcalendar -->
     <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
@@ -15,79 +16,135 @@
     <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <script type="text/javascript" src="../bower_components/angular-ui-calendar/src/calendar.js"></script>
-    <script type="text/javascript" src="../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
-    <script type="text/javascript" src="../bower_components/fullcalendar/dist/gcal.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js
+"></script>
+    <script type='text/javascript' src="../bower_components/fullcalendar/dist/gcal.js"></script>
+     
+    <script type="text/javascript" src="examinerDirectives.js"></script>
     <script src="examinerCalendar.js"></script>
+    
+    <script type="text/javascript" src="../generalFiles/quickstart.js">
+      
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth">
+    </script>
 
 </head>
 
 <body ng-controller="calendarController">
-   <!-- comes from studentDirective in practice.js -->
-  <student-header></student-header>
+  <div class="row">
+	<div class="col-md-2 col-sm-2 col-xs-12">
+		<button id="authorize-button" style="visibility: hidden" class="btn btn-primary">Authorize</button>
+    </div><!-- .col -->
+    
+    <div class="col-md-10 col-sm-10 col-xs-12">
+    <div class="panel panel-danger" id="result-panel">
+			<div class="panel-heading">
+				<h3 class="panel-title" id="result-title">Application Not Authorized</h3>
+			</div><!-- .panel-heading -->
+			<div class="panel-body">
+				<p>Insert Event into Public Calendar&hellip;</p>
+				<div id="event-response"></div>
+			</div><!-- .panel-body -->
+		</div><!-- .panel -->
+		
+	</div><!-- .col -->
+</div><!-- .row -->
+  
+    <div id="authorize-div" style="display: none">
+      <span>Authorize access to Google Calendar API</span>
+      <!--Button for the user to click to initiate auth sequence -->
+      <button id="authorize-button" onclick="handleAuthClick(event)">
+        Authorize
+      </button>
+    </div>
+    <pre id="output"></pre>
+   <!-- comes from examinerDirective.js -->
+    <examiner-navbar></examiner-navbar>
    
-    
-    <div class="calendar" ng-model="eventSources" data-calendar="myCalendar" id="cal" data-config="uiConfig.calendar" data-ui-calendar="uiConfig.calendar"></div>
+    <div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div> 
+    <div class='toast' style='display:none'>You have a new Appointment Request</div>
 
+    <!-- Modal for adding events-->
+    <div id="addEventModal" class="modal">
+          <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">x</span>
+                <h2>Event</h2><br>
+                <input type="text" placeholder="enter Your event" id="eventInput">
+                <h4>When:</h4>
+                <p id="eventStart"></p>
+                <p id="eventEnd"></p>
+                <label>Recurring Event?</label>
+                <input type="checkbox" id="dowCheckBox">
 
-<!-- Modal for adding events-->
-<div id="addEventModal" class="modal">
-      <!-- Modal content -->
-          <div class="modal-content">
-            <span class="close">x</span>
-            <h2>Event</h2><br>
-            <input type="text" placeholder="enter Your event" id="eventInput">
-            <h4>When:</h4>
-            <p id="eventStart"></p>
-            <p id="eventEnd"></p>
-            <button id="createEventButton">Create</button>
+                <form id="dowForm">
+                    <label>Sunday</label>
+                    <input type="checkbox" id="sunday" value="sunday">
+                    <label>Monday</label>
+                    <input type="checkbox" id="monday" value="monday">
+                    <label>Tuesday</label>
+                    <input type="checkbox" id="tuesday" value="tuesday">
+                    <label>Wednesday</label>
+                    <input type="checkbox" id="wednesday" value="wednesday">
+                    <label>Thursday</label>
+                    <input type="checkbox" id="thursday" value="thursday">
+                    <label>Friday</label>
+                    <input type="checkbox" id="friday" value="friday">
+                    <label>Saturday</label>
+                    <input type="checkbox" id="saturday" value="saturday">
+                </form>
+
+                <button id="createEventButton">Create</button>
+            </div>
         </div>
-    </div>
-    
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-             <span class="close">x</span>
-                <input type="text" id="calendarStartTime" placeholder="enter calendar start time">
-                <input type="text" id="calendarEndTime" placeholder="enter calendar end time">
-            <button id="saveButton" ng-click="saveCalSettings()">Save</button>
+
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                 <span class="close">x</span>
+                    <input type="text" id="calendarStartTime" placeholder="enter calendar start time">
+                    <input type="text" id="calendarEndTime" placeholder="enter calendar end time">
+                    <input type="email" id="googleCalendarId" placeholder="enter google calendar id">
+                <button id="saveButton" ng-click="saveCalSettings()">Save</button>
+            </div>
         </div>
-    </div>
-    
-    <div id="eventDetailsModal" class="modal">
-      <!-- Modal content -->
-          <div class="modal-content">
-            <span class="close">x</span>
-            <h2 id="eventTitle">Event</h2><br>
-            <h4>When:</h4>
-            <p id="eventStart"></p>
-            <p id="eventEnd"></p>
-            <button id="deleteButton">Delete Event</button>
+
+        <div id="eventDetailsModal" class="modal">
+          <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">x</span>
+                <h2 id="eventTitle">Event</h2><br>
+                <h4>When:</h4>
+                <p id="eventStart"></p>
+                <p id="eventEnd"></p>
+                <button id="deleteButton">Delete Event</button>
+            </div>
         </div>
-    </div>
-    
-        <div id="pendingRequestsModal" class="modal">
-      <!-- Modal content -->
-          <div class="modal-content">
-            <span class="close">x</span>
-            <table class="table">
-  <thead>
-    <tr>
-      <th>Student</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="request in requestsList track by $index">
-      <td>{{request.student}}</td>
-      <td>{{request.requestedStartTime}}</td>
-      <td>{{request.requestedEndTime}}</td>
-      <td><button ng-click="approveButtonEvent($index)">Approve</button></td>
-    </tr>
-      </tbody>
-    </table>
-           
+
+            <div id="pendingRequestsModal" class="modal">
+          <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">x</span>
+                <table class="table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="request in requestsList track by $index">
+          <td>{{request.firstName + " " + request.lastName}}</td>
+          <td>{{request.requestedStartTime}}</td>
+          <td>{{request.requestedEndTime}}</td>
+          <td><button ng-click="approveButtonEvent($index)">Approve</button></td>
+        </tr>
+          </tbody>
+        </table>
+
+            </div>
         </div>
-    </div>
 </body>
 </html>
