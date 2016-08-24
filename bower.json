@@ -1,0 +1,25 @@
+{
+  "name": "Checkride",
+  "dependencies": {
+    "angular-ui-calendar": "^1.0.1",
+    "fullcalendar": "^2.8.0",
+    "firebase-token-generator": "^2.0.0"
+  },
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "authors": [
+    "Jordan Mamroud",
+    "Josh Mamroud"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
