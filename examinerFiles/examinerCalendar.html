@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="" ng-app="myApp">
+<html lang="" ng-app="myApp" ng-controller="calendarController">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>Calendar</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
     <link rel="stylesheet" href="../generalFiles/popUpBox.css">
@@ -19,50 +19,61 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js
 "></script>
     <script type='text/javascript' src="../bower_components/fullcalendar/dist/gcal.js"></script>
-     
     <script type="text/javascript" src="examinerDirectives.js"></script>
+    
+    <script src="practice.js"></script>
     <script src="examinerCalendar.js"></script>
     
+<!--
     <script type="text/javascript" src="../generalFiles/quickstart.js">
       
     </script>
+-->
     <script src="https://apis.google.com/js/client.js?onload=checkAuth">
     </script>
+    
+
+    
 
 </head>
 
-<body ng-controller="calendarController">
-  <div class="row">
+<body>
+
+<!--
+html for showing gcal authorization 
+ <div class="row">
 	<div class="col-md-2 col-sm-2 col-xs-12">
 		<button id="authorize-button" style="visibility: hidden" class="btn btn-primary">Authorize</button>
-    </div><!-- .col -->
+    </div>
     
     <div class="col-md-10 col-sm-10 col-xs-12">
     <div class="panel panel-danger" id="result-panel">
 			<div class="panel-heading">
 				<h3 class="panel-title" id="result-title">Application Not Authorized</h3>
-			</div><!-- .panel-heading -->
+			</div>
 			<div class="panel-body">
 				<p>Insert Event into Public Calendar&hellip;</p>
 				<div id="event-response"></div>
-			</div><!-- .panel-body -->
-		</div><!-- .panel -->
+			</div>
+		</div>
 		
-	</div><!-- .col -->
-</div><!-- .row -->
-  
+	</div>
+    </div>
     <div id="authorize-div" style="display: none">
       <span>Authorize access to Google Calendar API</span>
-      <!--Button for the user to click to initiate auth sequence -->
+      
       <button id="authorize-button" onclick="handleAuthClick(event)">
         Authorize
       </button>
     </div>
     <pre id="output"></pre>
+-->
    <!-- comes from examinerDirective.js -->
-    <examiner-navbar></examiner-navbar>
    
+    <examiner-navbar></examiner-navbar>
+     
     <div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div> 
+
     <div class='toast' style='display:none'>You have a new Appointment Request</div>
 
     <!-- Modal for adding events-->
@@ -106,6 +117,7 @@
                     <input type="text" id="calendarEndTime" placeholder="enter calendar end time">
                     <input type="email" id="googleCalendarId" placeholder="enter google calendar id">
                 <button id="saveButton" ng-click="saveCalSettings()">Save</button>
+                <input type="checkbox" id="googleSync">select box to sync with google calendar<br>
             </div>
         </div>
 
@@ -125,24 +137,25 @@
           <!-- Modal content -->
               <div class="modal-content">
                 <span class="close">x</span>
-                <table class="table">
+    <table class="table">
       <thead>
         <tr>
           <th>Student</th>
           <th>Start Time</th>
           <th>End Time</th>
-
+          <th>Sent at</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="request in requestsList track by $index">
+        <tr ng-repeat="request in requestsList | orderBy:'-sentAt' track by $index" ng-init="initializeRequestsList()">
           <td>{{request.firstName + " " + request.lastName}}</td>
           <td>{{request.requestedStartTime}}</td>
           <td>{{request.requestedEndTime}}</td>
+          <td>{{requset.sentAt}}</td>
           <td><button ng-click="approveButtonEvent($index)">Approve</button></td>
         </tr>
           </tbody>
-        </table>
+    </table>
 
             </div>
         </div>

@@ -1,5 +1,5 @@
 {
-  "name": "Checkride",
+  "name": "checkride",
   "dependencies": {
     "angular-ui-calendar": "^1.0.1",
     "fullcalendar": "^2.8.0",

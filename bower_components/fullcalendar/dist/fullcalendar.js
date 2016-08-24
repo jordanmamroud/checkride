@@ -2732,7 +2732,7 @@ var DragListener = FC.DragListener = Class.extend(ListenerMixin, MouseIgnorerMix
 	handleMouseMove: function(ev) {
 		this.handleMove(ev);
 	},
-
+ 
 
 	// Scrolling (unrelated to auto-scroll)
 	// -----------------------------------------------------------------------------------------------------------------
@@ -9609,10 +9609,8 @@ function Calendar_constructor(element, overrides) {
 	
 	
 	function destroy() {
-
 		if (currentView) {
 			currentView.removeElement();
-
 			// NOTE: don't null-out currentView/t.view in case API methods are called after destroy.
 			// It is still the "current" view, just not rendered.
 		}
@@ -9868,7 +9866,7 @@ function Calendar_constructor(element, overrides) {
 	
 	function next() {
 		date = currentView.computeNextDate(date);
-		renderView();
+        renderView();
 	}
 	
 	

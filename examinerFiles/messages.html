@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="" ng-app="messages">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
+    <link rel="stylesheet" href="../generalFiles/myFullCalendar.css">
+    
+</head>
+<style>
+    .hide{
+        display: none;
+    }
+    #detailsModal{
+        height: 200px;
+        overflow: scroll ;
+    }
+    </style>
+
+<body ng-controller="messagesController">
+     <examiner-navbar></examiner-navbar> 
+       <h2 id="as">Messages</h2>
+        <div>
+         <table class="table" id="convoView">
+              <thead>
+                <tr>
+                  <th>Sent By</th>
+                  <th>Subject</th>
+                  <th>Received Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="convo in conversationsList | orderBy:'-lastReceivedMsg' track by $index" ng-init="$last && initializeConvoView()" ng-click="viewConvoMessages(convo)">
+                  <td>{{convo.$id}}</td>
+                  <td>adsf</td>
+                </tr>
+              </tbody>
+        </table>
+         
+          <div id="detailsModal" class="modal">
+          <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">x</span>
+                <h2 id="sender">hellsdafo</h2><br>
+                 <ul ng-repeat="msg in convoMessagesList track by $index" >
+                     <li>{{msg.subject}}</li>
+                 </ul>
+                 <textarea id="message"></textarea>
+                <button id="replyButton"> reply</button>
+              </div>
+        </div>
+    </div>
+       <div>
+            <table class="table hide" id="msgView">
+                  <thead>
+                    <tr>
+                      <th>asd By</th>
+                      <th>Subject</th>
+                      <th>Received Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="msg in messagesList | reverse track by $index" ng-init="$last && checkIfOpened()" ng-click="viewMessageDetails(msg)">
+                      <td>{{msg.sender}}</td>
+                      <td>{{msg.subject}}</td>
+                    </tr>
+                  </tbody>
+            </table>
+
+          <div id="msgDetailsModal" class="modal">
+          <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">x</span>
+                <h2 id="sender">hello</h2><br>
+                 <p id="msgDetails">aksd;jal</p>
+                 <textarea id="message"></textarea>
+                <button id="replyButton"> Reply</button>
+              </div>
+        </div>
+      
+        <div class='toast' style='display:none'>You have a new Appointment Request</div>
+        
+        <button id="switchView">switch views</button>
+<!--ng-init="$last && checkIfOpened()"-->
+        
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script src="practice.js"></script>
+    <script type="text/javascript" src="examinerDirectives.js"></script>
+    <script type="text/javascript" src="messages.js"></script>
+</body>
+</html>

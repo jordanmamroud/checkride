@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="" ng-app="profile">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examiner Profile</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
+    <link rel="stylesheet" href="../generalFiles/popUpBox.css">
+    <link rel="stylesheet" href="../generalFiles/myFullCalendar.css">
+</head>
+
+<body ng-controller="profile">
+ 
+  <examiner-navbar></examiner-navbar>
+  <h2 id="name">Name</h2>
+  <h3>Location</h3>
+  <h3>certifications</h3>
+  
+  <input id="certifications" type="text">
+  <ul ng-repeat="cert in certificationsList track by $index">
+      <li>{{cert.description}}<span ng-click="deleteCert($index)"> delete</span></li>
+  </ul>
+  <label>Enter airports you serve here</label>
+  <input type="text" id="airports">
+  <br>
+  <ul ng-repeat="airport in airportsList track by $index">
+      <li>{{airport.name}}<span ng-click="deleteAirport($index)">  delete</span></li>
+  </ul>
+  <label>Enter your bio here</label>
+  <br>
+  <textarea name="about" readonly="true" id="bio" cols="30" readrows="10">asdl;akjl;df</textarea>
+  <br>
+  <label>Enter new password here if you would like to change it</label>
+  <input type="text" id="oldPass" placeholder="old password">
+  <input type="text" id="newPass" placeholder="new password">
+  <br>
+  <button id="save">Save Changes</button>
+
+  <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../bower_components/moment/min/moment.min.js"></script>
+  <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+  <script type="text/javascript" src="examinerDirectives.js"></script>
+  <script src="profile.js"></script>
+  
+</body>
+</html>

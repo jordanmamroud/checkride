@@ -1,9 +1,27 @@
 
 var loginPage = angular.module("loginPage", ['firebase']);
 
+
+
+//
+//$.ajax
+//({
+//  type: "POST",
+//  url: "http://localhost:1337/",
+//  crossDomain:true, 
+//  dataType: "json",
+//  data:JSON.stringify({name: "jordan", phoneNumber:"7328413268"})
+// }).done(function ( data ) {
+//      alert("ajax callback response:"+JSON.stringify(data));
+//   });
+
+
+
+
 loginPage.controller("mainController",function($scope, $window, $firebaseObject){
-    
+        
     var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
+    var auth = usersRef.getAuth();
     $scope.signIn = function(){
         usersRef.authWithPassword({
             email: $scope.email ,
@@ -20,11 +38,14 @@ loginPage.controller("mainController",function($scope, $window, $firebaseObject)
                         userInfo.$loaded().then(function(){
                             switch(userInfo.userData.userType.toLowerCase()){
                                 case "examiner":
-                                    $window.location.href ="http://localhost:8000/Desktop/HTML%26CSS%26JSProjects/CheckRide/examinerFiles/examinerCalendar.html"
+                                      $window.location.href = "http://localhost:8000/examinerFiles/examinerCalendar.html"
+                                      
+//                                    $window.location.href ="https://checkride.firebaseapp.com/examinerFiles/examinerCalendar.html"
                                     break;
                                     
                                 case "student":
-                                    $window.location.href = "http://127.0.0.1:59651/StudentFiles/studentHomePage.html";
+                                      $window.location.href = "http://localhost:8000/StudentFiles/examinerList.html"
+//                                    $window.location.href = "https://checkride.firebaseapp.com/StudentFiles/studentHomePage.html";
                                     break;
                             }
                         });
@@ -33,6 +54,37 @@ loginPage.controller("mainController",function($scope, $window, $firebaseObject)
         }
         
     $scope.createAccountButton = function(){ 
-        $window.location.href = "http://127.0.0.1:61752/createAccountPage.html";       
+        $window.location.href = "http://localhost:8000/generalFiles/createAccountPage.html";       
     }
+    
+    // when user clicks forgot password opens up the modal for them to enter their email and a new password will be sent
+    var forgotPassBtn = function(){
+        $("#passReset").on("click", function(){
+           $("#resetModal").addClass("showing"); 
+        });
+    }
+    forgotPassBtn();
+    
+    // when the user clicks send inside reset password modal this will send them a temporary password
+    var sendNewPassword = function(ref){
+        $("#sendButton").on("click", function(){
+           ref.resetPassword({
+                  email: $("#email").val()
+                        }, 
+                  function(error) {
+                      if (error) {
+                        switch (error.code) {
+                          case "INVALID_USER":
+                            alert("The account does not exist");
+                            break;
+                          default:
+                            console.log("Error resetting password:", error);
+                        }
+                      } else {
+                        console.log("Password reset email sent successfully!");
+                      }
+            });
+        });
+    }
+    sendNewPassword(usersRef);
 });

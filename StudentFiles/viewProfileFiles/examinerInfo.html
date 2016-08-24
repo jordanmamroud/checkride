@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="" ng-app='examinerInfo'>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examiner Info</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../bower_components/fullcalendar/dist/fullcalendar.css"/>
+    <link rel="stylesheet" href="../../generalFiles/myFullCalendar.css"/>
+    
+    <!-- scripts --> 
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular/angular.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script type="text/javascript" src="../../bower_components/angular-ui-calendar/src/calendar.js"></script>
+    <script type="text/javascript" src="../../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/fullcalendar/dist/gcal.js"></script>
+    <script type="text/javascript" src="../studentDirectives.js"></script>
+    <script src="practice.js"></script>
+    <script type="text/javascript" src="examinerInfo.js"></script>
+</head>
+<style>
+    #sidebar{
+        display: inline-block;
+        width: 10%;
+    }
+    </style>
+
+<body ng-controller="infoController">
+  
+   <student-header></student-header>
+        <button id="messageButton">Send Message</button>
+        <h1 id="examinerName">Name</h1>
+       
+        <button id="scheduleButton">View Schedule</button>
+          <h2>Certifications</h2>
+           <ul ng-repeat="cert in certificationsList">
+               <li>{{cert.description}}</li>
+           </ul> 
+
+           <h2>Airports served</h2>
+           <ul ng-repeat="ap in airportList">
+               <li>{{ap.name}}</li>
+           </ul>
+
+           <h2>About</h2>
+           <p id="bio"></p>
+           
+               
+        <div id="messageModal" class="modal">
+          <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">x</span>
+                <h2>Message</h2><br>
+                <input type="text" id="messageSubject">
+                <textarea cols="50" rows="4" name="body" id="messageBody"></textarea>
+                <button id="sendButton">Send Message</button>
+            </div>
+        </div>
+</html>
