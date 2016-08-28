@@ -13,7 +13,7 @@ instructorList.controller('mainController',function($scope,$window, $firebaseArr
         $scope.scheduleButtonEvent = function(index){
             ref.child("currentExaminer").set($scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , ''));
     //        $window.location.href ="https://checkride.firebaseapp.com/StudentFiles/examinerAvailability.html";
-              $window.location.href = "http://localhost:8000/Desktop/HTML%26CSS%26JSProjects/CheckRide/StudentFiles/viewProfileFiles/examinerInfo.html?username=" + 
+              $window.location.href = "http://localhost:8000/CheckRide/StudentFiles/viewProfileFiles/examinerInfo.html?username=" + 
                   $scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , '');
         }
     }

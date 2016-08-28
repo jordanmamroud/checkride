@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
     <link rel="stylesheet" href="../generalFiles/popUpBox.css">
     <link rel="stylesheet" href="../generalFiles/myFullCalendar.css">
+    
     <!-- jquery, moment, and angular have to get included before fullcalendar -->
     <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -16,11 +17,9 @@
     <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <script type="text/javascript" src="../bower_components/angular-ui-calendar/src/calendar.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js
-"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js"></script>
     <script type='text/javascript' src="../bower_components/fullcalendar/dist/gcal.js"></script>
     <script type="text/javascript" src="examinerDirectives.js"></script>
-    
     <script src="practice.js"></script>
     <script src="examinerCalendar.js"></script>
     
@@ -33,8 +32,11 @@
     </script>
     
 
-    
-
+    <style>
+        .hide{
+            display: none ;
+        }
+    </style>
 </head>
 
 <body>
@@ -78,6 +80,7 @@ html for showing gcal authorization
 
     <!-- Modal for adding events-->
     <div id="addEventModal" class="modal">
+           
           <!-- Modal content -->
               <div class="modal-content">
                 <span class="close">x</span>
@@ -88,28 +91,48 @@ html for showing gcal authorization
                 <p id="eventEnd"></p>
                 <label>Recurring Event?</label>
                 <input type="checkbox" id="dowCheckBox">
-
-                <form id="dowForm">
-                    <label>Sunday</label>
-                    <input type="checkbox" id="sunday" value="sunday">
-                    <label>Monday</label>
-                    <input type="checkbox" id="monday" value="monday">
-                    <label>Tuesday</label>
-                    <input type="checkbox" id="tuesday" value="tuesday">
-                    <label>Wednesday</label>
-                    <input type="checkbox" id="wednesday" value="wednesday">
-                    <label>Thursday</label>
-                    <input type="checkbox" id="thursday" value="thursday">
-                    <label>Friday</label>
-                    <input type="checkbox" id="friday" value="friday">
-                    <label>Saturday</label>
-                    <input type="checkbox" id="saturday" value="saturday">
-                </form>
-
+                
+                <div id="recur" class="hide">
+                    <label>choose frequency</label>
+                         <select id="freq" name="frequency">
+                                <option>daily</option>
+                                <option>weekly</option>
+                                <option>monthly</option>
+                        </select><br>
+                        
+                    <form id="repeatForm">
+                        <label>starts on <input id='startDate'type="date"></label><br>
+                        <label><input type="checkbox" value="never" id="never">never</label>
+                        <br>
+                         <input type="checkbox" value="occurences" id="occurences"><label>after <input id="numOccur" type="number"> occurences</label><br>
+                         <input type="checkbox" value="endsOn" id="endsOn"><label>on</label>
+                         <input type="date" id="endDate">
+                    </form>
+                        
+                    <div id="dow" class="hide">    
+                        <form id="dowForm">
+                            <label>Sunday</label>
+                            <input type="checkbox" id="sunday" value="sunday">
+                            <label>Monday</label>
+                            <input type="checkbox" id="monday" value="monday">
+                            <label>Tuesday</label>
+                            <input type="checkbox" id="tuesday" value="tuesday">
+                            <label>Wednesday</label>
+                            <input type="checkbox" id="wednesday" value="wednesday">
+                            <label>Thursday</label>
+                            <input type="checkbox" id="thursday" value="thursday">
+                            <label>Friday</label>
+                            <input type="checkbox" id="friday" value="friday">
+                            <label>Saturday</label>
+                            <input type="checkbox" id="saturday" value="saturday">
+                        </form>
+                    </div>
+                </div>
                 <button id="createEventButton">Create</button>
+            
             </div>
         </div>
-
+               
         <div id="settingsModal" class="modal">
             <div class="modal-content">
                  <span class="close">x</span>
@@ -130,34 +153,37 @@ html for showing gcal authorization
                 <p id="eventStart"></p>
                 <p id="eventEnd"></p>
                 <button id="deleteButton">Delete Event</button>
+                 <div class="hide" id="deleteMonthlyEvent">
+                    <button id="oneEvent">remove just this event</button>
+                    <button id="allEvents">remove all events</button>
+                </div>
             </div>
         </div>
 
-            <div id="pendingRequestsModal" class="modal">
-          <!-- Modal content -->
-              <div class="modal-content">
-                <span class="close">x</span>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Student</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Sent at</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="request in requestsList | orderBy:'-sentAt' track by $index" ng-init="initializeRequestsList()">
-          <td>{{request.firstName + " " + request.lastName}}</td>
-          <td>{{request.requestedStartTime}}</td>
-          <td>{{request.requestedEndTime}}</td>
-          <td>{{requset.sentAt}}</td>
-          <td><button ng-click="approveButtonEvent($index)">Approve</button></td>
-        </tr>
-          </tbody>
-    </table>
-
-            </div>
+        <div id="pendingRequestsModal" class="modal">
+      <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">x</span>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Start Time</th>
+                      <th>End Time</th>
+                      <th>Sent at</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="request in requestsList | orderBy:'-sentAt' track by $index" ng-init="initializeRequestsList()">
+                      <td>{{request.firstName + " " + request.lastName}}</td>
+                      <td>{{request.requestedStartTime}}</td>
+                      <td>{{request.requestedEndTime}}</td>
+                      <td>{{requset.sentAt}}</td>
+                      <td><button ng-click="approveButtonEvent($index)">Approve</button></td>
+                    </tr>
+                      </tbody>
+                </table>        
         </div>
+    </div>
 </body>
 </html>

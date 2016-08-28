@@ -40,7 +40,7 @@ myApp.controller('mainController', ['$scope', "$firebaseObject", '$firebaseArray
     };
     
     var goToInfoPage = function(){
-        methods.newWindowOnClick("#infoPage", "http://localhost:8000/Desktop/HTML%26CSS%26JSProjects/CheckRide/StudentFiles/viewProfileFiles/examinerInfo.html?username=" + examinerId);
+        methods.newWindowOnClick("#infoPage", "../StudentFiles/viewProfileFiles/examinerInfo.html?username=" + examinerId);
     };
         
     // syncs examiners gcal events if they are synced with google calendar
@@ -48,7 +48,6 @@ myApp.controller('mainController', ['$scope', "$firebaseObject", '$firebaseArray
                 if(examinerData.calendar.settings.synced == true){
                     $scope.uiConfig.calendar.events.googleCalendarId = examinerData.calendar.settings.googleCalendarId ;
                     };
-           
     };
     
     //gets the examiners calendar times and sets the students calendar to the same times
@@ -61,14 +60,14 @@ myApp.controller('mainController', ['$scope', "$firebaseObject", '$firebaseArray
                     $scope.uiConfig.calendar.maxTime = fireObj.calendar.settings.maxTime.toString();
                 }
     }
-    console.log('hel')
+
     var callExaminerDataFuncs = function(){
         examinerData.$loaded().then(function(){
             setUpCalendar(examinerData);
             methods.sendTextOnClick("#sendButton", {
 //               name: examinerData.userData.firstName,
-                name:"bob",
-               phoneNumber: "7328413268"
+               name:"guess who it is",
+               phoneNumber: "7325704291"
             });
         });
     }

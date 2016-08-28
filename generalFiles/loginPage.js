@@ -2,22 +2,6 @@
 var loginPage = angular.module("loginPage", ['firebase']);
 
 
-
-//
-//$.ajax
-//({
-//  type: "POST",
-//  url: "http://localhost:1337/",
-//  crossDomain:true, 
-//  dataType: "json",
-//  data:JSON.stringify({name: "jordan", phoneNumber:"7328413268"})
-// }).done(function ( data ) {
-//      alert("ajax callback response:"+JSON.stringify(data));
-//   });
-
-
-
-
 loginPage.controller("mainController",function($scope, $window, $firebaseObject){
         
     var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
@@ -38,13 +22,13 @@ loginPage.controller("mainController",function($scope, $window, $firebaseObject)
                         userInfo.$loaded().then(function(){
                             switch(userInfo.userData.userType.toLowerCase()){
                                 case "examiner":
-                                      $window.location.href = "http://localhost:8000/examinerFiles/examinerCalendar.html"
+                                      $window.location.href = "../examinerFiles/examinerCalendar.html"
                                       
 //                                    $window.location.href ="https://checkride.firebaseapp.com/examinerFiles/examinerCalendar.html"
                                     break;
                                     
                                 case "student":
-                                      $window.location.href = "http://localhost:8000/StudentFiles/examinerList.html"
+                                      $window.location.href = "../StudentFiles/examinerList.html"
 //                                    $window.location.href = "https://checkride.firebaseapp.com/StudentFiles/studentHomePage.html";
                                     break;
                             }
@@ -54,7 +38,7 @@ loginPage.controller("mainController",function($scope, $window, $firebaseObject)
         }
         
     $scope.createAccountButton = function(){ 
-        $window.location.href = "http://localhost:8000/generalFiles/createAccountPage.html";       
+        $window.location.href = "createAccountPage.html";       
     }
     
     // when user clicks forgot password opens up the modal for them to enter their email and a new password will be sent

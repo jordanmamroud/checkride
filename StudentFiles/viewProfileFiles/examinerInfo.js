@@ -41,12 +41,11 @@ myApp.controller('infoController', ['$scope', '$firebaseArray','$firebaseObject'
             console.log(sender);
             methods.sendMessageOnClick("#sendButton", userListExaminerRef, sender);
         });
-//        methods.sendTextOnClick("#sendButton", {
-//            name:"jordan",
-//            phoneNumber: '7328413268'
-//        });
+        methods.sendTextOnClick("#sendButton", {
+            name:"guess who it is",
+            phoneNumber: '7325704291'
+        });
     }
-    
     
  
     var getBio = function(ref){
@@ -64,7 +63,7 @@ myApp.controller('infoController', ['$scope', '$firebaseArray','$firebaseObject'
     }
     
    var viewExaminerSchedule = function(){
-      methods.newWindowOnClick("#scheduleButton", "http://localhost:8000/Desktop/HTML%26CSS%26JSProjects/CheckRide/StudentFiles/viewProfileFiles/examinerAvailability.html?username=" + examinerId);
+      methods.newWindowOnClick("#scheduleButton", "../StudentFiles/viewProfileFiles/examinerAvailability.html?username=" + examinerId);
    }
    
    callFunctions();

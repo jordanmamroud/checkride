@@ -41,7 +41,7 @@ createAccountPage.controller('createAccountController',function($scope, $firebas
             var userType = angular.copy($scope.userType);
             var newUser = new user(firstName, lastName,password,phone,emailAddress,userType);
             ref.child("users/" +emailAddress.replace( /[\*\^\.\'\!\@\$]/g , '')).set({
-                    userData: new users(firstName, lastName,password,phone,emailAddress,userType) 
+                    userData: new user(firstName, lastName,password,phone,emailAddress,userType) 
                 });
             if(userType.toLowerCase() == "examiner" ){
                 ref.child("examiner/" + emailAddress.replace( /[\*\^\.\'\!\@\$]/g , '')).set({userData:newUser}); 
