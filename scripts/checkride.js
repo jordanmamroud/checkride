@@ -5,33 +5,64 @@ var checkrideApp = angular.module('checkrideApp',['ngRoute'])
     
         .when('/', {
             templateUrl : 'site/home.html',
-            controller : 'mainController'
+            controller : 'index'
         })
     
         .when('/about', {
             templateUrl : 'site/about.html',
-            controller : 'aboutController'
+            //controller : 'aboutController'
         })
-        .when('/how-it-works', {
+        .when('/search', {
             templateUrl : 'site/how-it-works.html',
-            controller : 'howController'
+            //controller : 'howController'
         })
         .otherwise({
             redirectTo:'site/home.html'
         });
     
-    $locationProvider.html5Mode(true);
+    //$locationProvider.html5Mode(true);
 })
 
-.controller('mainController', function($scope){
-    $scope.message = "Pretty Sweet!";
+.controller('index', function($scope){
+    $scope.title = "Pretty Sweet!";
+    $scope.title = "Pretty Sweet!";
+    
+    $scope.mainMenu = ['about','search','airports'];
 })
-
 
 .controller('aboutController', function($scope){
-   $scope.message = " About Page!"; 
+   $scope.message = " About Page!";
+    $scope.title= "About Checkride";
 })
 
 .controller('howController', function($scope){
    $scope.message = " How it Works Page!"; 
+})
+
+.controller('headerController', function($scope){
+    
+})
+
+.controller('footerController', function($scope){
+    
+})
+
+.directive("header", function(){
+    return{
+      restrict: 'A',
+        templateUrl: 'directives/header.html',
+        scope: true,
+        transclude: false,
+        controller: 'headerController'
+    };
+})
+
+.directive("footer", function(){
+    return{
+      restrict: 'A',
+        templateUrl: 'directives/footer.html',
+        scope: true,
+        transclude: false,
+        controller: 'footerController'
+    };
 });
