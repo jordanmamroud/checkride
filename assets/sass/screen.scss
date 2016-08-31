@@ -1,0 +1,54 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+//@import "compass/reset";
+//@import "bootstrap";
+@import "compass/css3";
+@import "compass/utilities";
+ 
+
+body{
+    background-image: url('http://wallpapercave.com/wp/NcdUsHW.jpg');
+    background-size: cover;
+}
+
+
+/* Front Page */
+#cr-main-search-box{
+    margin-top:20%;
+    
+    h1{
+        margin-bottom:5%;
+    }
+    
+    input{
+        margin-bottom:5%;
+    }
+}
+
+
+
+
+
+
+
+/*HELPER CLASSES*/
+.text-white{
+    color:white;
+}
+
+.navbar{
+    @include border-radius(0);
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+

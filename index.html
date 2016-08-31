@@ -1,30 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="checkrideApp" ng-controller="index">
+<html lang="en" ng-app="checkrider">
     <head>
+       
+        <title>{{title}}</title>
+      
+        <!-- Metadata -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
+        <!-- Stylesheets -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
-        <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script src="bower_components/angular/angular.min.js"></script>
-        <script src="bower_components/angular-route/angular-route.js"></script>
-        <script src="scripts/checkride.js"></script>
+        <link rel="stylesheet" href="assets/stylesheets/screen.css">
         
-        <title>{{title}}</title>
-        <base href="#/">
+        
+        <!-- Scripts -->
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-route/angular-route.js"></script> 
+        <!--<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>-->
+        <script src="bower_components/angular-touch/angular-touch.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="libs/ui-bootstrap/ui-bootstrap-tpls-2.1.3.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+        <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+        
+        <!-- Application Script -->
+        <script src="app/checkrider.js"></script>
+        <script src="app/components/checkrider.components.js"></script>
+        <script src="app/checkrider.routes.js"></script>
+        
     </head>
 
-    <body>
-        
-        <div header></div>
-        
-        
-        <div id='main' class='container'>
-            <div ng-view></div>
+    <body  ng-controller="index">
+       <div id="cr-app">
+            <!-- HEADER -->        
+            <div header></div>
+
+            <!-- MAIN APPLICATION -->
+            <div class="container" role="main">
+                <div ng-view></div>
+            </div>
+
+            <!-- FOOTER -->
+            <div footer></div>
         </div>
-        
-        <div footer></div>
     </body>
 </html>

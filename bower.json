@@ -1,11 +1,11 @@
 {
-  "name": "checkride",
+  "name": "Checkrider",
   "dependencies": {
     "angular-ui-calendar": "^1.0.1",
     "fullcalendar": "^2.8.0",
     "firebase-token-generator": "^2.0.0"
   },
-  "description": "",
+  "description": "Checkrider App",
   "main": "",
   "moduleType": [],
   "authors": [
