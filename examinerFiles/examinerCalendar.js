@@ -506,40 +506,10 @@ app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$fi
                 if(event.recur == "monthly"){
                     recurringEventMethods().deleteMonthlyEvent(event);
                 }
-//                ref.once("value", function (dataSnapshot){
-//                    //checking to see if the event has emailAddress property cuz only student appointments have that prop.
-//                     if(event.hasOwnProperty("recur")){
-//                         dataSnapshot.forEach(function(childSnapshot){
-//                            if(childSnapshot.val().hasOwnProperty("emailAddress")){
-//                                var studentRef = usersRef.child(childSnapshot.val().emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '') + "/upcomingAppointments"); 
-//                                studentRef.once("value", function(dataSnapshot){
-//                                   dataSnapshot.forEach(function(childr){
-//                                      if(childSnapshot.val().start == childr.val().start){
-////                                          console.log(childr.val());
-////                                          var apptToDelete = studentRef.child(childr.key());
-////                                          var examinerApptToDelete = ref.child(childSnapshot.key());
-////                                          apptToDelete.remove();
-////                                          examinerApptToDelete.remove();
-////                                          $("#cal").fullCalendar('refetchEventSources', events);
-////                                          $("#eventDetailsModal").css("display", "none");
-//                                      } 
-//                                   });
-//                                });
-//                            }
-//                         }); 
                    else{
                        var eventToDelete = userEventsRef.child(event.$id) ;
                        eventToDelete.remove();
                        $("#eventDetailsModal").css("display", "none");
-//                    dataSnapshot.forEach(function (childSnapshot) {
-//                        if (childSnapshot.val().id == event.id){
-//                            var eventToDelete = ref.child(childSnapshot.key());
-//                            eventToDelete.remove();
-//                            $("#cal").fullCalendar('refetchEventSources', events);
-//                            $("#eventDetailsModal").css("display", "none");
-//                        }
-//                    });
-//                      updateIcsFile(userInfo);
                    }
                 });
             }
@@ -591,8 +561,6 @@ app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$fi
                 }
             }
         
-        
-                                     
         //gets the pending appointment requests and shows it when the pending Request button is clicked, it is called in calendar config under custom buttons.
          var pendingRequestButtonEvent = function (list){
             list.$loaded().then(function () {

@@ -26,7 +26,6 @@ var checkrideApp = angular.module('checkrideApp',['ngRoute'])
 .controller('index', function($scope){
     $scope.title = "Pretty Sweet!";
     $scope.title = "Pretty Sweet!";
-    
     $scope.mainMenu = ['about','search','airports'];
 })
 
