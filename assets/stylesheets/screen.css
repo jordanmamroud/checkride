@@ -1,0 +1,46 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 12, ../sass/screen.scss */
+body {
+  background-image: url("http://wallpapercave.com/wp/NcdUsHW.jpg");
+  background-size: cover;
+}
+
+/* Front Page */
+/* line 19, ../sass/screen.scss */
+#cr-main-search-box {
+  margin-top: 20%;
+}
+/* line 22, ../sass/screen.scss */
+#cr-main-search-box h1 {
+  margin-bottom: 5%;
+}
+/* line 26, ../sass/screen.scss */
+#cr-main-search-box input {
+  margin-bottom: 5%;
+}
+
+/*HELPER CLASSES*/
+/* line 38, ../sass/screen.scss */
+.text-white {
+  color: white;
+}
+
+/* line 42, ../sass/screen.scss */
+.navbar {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+
+/* line 46, ../sass/screen.scss */
+.vertical-center {
+  min-height: 100%;
+  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh;
+  /* These two lines are counted as one :-)       */
+  display: flex;
+  align-items: center;
+}

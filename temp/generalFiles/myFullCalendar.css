@@ -1,0 +1,22 @@
+
+.modal{
+    
+    display: none;
+}
+
+.showing{
+    display: inline-block !important ;
+    margin: 0 auto ;
+    position: fixed;
+    width: 30%;
+    top: 40% ;
+}
+
+#pendingRequestsModal{
+    position: absolute;
+    left:20%;
+    right: 20%;
+    width:auto;
+    height: auto;
+}
+
