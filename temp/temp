@@ -1,0 +1,37 @@
+ 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /////////////////////////////
+    'checkrider.routes'
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //////////////////////////////////
+        .constant('componentsConst',{
+        partialPath: 'app/components/'
+    })

@@ -61,7 +61,7 @@ angular.module("checkrider.components").controller('headerController', ["$scope"
     //DIRECTIVES
     checkrider.directive("header", function(){
         return{
-            templateUrl: 'app/layout/header.html',
+            templateUrl: 'app/shared/templates/header.html',
             scope: true,
             transclude: false,
             controller: 'headerController'
@@ -70,7 +70,7 @@ angular.module("checkrider.components").controller('headerController', ["$scope"
 
     checkrider.directive("footer", function(){
         return{
-            templateUrl: 'app/layout/footer.html',
+            templateUrl: 'app/shared/templates/footer.html',
             scope: true,
             transclude: false,
             controller: 'footerController'

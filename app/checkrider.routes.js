@@ -3,11 +3,11 @@ checkrider.config(['$routeProvider', '$locationProvider', function($routeProvide
 
         $routeProvider
             .when('/', {
-                templateUrl : 'app/components/search/search.html',
+                templateUrl : 'app/shared/public/search.html',
                 controller : 'index'
             })
             .otherwise({
-                templateUrl:'app/site/404.html'
+                templateUrl:'app/shared/system/404.html'
             });
     
     }]);
