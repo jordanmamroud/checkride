@@ -31,8 +31,8 @@
                 
                 <form action="" class="navbar-form navbar-right">
                    <div class="form-group">
-                        <a href='#/{{item}}'class="" style="text-transform:capitalize;">Sign-up</a>
-                        <a href='#/{{item}}' role="button" type="button" class="btn btn-success btn-md" style="text-transform:capitalize;">Login</a>
+                        <a href='#{{header.signUp.path}}'class="" style="text-transform:capitalize;">Sign-up</a>
+                        <a ng-href='#{{header.login.path}}' role="button" type="button" class="btn btn-success btn-md" style="text-transform:capitalize;">{{header.login.name}}</a>
                     </div>
                 </form>
                 

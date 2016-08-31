@@ -1,5 +1,3 @@
-//var app = angular.module('log', []);
-
 app.service('loginService', ["$firebaseObject", "$location",function($firebaseObject,$location){
     var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
     var auth = usersRef.getAuth();
