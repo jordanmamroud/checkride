@@ -1,4 +1,7 @@
 
+angular.module("messages", []);
+
+
 var Options = function(){
     var userListRef = new Firebase("https://checkride.firebaseio.com/users");
     var authData = userListRef.getAuth();

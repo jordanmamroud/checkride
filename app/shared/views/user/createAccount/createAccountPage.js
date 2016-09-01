@@ -3,6 +3,7 @@ var app = angular.module('createAccountPage', ['firebase']);
 
 app.service('createAccountService',[ function(){
       var ref  = new Firebase("https://checkride.firebaseio.com/");
+     
       var onSuccess = function(newUser){ 
       ref.child("users/" + newUser.emailAddress.replace( /[\*\^\.\'\!\@\$]/g , '')).set({
                     userData:newUser
@@ -37,11 +38,12 @@ app.service('createAccountService',[ function(){
 app.controller('createAccountController',['$scope','createAccountService', function($scope, createAccountService){
 
         $scope.createAccount = function(){
+            console.log("ham");
             var user = {
                 firstName: $scope.firstName,
-                lastNam: $scope.lastName,
+                lastName: $scope.lastName,
                 password:$scope.password,
-                emailAddress:$scope.email,
+                emailAddress:$scope.emailAddress,
                 phone:$scope.phone,
                 userType: $scope.userType
             }

@@ -5,25 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     
+<!--
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="app/shared/views/user/login/loginPage.css">
     <link  rel="stylesheet" href="app/shared/views/user/myFullCalendar.css">
+-->
 </head>
 
 <body ng-controller="LoginController">
-   
-   <h1>Company logo</h1>
-   <h2> Sign in to your account</h2>
-   
-   <input placeholder="email" id="email" ng-model="email">
-   <input placeholder="password" type="password" id="password" ng-model='password'>
-   <button ng-click="login.signIn()" id="signIn">Sign in</button>
-   <button id="createAcctBtn" ng-click="createAccountPage()">Create account</button>
-   <a id="passReset" data-show-modal data-modal-to-open="#resetModal">Forgot password ?</a>
-    
+
+    <div class="col-md-4 col-md-offset-4">
+
+        <h1 class="text-center">Account Login</h1>
+
+            <form action="" class="signin">
+                <div class="form-group">
+                    <input placeholder="email" type="email" id="email" ng-model="login.email" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <input placeholder="password" type="password" id="password" ng-model="login.password" class="form-control">
+                </div>
+
+                <div class="form-group text-center">
+
+                    <button ng-click="login.signIn()"i d="signIn" class="btn btn-success btn-md  btn-block">Login</button>
+                    <button ng-click="login.createAccountPage()" id="createAcctBtn" class="btn btn-default btn-md  btn-block">Create account</button>
+                    <br>
+                    <a id="passReset" data-show-modal data-modal-to-open="#resetModal">Forgot password ?</a>
+                </div>
+            </form>
+    </div>
+
     <my-modal myid="resetModal">
-            <input type="text" id="email" placeholder="enter email for reset code">
-            <button ng-click='sendNewPassword()'>send</button>
+                <input type="text" id="email" placeholder="enter email for reset code">
+                <button ng-click='login.sendNewPassword()'>send</button>
     </my-modal>
 
 </body>

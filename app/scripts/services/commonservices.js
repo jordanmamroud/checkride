@@ -13,9 +13,9 @@ app.service("commonServices", ["$location",'$timeout', function($location, $time
             list = $filter('orderBy')(list, orderBy);
         },
         
-        showToastOnEvent: function(ref,child,event){
-            ref.child(child).on(event, function (datasnapshot){
-                                $('.toast').fadeIn(400).delay(3000).fadeOut(400);
+        showToastOnEvent: function(ref,event){
+            ref.on(event, function (datasnapshot){
+                        $('.toast').fadeIn(400).delay(3000).fadeOut(400);
             });
         },
         

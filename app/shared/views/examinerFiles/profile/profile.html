@@ -25,7 +25,7 @@
   
   <label>Enter airports you serve here</label>
   
-  <input type="text" ng-keypress="saveAirport($event.keycode)" id="airports" ng-model="airport">
+  <input type="text" ng-keypress="saveAirport($event.keyCode)" id="airports" ng-model="airport">
   <br>
   <ul ng-repeat="airport in airportsList track by $index">
       <li>{{airport.name}}<span ng-click="deleteAirport($index)">  delete</span></li>
@@ -39,7 +39,7 @@
   <input type="text" id="oldPass" placeholder="old password" ng-model='oldPassword'>
   <input type="text" id="newPass" placeholder="new password" ng-model="newPassword">
   <br>
-  <button id="save">Save Changes</button>
+  <button id="save" ng-click="saveChanges()">Save Changes</button>
 
 
 </body>

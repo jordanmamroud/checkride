@@ -5,10 +5,9 @@ var app = angular.module("loginMod", ['firebase', 'commonServices']);
 app.service('loginService', ["$firebaseObject", "$location",function($firebaseObject,$location){
     var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
     var auth = usersRef.getAuth();
-
+    
     return{
         signIn: function(email, pass){
-
                 usersRef.authWithPassword({
                     email: email,
                     password: pass
@@ -23,10 +22,9 @@ app.service('loginService', ["$firebaseObject", "$location",function($firebaseOb
                            userInfo.$loaded().then(function(){
                                 switch(userInfo.userData.userType.toLowerCase()){
                                     case "examiner":
-                                          $location.path('/examiner/profile?');
-                                        
+                                          $location.path('/examiner/profile');
                                         break;
-
+                                        
                                     case "student":
                                          $location.path("StudentFiles/examinerList.html")
                                         break;
@@ -37,9 +35,9 @@ app.service('loginService', ["$firebaseObject", "$location",function($firebaseOb
             })
         },
         
-        sendNewPassWord: function(){
+        sendNewPassWord: function(email){
                usersRef.resetPassword({
-                      email: $("#email").val()
+                      email: email
                             }, 
                       function(error) {
                           if (error) {
@@ -60,23 +58,20 @@ app.service('loginService', ["$firebaseObject", "$location",function($firebaseOb
 
 app.controller("LoginController", ["loginService","$scope","$firebaseObject", "commonServices",function(loginService, $scope, $firebaseObject,commonServices){
     
-    
-    var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
+   var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
     
    this.signIn = function(){
-        console.log($scope.email + $scope.password);
-        loginService.signIn($scope.email, $scope.password);
-        console.log("as")
+        loginService.signIn(this.email, this.password);
     }
 
     this.sendNewPassWord = function(){
-        loginService.sendNewPassWord(usersRef);
+        loginService.sendNewPassWord(this.email);
     }
 
    this.createAccountPage = function(){
      commonServices.changePath("/createAccount");
    }
-   
+  
 }]);
 
 

@@ -6,5 +6,5 @@ app.controller("homePage", ["$scope", "$firebaseArray", function($scope, $fireba
     var userEmail = authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, '');
     var approvedApptsRef = new Firebase("https://checkride.firebaseio.com/users/" + userEmail + "/calendar/approvedAppointments");
     $scope.approvedApptsList = $firebaseArray(approvedApptsRef);
-    console.log($scope.approvedApptsList);
+
 }]);
