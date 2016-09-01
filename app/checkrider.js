@@ -17,11 +17,7 @@ var checkrider = angular.module('checkrider',[
     $scope.appName = "Checkrider";    
     $scope.title = "Checkrider";
 
-}])
-
-
-
-
+}]);
 
 //Move later
 .constant('RoutePaths', {

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="" ng-app="checkrideApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="app/shared/views/user/login/loginPage.css">
+    <link  rel="stylesheet" href="app/shared/views/user/myFullCalendar.css">
+</head>
+
+<body ng-controller="LoginController">
+   
+   <h1>Company logo</h1>
+   <h2> Sign in to your account</h2>
+   
+   <input placeholder="email" id="email" ng-model="email">
+   <input placeholder="password" type="password" id="password" ng-model='password'>
+   <button ng-click="login.signIn()" id="signIn">Sign in</button>
+   <button id="createAcctBtn" ng-click="createAccountPage()">Create account</button>
+   <a id="passReset" data-show-modal data-modal-to-open="#resetModal">Forgot password ?</a>
+    
+    <my-modal myid="resetModal">
+            <input type="text" id="email" placeholder="enter email for reset code">
+            <button ng-click='sendNewPassword()'>send</button>
+    </my-modal>
+
+</body>
+</html>

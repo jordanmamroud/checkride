@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="" ng-app="createAccountPage">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account Page </title>
+    <link href="app/shared/views/user/createAccount/style.css" rel="stylesheet">  
+</head>
+
+<body ng-controller="createAccountController">
+     <h1>Create your account</h1>
+     
+     <div id="name">
+         <h2>Name</h2>    
+             <input type="text" placeholder="firstName" ng-model="firstName">
+             <input type="text" placeholder="lastName" ng-model="lastName">
+    </div>
+    
+    <div>
+         <h2>email address</h2>
+         <input type="text" placeholder="emailAddress" ng-model="email">
+     </div>
+        
+         <div>
+         <h2>password</h2>
+         <input type="text" placeholder="password" ng-model="password">
+     </div>
+     
+     <div>
+        <h2>phone number</h2>
+         <input type="text" placeholder="phone number" ng-model="phone">
+     </div>
+     
+    <select ng-model="userType">
+        <option>examiner</option>
+        <option>Student</option>
+        <option>Admin</option>
+    </select><br>
+<!--
+     <div>
+        <h2>Account type</h2>
+         <input type="text" placeholder="accountType" ng-model="accountType">
+     </div>    
+-->
+    
+     <button ng-click="createAccount()">Create</button>
+     
+</body>
+</html>

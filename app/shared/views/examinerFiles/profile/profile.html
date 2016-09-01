@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="" ng-app="profile">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examiner Profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+</head>
+
+<body ng-controller="profileController">
+ 
+  <examiner-navbar></examiner-navbar>
+  
+  <h2 id="name" ng-model="name">{{name}}</h2>
+  <h3>Location</h3>
+  <h3>certifications</h3>
+  
+  <input id="certifications" ng-model="certification" ng-keypress="saveCertification($event.keyCode)" type="text">
+  
+  <ul ng-repeat="cert in certificationsList track by $index">
+      <li>{{cert.description}}<span ng-click="deleteCert($index)"> delete</span></li>
+  </ul>
+  
+  <label>Enter airports you serve here</label>
+  
+  <input type="text" ng-keypress="saveAirport($event.keycode)" id="airports" ng-model="airport">
+  <br>
+  <ul ng-repeat="airport in airportsList track by $index">
+      <li>{{airport.name}}<span ng-click="deleteAirport($index)">  delete</span></li>
+  </ul>
+  
+  <label>Enter your bio here</label>
+  <br>
+  <textarea name="about" id="bio" cols="30" readrows="10" ng-model="bio">asdl;akjl;df</textarea>
+  <br>
+  <label>Enter new password here if you would like to change it</label>
+  <input type="text" id="oldPass" placeholder="old password" ng-model='oldPassword'>
+  <input type="text" id="newPass" placeholder="new password" ng-model="newPassword">
+  <br>
+  <button id="save">Save Changes</button>
+
+
+</body>
+</html>
