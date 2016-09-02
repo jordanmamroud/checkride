@@ -1,13 +1,28 @@
-angular.module('UserServices.Module', []);
+angular.module('UserServices.Module', ['firebase'])
 
-checkrider.service('LoginService', ["$firebaseObject", "$location", 'RoutePaths', function($firebaseObject,$location, RoutePaths){
+.factory("Auth", ["$firebaseAuth",
+  function($firebaseAuth) {
+    var ref = new Firebase("https://checkride.firebaseio.com/users/");
+    return $firebaseAuth(ref);
+  }
+])
+
+
+
+
+.service('LoginService', ["$location", 'RoutePaths', function($firebaseAuth, $firebaseObject,$location, RoutePaths){
     
-    var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
+
+/*
+   var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
     var auth = usersRef.getAuth();
     
+    
+    
     return{
+        signUp: RoutePaths.signUp,
         signIn: function(email, pass, fireData){
-                console.log('bane');
+
                 usersRef.authWithPassword({
                 email: email ,
                 password: pass
@@ -53,45 +68,64 @@ checkrider.service('LoginService', ["$firebaseObject", "$location", 'RoutePaths'
                           }
                 });
         }
-    }
+    }*/
 }])
 
-.controller("LoginController", ['LoginService',function($scope, $window, $firebaseObject, LoginService){
-    var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
-    var auth = usersRef.getAuth();
 
-    $scope.signIn = LoginService.signIn();
+
+
+//LOGIN CONTROLLER
+.controller("UserServices", ['$scope', 'Auth', 'RoutePaths', 'LoginService', function($scope, Auth, RoutePaths, LoginService){
+
+    console.log(Auth);
+    this.signUp = RoutePaths.signUp;
     
-    // when the user clicks send inside reset password modal this will send them a temporary password
-    var sendNewPassword = function(ref){
-        $("#sendButton").on("click", function(){
-           ref.resetPassword({
-                  email: $("#email").val()
-                        }, 
-                  function(error) {
-                      if (error) {
-                        switch (error.code) {
-                          case "INVALID_USER":
-                            alert("The account does not exist");
-                            break;
-                          default:
-                            console.log("Error resetting password:", error);
-                        }
-                      } else {
-                        console.log("Password reset email sent successfully!");
-                      }
-            });
+    
+    //CREATE ACCOUNT
+    $scope.create = function() {
+        $scope.message = null;
+        $scope.error = null;
+
+        Auth.$createUser({
+            email: $scope.email,
+            password: $scope.password
+        }).then(function(userData) {
+            $scope.message = "User created with uid: " + userData.uid;
+            
+            console.log($scope.message);
+        }).catch(function(error) {
+            $scope.error = function(){
+                switch (error.code){
+                    case "AUTHENTICATION_DISABLED":
+                        return "The requested authentication provider is disabled for this Firebase application.";
+                    case "EMAIL_TAKEN":
+                        return "The new user account cannot be created because the specified email address is already in use.";
+                    case "INVALID_ARGUMENTS":
+                        return "The specified credentials are malformed or incomplete. Please refer to the error message, error details, and Firebase documentation for the required arguments for authenticating with this provider.";
+                    case "INVALID_CREDENTIALS":
+                        return "The specified authentication credentials are invalid. This may occur when credentials are malformed or expired.";
+                    case "INVALID_EMAIL":
+                        return "The specified email is not a valid email.";
+                    case "PROVIDER_ERROR":
+                        return "A third-party provider error occurred. Please refer to the error message and error details for more information.";
+                };
+                return "Aww, you done fucked up now.";
+            }();
         });
-    }
-    sendNewPassword(usersRef);
-}]);
+    };
+    
+    
+}])
 
 
 
 
 
 
-checkrider.service("CommonServices", ["$location",'$timeout', function($location, $timeout){
+
+
+//COMMON SERVICES
+.service("CommonServices", ["$location",'$timeout', function($location, $timeout){
     return{
         
         changeLocationOnClick: function(selector, urlString){

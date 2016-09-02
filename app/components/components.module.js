@@ -1,27 +1,8 @@
 'use strict';
 
-angular.module("Components.Module",[])
+angular.module("Components.Module",['Checkrider.Routes'])
 
-    //HEADER CONTROLLER
-    .controller('HeaderController', ["$scope", "$location",'RoutePaths', function($scope, $location, RoutePaths){
-        $scope.$on('$routeChangeSuccess', function () {
-            if($location.path() == '/search'){
-                $scope.isSearch = true;    
-            }else{
-                $scope.isSearch = false;
-            }
-        });
-        
-        this.login = RoutePaths.login;
-        this.signUp = RoutePaths.signUp;
-        
-        
-    }])
 
-    //FOOTER CONTROLLER
-    .controller('FooterController', ["$scope", function($scope){
-        
-    }])
 
     .controller('searchController',["$scope", "$window", "$firebaseArray", function($scope, $window, $firebaseArray){
 

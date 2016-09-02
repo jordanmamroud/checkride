@@ -1,5 +1,5 @@
 
-<div class="col-md-4 col-md-offset-4">
+<div class="col-md-4 col-md-offset-4" ng-controller="UserServices as user">
 
     <h1 class="text-center">Account Login</h1>
     
@@ -15,9 +15,9 @@
             <div class="form-group text-center">
                 
                 <button id="signIn" class="btn btn-success btn-md  btn-block">Login</button>
-                <button id="createAcctBtn" class="btn btn-default btn-md  btn-block">Create account</button>
+                <a ng-href="#{{user.signUp.path}}" id="createAcctBtn" class="btn btn-default btn-md  btn-block" >Create account</a>
                 <br>
-                <a id="passReset" data-show-modal data-modal-to-open="#resetModal">Forgot password ?</a>
+                <a id="passReset" data-show-modal data-modal-to-open="#resetModal">Forgot password?</a>
             </div>
     </form>
 

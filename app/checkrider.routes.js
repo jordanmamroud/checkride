@@ -1,5 +1,5 @@
-'use strict';
-checkrider.config(['$routeProvider', '$locationProvider', 'RoutePaths', function($routeProvider, $locationProvider, RoutePaths){
+angular.module('Checkrider.Routes',['ngRoute'])
+.config(['$routeProvider', '$locationProvider', 'RoutePaths', function($routeProvider, $locationProvider, RoutePaths){
     
         $routeProvider
             .when('/', {
@@ -8,11 +8,11 @@ checkrider.config(['$routeProvider', '$locationProvider', 'RoutePaths', function
             })
             .when( RoutePaths.login.path, {
                     templateUrl: 'app/shared/user/login.html',
-                    controller: 'LoginController'
+                    controller: 'UserServices'
             })
             .when( RoutePaths.signUp.path, {
                     templateUrl: 'app/shared/user/create-account.html',
-                    controller: 'LoginController'
+                    controller: 'UserServices'
             })
             .otherwise({
                 templateUrl:'app/shared/system/404.html'
@@ -20,10 +20,10 @@ checkrider.config(['$routeProvider', '$locationProvider', 'RoutePaths', function
         
         //Supposed to remove '#' from url but not working on refresh
         //$locationProvider.html5Mode(true);
-    }]);
+    }])
 
 //DIRECTIVES
-checkrider.directive("header", function(){
+.directive("header", function(){
     return{
         templateUrl: 'app/shared/templates/header.html',
         scope: true,
@@ -39,4 +39,24 @@ checkrider.directive("header", function(){
         transclude: false,
         controller: 'FooterController'
     };
+})
+
+//Move later
+.constant('RoutePaths', {
+    login: {
+        name: 'Log in',
+        path: '/login',
+        eula: '/login/eula',
+        noSubscription: '/no-subscription',
+        myAccount: '/my-account',
+        createAccount: '/my-account/create',
+        createAccountFromXID: '/my-account/update',
+        // more routes here
+    },
+    signUp: {
+        name: 'Sign-Up',
+        path: '/create-account'
+        // more routes here
+    }
+    // more objects here
 })
