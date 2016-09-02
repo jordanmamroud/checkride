@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="" ng-app="myApp" ng-controller="calendarController">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
+    <link rel="stylesheet" href="../generalFiles/popUpBox.css">
+    <link rel="stylesheet" href="../generalFiles/myFullCalendar.css">-->
+    
+    <style>
+        .hide{
+            display: none ;
+        }
+        .showing{
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+   
+            <examiner-navbar></examiner-navbar>
+
+            <div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div> 
+            <div class='toast' style='display:none'>You have a new Appointment Request</div>
+
+            <my-modal myid="addEventModal">
+                    <h2>Event</h2><br>
+                    <input type="text" placeholder="enter Your event" id="eventInput">
+                    <h4>When:</h4>
+                    <p id="eventStart" ng-model="eventStart"></p>
+                    <p id="eventEnd" ng-model="eventStart"></p>
+                    <label>Recurring Event?</label>
+                    <input type="checkbox" id="dowCheckBox">
+
+                    <div id="recur" class="hide">
+                        <label>choose frequency</label>
+                             <select id="freq" name="frequency">
+                                    <option>daily</option>
+                                    <option>weekly</option>
+                                    <option>monthly</option>
+                            </select><br>
+
+                        <form id="repeatForm">
+                            <label>starts on <input id='startDate'type="date"></label><br>
+                            <label><input type="checkbox" value="never" id="never">never</label>
+                            <br>
+                             <input type="checkbox" value="occurences" id="occurences"><label>after <input id="numOccur" type="number"> occurences</label><br>
+                             <input type="checkbox" value="endsOn" id="endsOn"><label>on</label>
+                             <input type="date" id="endDate">
+                        </form>
+
+                        <div id="dow" class="hide">    
+                            <form id="dowForm">
+                                <label>Sunday</label>
+                                <input type="checkbox" id="sunday" value="sunday">
+                                <label>Monday</label>
+                                <input type="checkbox" id="monday" value="monday">
+                                <label>Tuesday</label>
+                                <input type="checkbox" id="tuesday" value="tuesday">
+                                <label>Wednesday</label>
+                                <input type="checkbox" id="wednesday" value="wednesday">
+                                <label>Thursday</label>
+                                <input type="checkbox" id="thursday" value="thursday">
+                                <label>Friday</label>
+                                <input type="checkbox" id="friday" value="friday">
+                                <label>Saturday</label>
+                                <input type="checkbox" id="saturday" value="saturday">
+                            </form>
+                        </div>
+                    </div>
+                    <button close-modal id="createEventButton" ng-click="createEvent()">Create</button>
+            </my-modal>
+
+
+            <my-modal myid="settingsModal">
+                <input type="text" id="calendarStartTime" placeholder="enter calendar start time">
+                <input type="text" id="calendarEndTime" placeholder="enter calendar end time">
+                <input type="email" id="googleCalendarId" placeholder="enter google calendar id">
+                <button close-modal id="saveButton">Save</button>
+                <input type="checkbox" ng-checked="syncGcal()"id="googleSync">select box to sync with google calendar<br>
+            </my-modal>
+
+            <my-modal myid="eventDetailsModal">
+                <h2 id="eventTitle">Event</h2><br>
+                <h4>When:</h4>
+                <p id="eventStart"></p>
+                <p id="eventEnd"></p>
+                <button close-modal id="deleteButton">Delete Event</button>
+                <div class="hide" id="deleteMonthlyEvent">
+                    <button id="oneEvent">remove just this event</button>
+                    <button id="allEvents">remove all events</button>
+                </div>
+            </my-modal>
+
+
+            <my-modal myid="pendingRequestsModal">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Start Time</th>
+                      <th>End Time</th>
+                      <th>Sent at</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="request in requestsList | orderBy:'-sentAt' track by $index" ng-init="initializeRequestsList()">
+                      <td>{{request.firstName + " " + request.lastName}}</td>
+                      <td>{{request.requestedStartTime}}</td>
+                      <td>{{request.requestedEndTime}}</td>
+                      <td>{{requset.sentAt}}</td>
+                      <td><button ng-click="approveButtonEvent($index)">Approve</button></td>
+                    </tr>
+                      </tbody>
+                </table>       
+            </my-modal>
+</body>
+</html>

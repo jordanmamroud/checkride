@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="" ng-app="instructorList">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstructorList</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
+
+</head>
+
+<body>
+
+      <student-header></student-header>
+
+      <input type="text" ng-model="searchBox" id="airportSearch" placeholder="search airport">
+      <table class="table">
+              <thead>
+                <tr>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="userList" ng-model="user" ng-repeat="user in list | filter: searchBox: user.userData.airports">
+                  <td>{{user.userData.firstName}}</td>
+                  <td>{{user.userData.lastName}}</td>
+                  <td></td>
+                  <td><button ng-click="goToProfile($index)">Schedule</button></td>
+                </tr>
+                  </tbody>
+        </table>           
+</body>
+</html>

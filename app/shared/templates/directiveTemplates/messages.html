@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+    .hide{
+        display: none;
+    }
+    #detailsModal{
+        height: 200px;
+        overflow: scroll ;
+    }
+    .setColor{
+        background-color:red;
+
+    }
+    </style>
+
+<body>
+
+       <h2 id="as">Messages</h2>
+        <div>
+         <table class="table" ng-show="!view" id="convoView">
+              <thead>
+                <tr>
+                  <th>Sent By</th>
+                  <th>Subject</th>
+                  <th>Received Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="convo in conversationsList | orderBy:'-lastReceivedMsg' track by $index" ng-class="{setColor: convo.hasNewMsg == true}" ng-init="$last && initializeConvoView()" ng-click="viewConvoMessages(convo)" show-modal modal-to-open="#detailsModal">
+                  <td>{{convo.$id}}</td>
+                  <td>{{convo.has}}</td>
+                </tr>
+              </tbody>
+        </table>
+
+                <my-modal myid='detailsModal'>
+                    <h2 ng-model="convo">{{convo}}</h2><br>
+                     <ul ng-repeat="msg in convoMessagesList track by $index" >
+                         <li>{{msg.subject}}</li>
+                     </ul>
+                     <textarea id="message"></textarea>
+                    <button id="replyButton"> reply</button>
+                </my-modal>
+              </div>
+       <div>
+            <table class="table" ng-show="view" id="msgView">
+                  <thead>
+                    <tr>
+                      <th>asd By</th>
+                      <th>Subject</th>
+                      <th>Received Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr show-modal modal-to-open="#msgDetailsModal" ng-repeat="msg in messagesList | reverse track by $index" ng-class="{setColor: msg.opened==false}" ng-init="$last && checkIfOpened()" ng-click="viewMessageDetails(msg)">
+                      <td>{{msg.sender}}</td>
+                      <td>{{msg.subject}}</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+            </table>
+
+            <my-modal myid='msgDetailsModal'>
+                 <h2 ng-model="sender" id="sender">hello</h2><br>
+                 <p ng-model="message">{{message}}</p>
+                 <textarea id="message"></textarea>
+                 <button ng-click="sendMessage()"id="replyButton"> Reply</button>
+             </my-modal>
+      
+        <div class='toast' style='display:none'>You have a new Appointment Request</div>
+        <button ng-click="view = !view" id="switchView" ng-class="">switch views</button>
+
+</body>
+</html>
