@@ -11,12 +11,11 @@
     </style>
 
 <body>
-  
    <student-header></student-header>
         <button show-modal modal-to-open="#messageModal" id="messageButton">Send Message</button>
-        <h1 ng-model="examinerName">{{examinerName}}</h1>
+        <h1 ng-model="studentName">{{examinerName}}</h1>
        
-        <button id="scheduleButton">View Schedule</button>
+        <button id="scheduleButton" ng-click="viewSchedule()">View Schedule</button>
           <h2>Certifications</h2>
            <ul ng-repeat="cert in certificationsList">
                <li>{{cert.description}}</li>
@@ -30,11 +29,5 @@
            <h2>About</h2>
            <p ng-model="bio"id="bio">{{bio}}</p>
            
-    <send-message-modal send-to="examinerId" sender="examinerName" modal-id="messageModal"></send-message-modal>
-    <my-modal myid="messageModal">
-                <h2>Message</h2><br>
-                <input type="text" id="messageSubject" ng-model="messageSubject">
-                <textarea cols="50" rows="4" name="body" id="messageBody" ng-model="messageBody"></textarea>
-                <button ng-click="sendMessage()" id="sendButton">Send Message</button>
-    </my-modal>     
+    <send-message-modal send-to="examinerId" sender="studentName" modal-id="messageModal"></send-message-modal>
 </html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="" ng-app="studentHomePage">
+<head>
+
+</head>
+
+<body ng-controller="mainController">
+  <student-header></student-header>
+   
+    <h2>Upcoming Appointments</h2>
+     <table class="table">
+      <thead>
+        <tr>
+          <th>Examiner Name</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="appt in appointmentsList track by $index">
+          <td>{{appt.firstName +" " + appt.lastName}}</td>
+          <td>{{appt.start}}</td>
+          <td>{{appt.end}}</td>
+
+        </tr>
+      </tbody>
+    </table>
+    
+</body>
+</html>

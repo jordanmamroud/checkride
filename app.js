@@ -38,15 +38,23 @@ app.config(function($routeProvider){
         controller:'messagesController'
     })
      .when("/student",{
-        templateUrl:'app/shared/views/StudentFiles/examinerList/examinerList.html',
+        templateUrl:'app/shared/views/StudentFiles/studentTemplates/studentHomePage.html',
+        controller:"studentHomePageController"
+    })
+    .when("/student/examinersList",{
+        templateUrl:'app/shared/views/StudentFiles/studentTemplates/examinerList.html',
         controller:"examinerListController"
     })
     .when("/student/examinerProfile",{
-        templateUrl: "app/shared/views/studentFiles/viewProfileFiles/examinerInfo/examinerInfo.html",
+        templateUrl: "app/shared/views/StudentFiles/studentTemplates/examinerInfo.html",
         controller: "examinerInfoController"
     })
     .when("/student/messages",{
-        templateUrl:"app/shared/views/StudentFiles/studentMessages.html"
+        templateUrl:"app/shared/views/StudentFiles/studentTemplates/studentMessages.html"
+    })
+    .when("/student/examinerAvailability",{
+        templateUrl: "app/shared/views/StudentFiles/studentTemplates/examinerAvailability.html",
+        controller:"examinerAvailabilityController"
     })
 });
 
