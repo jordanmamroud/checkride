@@ -20,6 +20,7 @@ app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$fi
         var arr= [];      
         var events = $firebaseArray(userEventsRef);
         var approvedApointments = $firebaseArray(approvedAppointmentsRef);
+          
         // the requests list is a list of all student appointment request for the logged in examiner                             
         $scope.requestsList = $firebaseArray(appointmentRequestsListRef);
         
@@ -38,8 +39,6 @@ app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$fi
           $scope.requestsList = $filter('orderBy')($scope.requestsList, '-sentAt');
         };
           
-                                     
-     
          //shows when a new appointment request has been received                            
          var newRequestToast = function(ref){
             ref.child("appointmentRequests").on("child_added", function (datasnapshot){

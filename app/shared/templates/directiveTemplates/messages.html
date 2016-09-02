@@ -1,14 +1,6 @@
 <!DOCTYPE html>
-<html lang="" ng-app="messages">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages</title>
-<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
-    <link rel="stylesheet" href="../generalFiles/myFullCalendar.css">-->
-    
-</head>
+<html>
+
 <style>
     .hide{
         display: none;
@@ -17,11 +9,14 @@
         height: 200px;
         overflow: scroll ;
     }
+    .setColor{
+        background-color:red;
+
+    }
     </style>
 
-<body ng-controller="messagesController">
-    
-     <examiner-navbar></examiner-navbar> 
+<body>
+
        <h2 id="as">Messages</h2>
         <div>
          <table class="table" ng-show="!view" id="convoView">
@@ -33,18 +28,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="convo in conversationsList | orderBy:'-lastReceivedMsg' track by $index" ng-init="$last && initializeConvoView()" ng-click="viewConvoMessages(convo)">
+                <tr ng-repeat="convo in conversationsList | orderBy:'-lastReceivedMsg' track by $index" ng-class="{setColor: convo.hasNewMsg == true}" ng-init="$last && initializeConvoView()" ng-click="viewConvoMessages(convo)" show-modal modal-to-open="#detailsModal">
                   <td>{{convo.$id}}</td>
-                  <td>adsf</td>
+                  <td>{{convo.has}}</td>
                 </tr>
               </tbody>
         </table>
-         
-<!--
-          <div id="detailsModal" class="modal">
-              <div class="modal-content">
-                <span class="close">x</span>
--->
+
                 <my-modal myid='detailsModal'>
                     <h2 ng-model="convo">{{convo}}</h2><br>
                      <ul ng-repeat="msg in convoMessagesList track by $index" >
@@ -53,10 +43,7 @@
                      <textarea id="message"></textarea>
                     <button id="replyButton"> reply</button>
                 </my-modal>
-                
               </div>
-   
-      
        <div>
             <table class="table" ng-show="view" id="msgView">
                   <thead>
@@ -67,22 +54,22 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="msg in messagesList | reverse track by $index" ng-init="$last && checkIfOpened()" ng-click="viewMessageDetails(msg)">
+                    <tr show-modal modal-to-open="#msgDetailsModal" ng-repeat="msg in messagesList | reverse track by $index" ng-class="{setColor: msg.opened==false}" ng-init="$last && checkIfOpened()" ng-click="viewMessageDetails(msg)">
                       <td>{{msg.sender}}</td>
                       <td>{{msg.subject}}</td>
+                      <td></td>
                     </tr>
                   </tbody>
             </table>
 
-                <my-modal myid='msgDetailsModal'>
-                    <h2 id="sender">hello</h2><br>
-                     <p ng-model="message">{{message}}</p>
-                     <textarea id="message"></textarea>
-                    <button id="replyButton"> Reply</button>
-                 </my-modal>
+            <my-modal myid='msgDetailsModal'>
+                 <h2 ng-model="sender" id="sender">hello</h2><br>
+                 <p ng-model="message">{{message}}</p>
+                 <textarea id="message"></textarea>
+                 <button ng-click="sendMessage()"id="replyButton"> Reply</button>
+             </my-modal>
       
         <div class='toast' style='display:none'>You have a new Appointment Request</div>
-        
         <button ng-click="view = !view" id="switchView" ng-class="">switch views</button>
 
 </body>

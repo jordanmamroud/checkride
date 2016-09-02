@@ -322,7 +322,7 @@ app.service("calendarService", [function(){
         syncGcal:function(userData, calendarGcalId){
               userData.$loaded().then(function(){
                              if(userData.synced == true){
-                                 calendarGcalId = data.googleCalendarId ;
+                                 calendarGcalId = userData.googleCalendarId ;
                                  $("#googleSync").prop("checked", true);
                              };
              });
@@ -385,7 +385,6 @@ app.controller("examinerCalendar",  ['$window','$scope', '$firebaseArray', '$fir
             newRequestToast(appointmentRequestsListRef);
             configureCalendar(userEventsRef, userListRef, approvedAppointmentsRef);
             setUpCalendar(calendarConfigRef);
-//            closeModal();
             saveCalSettings(calendarConfigRef);
             approveApptRequest($scope.requestsList,userListRef, userEventsRef ,approvedAppointmentsRef);
             syncWithGcal(calSettingsInfo);
@@ -398,7 +397,7 @@ app.controller("examinerCalendar",  ['$window','$scope', '$firebaseArray', '$fir
 
          //shows when a new appointment request has been received                            
          var newRequestToast = function(ref){
-             commonServices.showToastOnEvent(ref, "appointmentRequests", "child_added");
+             commonServices.showToastOnEvent(ref,"child_added");
          }
          
         // username object is used to set the user name in the top left corner of navbar                             

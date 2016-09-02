@@ -66,14 +66,16 @@ app.service("profileService", ['$firebaseObject','$firebaseAuth', function($fire
 
 app.controller("profileController", ['$scope',"$firebaseArray", "$firebaseObject",'profileService', function($scope, $firebaseArray, $firebaseObject,profileService){
 
-    var examinerListRef = new Firebase("https://checkride.firebaseio.com/examiner");
-    var authData = examinerListRef.getAuth();
+    var usersRef = new Firebase("https://checkride.firebaseio.com/users");
+    var authData = usersRef.getAuth();
     var userEmail = authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, '');
-    var userRef = new Firebase("https://checkride.firebaseio.com/examiner/" + userEmail);
+    var userRef =   usersRef.child(userEmail);
+  
+
+    var bioRef = userRef.child("userData/bio");
+    var certificationsRef= userRef.child("/userData/certifications");
+    var airportsRef= userRef.child("/userData/airports");
     var userInfo = $firebaseObject(userRef);
-    var bioRef = new Firebase("https://checkride.firebaseio.com/examiner/" + userEmail +"/userData/bio");
-    var certificationsRef= new Firebase("https://checkride.firebaseio.com/examiner/" + userEmail +"/userData/certifications");
-    var airportsRef= new Firebase("https://checkride.firebaseio.com/examiner/" + userEmail +"/userData/airports");
     
     $scope.oldPassword='';
     $scope.newPassword='';

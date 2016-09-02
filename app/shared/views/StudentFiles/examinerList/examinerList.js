@@ -1,22 +1,45 @@
-var instructorList = angular.module('instructorList',['firebase', 'studentDirectives']);
+var app = angular.module('studentMod',['firebase', 'studentDirectives', 'commonServices', 'messages']);
 
-instructorList.controller('mainController',function($scope,$window, $firebaseArray){
+app.controller('examinerListController',["$scope","$location","$firebaseArray",function($scope,$location, $firebaseArray){
     var ref = new Firebase("https://checkride.firebaseio.com/");
     var examinersRef = new Firebase("https://checkride.firebaseio.com/examiner");
     var authData = ref.getAuth();
     var studentRef = ref.child("student/" + authData.password.email.replace( /[\*\^\.\'\!\@\$]/g , ''));
     
-    $scope.list = $firebaseArray(examinersRef);    
-    
-    // when the a student clicks schedule button it will go to the profile of the selected examiner
-    var goToProfile = function(ref){
-        $scope.scheduleButtonEvent = function(index){
-            ref.child("currentExaminer").set($scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , ''));
-    //        $window.location.href ="https://checkride.firebaseapp.com/StudentFiles/examinerAvailability.html";
-              $window.location.href = "http://localhost:8000/CheckRide/StudentFiles/viewProfileFiles/examinerInfo.html?username=" + 
-                  $scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , '');
-        }
+    $scope.list = $firebaseArray(examinersRef);  
+    $scope.goToProfile = function(index){   
+        $location.path("/student/examinerProfile").search({username:$scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , '')});
     }
-    goToProfile(studentRef);
-});
+    
+}]);
 
+app.controller('examinerInfoController', ['$routeParams','$scope', '$firebaseArray','$firebaseObject', 'commonServices',function($routeParams,$scope, $firebaseArray, $firebaseObject){
+     $scope.examinerId = $routeParams.username ;
+   
+    var usersRef = new Firebase("https://checkride.firebaseio.com/users");
+    var authData = usersRef.getAuth();
+    var userRef = usersRef.child(authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, ''));
+
+    
+    var examinerRef = usersRef.child($scope.examinerId)
+    var certificationsRef = examinerRef.child("userData/certifications");
+    var airportsRef = examinerRef.child("userData/airports");
+    var bioRef = examinerRef.child("userData/bio");
+    
+    var studentData = $firebaseObject(userRef);
+    var examinerData = $firebaseObject(examinerRef);
+    
+    $scope.certificationsList = $firebaseArray(certificationsRef);
+    $scope.airportList = $firebaseArray(airportsRef);
+    $scope.certificationsList.$loaded().then(function(){
+            
+    });
+  
+    examinerData.$loaded().then(function(){
+        var data = examinerData.userData;
+        $scope.bio = data.bio ;
+        $scope.examinerName = data.firstName +" " + data.lastName ;
+
+    });
+    
+}]);

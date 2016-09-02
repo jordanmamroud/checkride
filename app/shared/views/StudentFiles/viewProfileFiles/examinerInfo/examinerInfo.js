@@ -1,8 +1,8 @@
-var myApp = angular.module('examinerInfo', ['firebase', 'studentDirectives']);
+var myApp = angular.module('examinerInfoMod', ['firebase', 'studentDirectives']);
 
-myApp.controller('infoController', ['$scope', '$firebaseArray','$firebaseObject' ,function($scope, $firebaseArray, $firebaseObject){
+myApp.controller('examinerInfoController', ['$scope', '$firebaseArray','$firebaseObject' ,function($scope, $firebaseArray, $firebaseObject){
     
-    var methods = StudentFunctions();
+
     var examinerId = methods.getVarFromURL();
     
     var studentsRef = new Firebase("https://checkride.firebaseio.com/student/");
@@ -10,22 +10,19 @@ myApp.controller('infoController', ['$scope', '$firebaseArray','$firebaseObject'
     var userRef = studentsRef.child(authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, ''));
     var userDataRef = userRef.child('userData');
     var studentData = $firebaseObject(userDataRef);
-    
     var userListExaminerRef = new Firebase("https://checkride.firebaseio.com/users/" + examinerId);
     var examinerRef = new Firebase("https://checkride.firebaseio.com/examiner/" + examinerId); 
     var examinerDataRef = examinerRef.child('userData')
     var certificationsRef = examinerDataRef.child("certifications");
     var airportsRef = examinerDataRef.child("airports");
   
-    
-
     $scope.certificationsList = $firebaseArray(certificationsRef);
     $scope.airportList = $firebaseArray(airportsRef);
     $scope.certificationsList.$loaded().then(function(){
             console.log($scope.certificationsList);
     })
   
-
+    
     
     var callFunctions = function(){
         getBio(examinerRef);

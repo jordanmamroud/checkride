@@ -1,4 +1,4 @@
-var app = angular.module("checkrideApp", ['ngRoute','ui.calendar', 'firebase', 'examinerDirectives','examinerCalendar', 'loginMod',"createAccountPage",'messages', 'profile']);
+var app = angular.module("checkrideApp", ['ngRoute','ui.calendar', 'firebase', 'examinerDirectives','examinerCalendar', 'loginMod',"createAccountPage",'messages', 'profile', 'examinerControllers', 'studentMod','studentDirectives']);
 
 // logic for showing recurring event options, put in directive
 //           showRecurringEventOptions: function(){
@@ -20,7 +20,6 @@ app.config(function($routeProvider){
         templateUrl:"app/shared/views/user/login/loginPage.html",
         controller:"LoginController",
         controllerAs:"login"
-
     })
     .when("/createAccount", {
         templateUrl: 'app/shared/views/user/createAccount/createAccountPage.html',
@@ -34,14 +33,20 @@ app.config(function($routeProvider){
         templateUrl:'app/shared/views/examinerFiles/profile/profile.html',
         controller:'profileController'
     })
-    .when("/student",{
-        templateUrl:'app/shared/views/StudentFiles/examinerList.html',
-        controller:"examinerList"
-    })
     .when("/examiner/messages",{
-        templateUrl:'app/shared/views/examinerFiles/messages.html',
+        templateUrl:'app/shared/views/examinerFiles/examinerMessages.html',
         controller:'messagesController'
     })
-   
+     .when("/student",{
+        templateUrl:'app/shared/views/StudentFiles/examinerList/examinerList.html',
+        controller:"examinerListController"
+    })
+    .when("/student/examinerProfile",{
+        templateUrl: "app/shared/views/studentFiles/viewProfileFiles/examinerInfo/examinerInfo.html",
+        controller: "examinerInfoController"
+    })
+    .when("/student/messages",{
+        templateUrl:"app/shared/views/StudentFiles/studentMessages.html"
+    })
 });
 

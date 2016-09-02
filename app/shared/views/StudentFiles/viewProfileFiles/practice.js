@@ -10,8 +10,7 @@ var StudentFunctions = function(){
              return urlVar ;
          },
          
-         sendMessageOnClick: function(selector, fireRef, sender){
-            
+         sendMessageOnClick: function(selector, fireRef, sender, key){
                         $(selector).on("click", function(){
                             console.log(Date.now());
                             var convoRef = fireRef.child("conversations/" + sender);
@@ -21,7 +20,8 @@ var StudentFunctions = function(){
                                 body: $("#messageModal #messageBody").val(),
                                 sender: sender,
                                 order: Date.now(),
-                                opened: false
+                                opened: false,
+                                key: key
                         }
                         convoRef.child("lastReceivedMsg").set(new Date(Date.now()).toString());
                         convoRef.child("hasNewMsg").set(true);

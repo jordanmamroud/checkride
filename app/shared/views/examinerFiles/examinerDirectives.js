@@ -5,7 +5,7 @@ myApp.directive("examinerNavbar", function($location){
    return{
        templateUrl:'app/shared/views/examinerFiles/examinerHeader.html',
        controller:function($scope){
-           console.log('h')
+
             $scope.profile = function(){
                 $location.path("/examiner/profile")
             }

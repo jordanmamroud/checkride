@@ -26,7 +26,7 @@ app.service('loginService', ["$firebaseObject", "$location",function($firebaseOb
                                         break;
                                         
                                     case "student":
-                                         $location.path("StudentFiles/examinerList.html")
+                                         $location.path("/student")
                                         break;
                                 }
                             });
