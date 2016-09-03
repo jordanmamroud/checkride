@@ -8,33 +8,31 @@ body {
 }
 
 /* Front Page */
-/* line 20, ../sass/screen.scss */
-#cr-main-search-box {
-  margin-top: 20%;
-}
-/* line 23, ../sass/screen.scss */
-#cr-main-search-box h1 {
-  margin-bottom: 5%;
-}
-/* line 27, ../sass/screen.scss */
-#cr-main-search-box input {
-  margin-bottom: 5%;
+/*
+#cr-main-search-box{
+    margin-top:20%;
+    
+    h1{
+        margin-bottom:5%;
+    }
+    
+    input{
+        margin-bottom:5%;
+    }
 }
 
+*/
 /*HELPER CLASSES*/
-/* line 39, ../sass/screen.scss */
-.text-white {
-  color: white;
+/*
+.text-white{
+    color:white;
 }
 
-/* line 43, ../sass/screen.scss */
-.navbar {
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  border-radius: 0;
+.navbar{
+    @include border-radius(0);
 }
-
-/* line 47, ../sass/screen.scss */
+*/
+/* line 51, ../sass/screen.scss */
 .vertical-center {
   min-height: 100%;
   /* Fallback for browsers do NOT support vh unit */

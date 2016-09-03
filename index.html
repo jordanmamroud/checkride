@@ -14,52 +14,88 @@
        
         <!-- Libraries -->
             <!-- Stylesheets -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-            <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css"/>
-            <link rel="stylesheet" href="user/popUpBox.css">
-            <link rel="stylesheet" href="user/myFullCalendar.css">
+            <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
+            
             <link rel="stylesheet" href="node_modules/angular-material/angular-material.css"/>
 
             <!-- Scripts -->
-            <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-            <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script> 
-            <script type="text/javascript" src="bower_components/angular-touch/angular-touch.js"></script>
-            <script type='text/javascript' src="bower_components/fullcalendar/dist/gcal.js"></script>
-            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js"></script>
-            <script type="text/javascript" src="bower_components/angular-ui-calendar/src/calendar.js"></script>
-            <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
-            <script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
-            <script type="text/javascript" src="assets/libs/ui-bootstrap/ui-bootstrap-tpls-2.1.3.js"></script>
+            <script type="text/javascript" src="node_modules/angular/angular.js"></script>
+            <script type="text/javascript" src="node_modules/angular-route/angular-route.js"></script> 
+            <!--<script type="text/javascript" src="node_modules/angular-touch/angular-touch.js"></script>-->
+            <script type="text/javascript" src="node_modules/angular-animate/angular-animate.js"></script>
+            <script type="text/javascript" src="node_modules/angular-aria/angular-aria.js"></script>            
+            <script type="text/javascript" src="node_modules/angular-material/angular-material.js"></script>            
+            <!--<script type="text/javascript" src="assets/libs/ui-bootstrap/ui-bootstrap-tpls-2.1.3.js"></script>-->
             <script type="text/javascript" src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
             <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
-            <script type="text/javascript" src="node_modules/angular-material/angular-material.js"></script>
+            
         
-        <!-- APPLICATION ->> 
+        <!-- APPLICATION FILES ->> 
             <!-- Stylesheets -->
             <link rel="stylesheet" href="assets/css/stylesheets/screen.css">
             
+            
+            
             <!-- Scripts -->
-            <script type="text/javascript" src="../checkrider.js"></script>
-            <script type="text/javascript" src="../app/checkrider.routes.js"></script>
+            <script type="text/javascript" src="checkrider.js"></script>
+            <script type="text/javascript" src="app/checkrider.directives.js"></script>
+            <script type="text/javascript" src="app/checkrider.routes.js"></script>
+            <script type="text/javascript" src="app/components/components.js"></script>
+            <script type="text/javascript" src="app/users/user.js"></script>
+            <script type="text/javascript" src="app/components/search/search.js"></script>
+
+            
+
+            
+            
+            <!-- Author: Jordan --> 
+            <!--
+            <link rel="stylesheet" href="app/shared/views/user/popUpBox.css">
+            <link rel="stylesheet" href="app/shared/views/user/myFullCalendar.css">
+            
+            <script type="text/javascript" src="app/components/examiner/checkrider-examiner.js"></script>
+            <script type="text/javascript" src="app/components/instructor/checkrider-instructor.js"></script>
+            <script type="text/javascript" src="app/components/student/checkrider-student.js"></script>
             <script src="app.js"></script>
-            <script type="text/javascript" src="../app/components/components.module.js"></script>
-            <script type="text/javascript" src="../app/shared/user/user.services.js"></script>
-            <script type='text/javascript' src="../examinerFiles/calendarServices.js"></script>        
+            
+            <script type="text/javascript" src="app/scripts/services/commonservices.js"></script>
+            <script type="text/javascript" src="app/scripts/directives/directives.js"></script>
+            <script type="text/javascript" src="app/shared/views/examinerFiles/examinerCalendar/calendarServices.js"></script>
+            <script type="text/javascript" src="app/shared/views/examinerFiles/examinerDirectives.js"></script>
+            <script type="text/javascript" src="app/shared/views/user/login/loginPage.js"></script>
+            <script type="text/javascript" src="app/shared/views/user/createAccount/createAccountPage.js"></script>
+            <script type="text/javascript" src="app/shared/views/examinerFiles/profile/profile.js"></script>
+            <script type="text/javascript" src="app/scripts/messages.js"></script>
+            <script type="text/javascript" src="app/shared/views/examinerFiles/examinerMessages.js"></script>
+            <script type="text/javascript" src="app/shared/views/StudentFiles/studentDirectives.js"></script>
+            <script type="text/javascript" src="app/shared/views/StudentFiles/examinerList/examinerList.js"></script>
+            <script type="text/javascript" src="app/shared/views/StudentFiles/viewProfileFiles/examinerInfo/examinerInfo.js"></script>-->
         
     </head>
 
-    <body  ng-controller="index">
-       <div id="cr-app">
-            <!-- HEADER -->        
-            <div header></div>
+    <body ng-controller="crIndexCtrl" layout="column">
 
-            <!-- MAIN APPLICATION -->
-            <div class="container" role="main">
-                <div ng-view></div>
-            </div>
+        
+        <!-- HEADER -->
+        <md-toolbar layout="row">
+            <cr-header></cr-header>    
+        </md-toolbar>
+          
+        <!-- Main Wrapper -->
+        <div flex layout="row">
+            
+            <!-- SIDEBAR -->          
+            <md-sidebar  md-is-open="$mdMedia('sm')" class="" ng-show="false">
+                <cr-sidebar></cr-sidebar>
+            </md-sidebar>
+       
+            <!-- CONTENT -->
+            <md-content flex id="content">
+                <div class="container" role="main" layout-fill layout-row>
+                    <div ng-view layout-fill></div>
+                </div>
+            </md-content>
 
-            <!-- FOOTER -->
-            <div footer></div>
         </div>
 
     </body>

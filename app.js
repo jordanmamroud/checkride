@@ -1,4 +1,16 @@
-var app = angular.module("checkrideApp", ['ngRoute','ui.calendar', 'firebase', 'examinerDirectives','examinerCalendar', 'loginMod',"createAccountPage",'messages', 'profile', 'examinerControllers', 'studentMod','studentDirectives']);
+var app = angular.module("checkrideApp", 
+                         ['ngRoute',
+                          'ui.calendar',
+                          'firebase',
+                          'examinerDirectives',
+                          'examinerCalendar',
+                          'loginMod',
+                          "createAccountPage",
+                          'messages', 
+                          'profile', 
+                          'examinerControllers', 
+                          'studentMod',
+                          'studentDirectives']);
 
 // logic for showing recurring event options, put in directive
 //           showRecurringEventOptions: function(){
@@ -15,8 +27,11 @@ var app = angular.module("checkrideApp", ['ngRoute','ui.calendar', 'firebase', '
 //                    },
 
 
+/*
+//MERGED
 app.config(function($routeProvider){
-    $routeProvider.when("/",{
+    $routeProvider
+    .when("/",{
         templateUrl:"app/shared/views/user/login/loginPage.html",
         controller:"LoginController",
         controllerAs:"login"
@@ -49,4 +64,5 @@ app.config(function($routeProvider){
         templateUrl:"app/shared/views/StudentFiles/studentMessages.html"
     })
 });
+*/
 

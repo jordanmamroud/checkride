@@ -1,0 +1,72 @@
+
+<div id="cr-pg-search" class="row" style="display:none">
+   
+    <!-- Search Box -->
+   <div id="cr-main-search-box" class="col-md-8 col-md-offset-2">
+
+        <h1 class="text-center text-primary">Schedule your checkride</h1>
+
+        <!-- Main Search Area --> 
+        <form id="main-search">
+            <div class="form-group form-group-lg">
+                <input type="text" class="form-control" placeholder="Search by airport... (ie. 'EWR' or 'Newark')" autofocus ng-model="searchBox" />
+                <div class="text-center">
+                    <button class="btn btn-primary btn-lg" ng-click="search(searchBox)">Find Examiners</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+   
+   
+    <!-- Search Results -->
+    <div id="cr-main-search-results" class="col-md-12 panel" ng-show="examiners.length > 0">
+       
+        <div class="panel-header">
+            <h3>Examiners</h3>
+        </div>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Examiners</th>
+                    <th>Airports</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="userList" ng-model="examiners" ng-repeat="examiner in examiners">
+                   <!--| filter: searchBox: user.userData.lastname-->
+                    <td>{{examiner.userData.firstName}} {{examiner.userData.lastName}}</td>
+                    <td><span ng-model="$index.airports" ng-repeat="airport in $index.airports">{{airport}}</span></td>
+                    <td>
+                        <button>View</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+
+
+<md-content layout-fill style="background-image:url('http://cdn.wonderfulengineering.com/wp-content/uploads/2014/05/airplane-wallpaper-2.jpg'); background-size:cover; background-position:center center;">
+    <section layout-fill>
+            
+           <md-container layout layout-align="center center">
+               <h1 class="md-display-1">Find an examiner near you...</h1>
+           </md-container>
+           
+            <form layout layout-align="center center">       
+                    <md-input-container layout="column" flex="50">
+                       <label>Search by airport code (ie.: 'ABE') </label>
+                        <input autofocus>                
+                    </md-input-container>
+
+                    <md-input-container layout-align="center" flex="10" layout="column">
+                        <md-button class="md-raised md-primary" type="submit">Search</md-button>
+                    </md-input-container>
+            </form>
+        
+    </section>
+</md-content>
