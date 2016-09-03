@@ -11,7 +11,6 @@ myApp.directive("examinerNavbar", function($location){
                 $location.path("/examiner/profile")
             }
             $scope.calendar = function(){
-                console.log('ham');
                 $location.path("/examiner/calendar");
             }
             $scope.messages = function(){

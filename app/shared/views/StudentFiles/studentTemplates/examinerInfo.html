@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="" ng-app='examinerInfo'>
+<head>
+
+</head>
+<style>
+    #sidebar{
+        display: inline-block;
+        width: 10%;
+    }
+    </style>
+
+<body>
+   <student-header></student-header>
+        <button show-modal modal-to-open="#messageModal" id="messageButton">Send Message</button>
+        <h1 ng-model="studentName">{{examinerName}}</h1>
+       
+        <button id="scheduleButton" ng-click="viewSchedule()">View Schedule</button>
+          <h2>Certifications</h2>
+           <ul ng-repeat="cert in certificationsList">
+               <li>{{cert.description}}</li>
+           </ul> 
+
+           <h2>Airports served</h2>
+           <ul ng-repeat="ap in airportList">
+               <li>{{ap.name}}</li>
+           </ul>
+
+           <h2>About</h2>
+           <p ng-model="bio"id="bio">{{bio}}</p>
+           
+    <send-message-modal send-to="examinerId" sender="studentName" modal-id="messageModal"></send-message-modal>
+</html>

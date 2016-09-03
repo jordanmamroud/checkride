@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang=""ng-app="instructorAvailability">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examiner Profile</title>
+
+</head>
+    
+<body>  
+        <!-- comes from studentDirective in studentDirectives.js -->
+        <student-header></student-header>
+        <h1 ng-model="studentName">{{studentName}}</h1>
+    
+        <button ng-click="goBack()">Back to profile</button>
+    
+        <button show-modal modal-to-open="#messageModal">Send Message</button>
+
+        <div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div> 
+      
+        <send-message-modal send-to="examinerId" sender="studentName" modal-id="messageModal"></send-message-modal>
+<!--
+     <my-modal myid="messageModal">
+                <h2>Message</h2><br>
+                <input type="text" id="messageSubject">
+                <textarea cols="50" rows="4" name="body" id="messageBody"></textarea>
+                <button id="sendButton">Send Message</button>
+     </my-modal>
+-->
+        
+        <my-modal myid="requestModal">
+                <h2>Time</h2><br>
+                <p ng-model="eventStart">{{eventStart}}</p>
+                <p ng-model="eventEnd">{{eventEnd}}</p>
+                <button id="requestButton" ng-click="sendRequest()">Request Appointment</button>
+          </my-modal>
+</body>
+</html>

@@ -1,6 +1,6 @@
 var app = angular.module('commonServices', []);
 
-app.service("commonServices", ["$location",'$timeout', function($location, $timeout){
+app.service("commonServices", ["$location",'$timeout', '$filter',function($location, $timeout, $filter){
     return{
         
         changePath: function(urlString){
@@ -17,12 +17,6 @@ app.service("commonServices", ["$location",'$timeout', function($location, $time
             ref.on(event, function (datasnapshot){
                         $('.toast').fadeIn(400).delay(3000).fadeOut(400);
             });
-        },
-        
-        setDataField: function(fireData, selector){
-            fireData.$loaded().then(function(){
-               $(selector).text(fireData.userData.firstName + " " + fireData.userData.lastName); 
-            });
-        }  
+        }
     }
 }]);
