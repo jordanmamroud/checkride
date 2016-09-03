@@ -4,9 +4,11 @@ app.directive("showModal", function(){
        link: function(scope,element,attrs){
            $(element).on("click", function(){
                 $(scope.modalToOpen).addClass('showing');
-               console.log('ham');
            })
        }, 
+        controller:function($scope){
+            console.log($scope);
+        },
        scope:{
             modalToOpen:"@modalToOpen",
             openFunc:"&"

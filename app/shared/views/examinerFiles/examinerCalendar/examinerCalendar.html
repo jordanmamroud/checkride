@@ -4,17 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
-<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../bower_components/fullcalendar/dist/fullcalendar.css"/>
-    <link rel="stylesheet" href="../generalFiles/popUpBox.css">
-    <link rel="stylesheet" href="../generalFiles/myFullCalendar.css">-->
-    
+
     <style>
         .hide{
             display: none ;
         }
         .showing{
-            display: block;
+            display: block ;
         }
     </style>
 </head>
@@ -22,7 +18,7 @@
 <body>
    
             <examiner-navbar></examiner-navbar>
-
+            <h2 ng-model="name">{{name}}</h2>
             <div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div> 
             <div class='toast' style='display:none'>You have a new Appointment Request</div>
 
@@ -33,11 +29,10 @@
                     <p id="eventStart" ng-model="eventStart"></p>
                     <p id="eventEnd" ng-model="eventStart"></p>
                     <label>Recurring Event?</label>
-                    <input type="checkbox" id="dowCheckBox">
-
-                    <div id="recur" class="hide">
+                    <input type="checkbox" id="dowCheckBox" ng-model="dowCheckBox">
+                    <div id="recur" ng-class="{hide: dowCheckBox == false}">
                         <label>choose frequency</label>
-                             <select id="freq" name="frequency">
+                             <select ng-model="frequency" id="freq" name="frequency">
                                     <option>daily</option>
                                     <option>weekly</option>
                                     <option>monthly</option>
@@ -52,7 +47,7 @@
                              <input type="date" id="endDate">
                         </form>
 
-                        <div id="dow" class="hide">    
+                        <div id="dow" ng-class="{hide: frequency != 'weekly'}">    
                             <form id="dowForm">
                                 <label>Sunday</label>
                                 <input type="checkbox" id="sunday" value="sunday">
@@ -73,13 +68,13 @@
                     </div>
                     <button close-modal id="createEventButton" ng-click="createEvent()">Create</button>
             </my-modal>
-
+<input type="text" ng-model="calStartTime" id="calendarStartTime" placeholder="enter calendar start time">
 
             <my-modal myid="settingsModal">
-                <input type="text" id="calendarStartTime" placeholder="enter calendar start time">
-                <input type="text" id="calendarEndTime" placeholder="enter calendar end time">
-                <input type="email" id="googleCalendarId" placeholder="enter google calendar id">
-                <button close-modal id="saveButton">Save</button>
+                <input type="text" ng-model="calStartTime" id="calendarStartTime" placeholder="enter calendar start time">
+                <input type="text" ng-model="calEndTime" id="calendarEndTime" placeholder="enter calendar end time">
+                <input type="email" ng-model="gcalId" id="googleCalendarId" placeholder="enter google calendar id">
+                <button close-modal id="saveButton" ng-click="saveCalSettings()">Save</button>
                 <input type="checkbox" ng-checked="syncGcal()"id="googleSync">select box to sync with google calendar<br>
             </my-modal>
 

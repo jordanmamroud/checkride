@@ -1,6 +1,6 @@
 var app = angular.module('examinerCalendar',[]);
 
-app.service("calendarService", [function(){
+app.service("calendarService", ['$filter', function($filter){
        // constructor for the users calendar settings called in saveCalSettings function
         var CalSettings = function (minTime, maxTime, googleCalendarId, synced) {
             this.minTime = minTime;
@@ -9,6 +9,7 @@ app.service("calendarService", [function(){
             this.synced = synced;
         }
         
+
         var eventCreate = {
                 createRegularEvent: function(start, end, eventId, ref){         
                     var eventObj ={
@@ -107,7 +108,6 @@ app.service("calendarService", [function(){
                               }
                         },
             updateMonthlyEvent: function(){
-                        //reminder properbel is _i is original time not new event time , look at event itself more
                         ref.once("value", function(datasnapshot){
                             datasnapshot.forEach(function(childsnapshot){
                                 if(childsnapshot.val().title == event.title){
@@ -128,9 +128,7 @@ app.service("calendarService", [function(){
                     }
             }
         }
-        
-        
-        
+
     return{
         recurringEventMethods: function(start, end, eventId,ref){
              var today = moment(start).format('YYYY/MM/DD').replace(/-/g, "/");
@@ -282,9 +280,9 @@ app.service("calendarService", [function(){
         
         saveCalSettings: function(startTime, endTime, googleCalendarId, ref){
                 if($('#googleSync').prop('checked')){
-                    ref.set(new CalSettings(startTime, endTime,googleCalendarId, true));
+                    ref.child("settings").set(new CalSettings(startTime, endTime, googleCalendarId, true));
                 }else{
-                    ref.set(new CalSettings(startTime, endTime,googleCalendarId, false));
+                    ref.child("settings").set(new CalSettings(startTime, endTime, googleCalendarId, false));
                 }
         },
         
@@ -375,85 +373,63 @@ app.controller("examinerCalendar",  ['$window','$scope', '$firebaseArray', '$fir
         var arr= [];      
         var events = $firebaseArray(userEventsRef);
         var approvedApointments = $firebaseArray(approvedAppointmentsRef);
-          
-
-        // the requests list is a list of all student appointment request for the logged in examiner                             
+        var userInfo = $firebaseObject(userRef);
+                       
         $scope.requestsList = $firebaseArray(appointmentRequestsListRef);
-          
+        $scope.dowCheckBox= false ;
+        $scope.frequency = 'daily';
+        $scope.calStartTime=20;
         
+        userInfo.$loaded().then(function(){
+           $scope.name = userInfo.userData.firstName +" " + userInfo.userData.lastName ;
+        });
+  
+/*        calendarService.syncGcal(calSettingsInfo, $scope.uiConfig.calendar.events.googleCalendarId);*/
+        commonServices.showToastOnEvent(appointmentRequestsListRef,"child_added");
+        commonServices.orderArray($scope.requestsList, "-sentAt")
+
         var callFunctions = function(){
-            newRequestToast(appointmentRequestsListRef);
+ 
             configureCalendar(userEventsRef, userListRef, approvedAppointmentsRef);
-            setUpCalendar(calendarConfigRef);
             saveCalSettings(calendarConfigRef);
             approveApptRequest($scope.requestsList,userListRef, userEventsRef ,approvedAppointmentsRef);
-            syncWithGcal(calSettingsInfo);
-            setNameField();
+ 
         };
 
-        var initializeRequestsList = function(){
-            commonServices.orderArray($scope.requestsList, "-sentAt")
-        };
-
-         //shows when a new appointment request has been received                            
-         var newRequestToast = function(ref){
-             commonServices.showToastOnEvent(ref,"child_added");
-         }
-         
-        // username object is used to set the user name in the top left corner of navbar                             
-        var setNameField = function(){        
-            commonServices.setDataField(userInfo, "#userName");
-        }
-                
-        //used to get the users gmail if they have chosen to sync with gcal                                   
-        var syncWithGcal = function(data){
-          calendarService.syncGcal(data, $scope.uiConfig.calendar.events.googleCalendarId)
-        }
+   
         var test=[];
                         
         // takes the users saved calendar settings from db and adds events in events[] to calendar  
-        var setUpCalendar = function (ref) {
-            ref.on("value", function (snapshot){
-                $("#loggedInUser").text(userEmail);
-                if(snapshot.hasChild("minTime")){
-                    var startTime = snapshot.val().minTime;
-                    var endTime = snapshot.val().maxTime;
-                    // giving owner document error
-/*                    $scope.uiConfig.calendar.minTime = startTime.toString();
-                    $scope.uiConfig.calendar.maxTime = endTime.toString();*/
-                }
-            });
-        }
-                              
-
-        var onEventChange = function (event,  ref) {
-                calendarService.onEventChange(event,ref);
-        }
-        
-        var createEvent = function (start, end, ref){
-            calendarService.createEvent(start,end, userEventsRef);
-        }
-          
-        var createRecurringEvent = function(start, end,eventId){
-             calendarService.createRecurringEvent(start,end,eventId);
-        }
-
-        var createRegularEvent = function(start, end, eventId){
-            calendarService.createRegularEvent(start,end,eventId,userEventsRef);
-        }
-
-        var deleteEvent = function (event,ref) {
-            calendarService.deleteEvent(event, ref,"#deleteButton");
-        }
+//        var setUpCalendar = function (calendarConfigRef) {
+//            ref.on("value", function (snapshot){
+//                $("#loggedInUser").text(userEmail);
+//                if(snapshot.hasChild("minTime")){
+//                    var startTime = snapshot.val().minTime;
+//                    var endTime = snapshot.val().maxTime;
+//                    // giving owner document error
+///*                    $scope.uiConfig.calendar.minTime = startTime.toString();
+//                    $scope.uiConfig.calendar.maxTime = endTime.toString();*/
+//                }
+//            });
+//        }
 
         var saveCalSettings = function(ref){
             $("#saveButton").on("click", function(){
                 var startTime = $("#calendarStartTime").val();
                 var endTime = $("#calendarEndTime").val();
                 var googleCalendarId = $("#googleCalendarId").val();
-                calendarService.saveCalSettings(startTime, endTime, googleCalendarId, ref);
+                calendarService.saveCalSettings(startTime, endTime, googleCalendarId, calendarConfigRef);
                 console.log('hammmies')
             });
+        }
+        
+        $scope.saveCalSettings =function(){
+//                var startTime = $("#calendarStartTime").val();
+//                var endTime = $("#calendarEndTime").val();
+//                var googleCalendarId = $("#googleCalendarId").val();
+                console.log($scope.calStartTime);
+                calendarService.saveCalSettings($scope.calStartTime , $scope.calEndTime, $scope.gcalId, userCalendarRef);
+                console.log('hammmies')
         }
 
          var pendingRequestButtonEvent = function (list){
@@ -471,17 +447,6 @@ app.controller("examinerCalendar",  ['$window','$scope', '$firebaseArray', '$fir
                 calendarService.approveAppointment(list,index, userListRef ,userEventsRef, approvedAppointmentsRef, userInfo);
             };   
         }
-        
-        
-//        //  closes modal boxes when x button is clicked
-//        var closeModal = function () {
-//            $("span.close").on("click", function () {
-//                $(".modal").css("display", "none");
-//                $("#addEventModal").removeClass("showing");
-//                $("#recur").addClass("hide");
-//                $("#dowCheckBox").prop("checked", false);
-//            });
-//        }
         
         $scope.eventSources = [];
           
@@ -534,17 +499,17 @@ app.controller("examinerCalendar",  ['$window','$scope', '$firebaseArray', '$fir
                         $("#eventStart").text(start.toString());
                         $("#eventEnd").text(end.toString());
                         $("#createEventButton").unbind();
-                        createEvent(start, end);
+                         calendarService.createEvent(start,end, userEventsRef);
                     },
                     editable: true,
                     eventClick: function (event, element) {
                         calendarService.eventClick(event,userEventsRef,approvedAppointmentsRef, "#deleteButton");
                     },
                     eventDrop: function ( event , element) {
-                        onEventChange(event, userEventsRef);
+                        calendarService.onEventChange(event, userEventsRef);
                     },
                     eventResize: function (event , element) {
-                        onEventChange(event, userEventsRef);
+                        calendarService.onEventChange(event, userEventsRef);
                     },
                     eventRender: function(event,element,view){  
                         calendarService.checkDateRange(event);
@@ -559,8 +524,7 @@ app.controller("examinerCalendar",  ['$window','$scope', '$firebaseArray', '$fir
         }
 
           
-        callFunctions();
-        
+        callFunctions();  
 }]);
 
 
