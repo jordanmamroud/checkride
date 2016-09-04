@@ -8,12 +8,13 @@ angular.module('crRoutes',['ngRoute'])
             resolve: 'crSearchCtrl'
         })
         .when( RoutePaths.login.path, {
-                templateUrl: 'app/shared/user/login.html',
-                controller: 'UserServicesCtrl'
+                templateUrl:'app/sessions/login.html',
+            controller:"LoginController",
+            controllerAs:"login"
         })
         .when( RoutePaths.signUp.path, {
-                templateUrl: 'app/shared/user/create-account.html',
-                controller: 'UserServicesCtrl'
+                templateUrl: 'app/users/views/create-user.html'
+                
         })
         .otherwise({
             templateUrl:'app/shared/system/404.html'
@@ -21,36 +22,35 @@ angular.module('crRoutes',['ngRoute'])
 
         //Author: Jordan
         .when("/log-in",{
-            templateUrl:'app/shared/views/user/login/loginPage.html',
+            templateUrl:'app/sessions/login.html',
             controller:"LoginController",
             controllerAs:"login"
         })
         .when("/createAccount", {
-            templateUrl: 'app/shared/views/user/createAccount/createAccountPage.html',
+            templateUrl: 'app/sessions/createAccountPage.html',
             controller:'createAccountController'
         })
         .when("/examiner/calendar",{
-            templateUrl:"app/shared/views/examinerFiles/examinerCalendar/examinerCalendar.html",
+            templateUrl:"app/users/views/examinerCalendar.html",
             controller:"examinerCalendar"
         })
         .when("/examiner/profile", {
-            templateUrl:'app/shared/views/examinerFiles/profile/profile.html',
+            templateUrl:'app/users/views/profile.html',
             controller:'profileController'
         })
         .when("/examiner/messages",{
-            templateUrl:'app/shared/views/examinerFiles/examinerMessages.html',
-            controller:'messagesController'
+            templateUrl:'app/components/messaging/messages.html'
         })
          .when("/student",{
-            templateUrl:'app/shared/views/StudentFiles/examinerList/examinerList.html',
+            templateUrl:'app/users/views/examinerList.html',
             controller:"examinerListController"
         })
         .when("/student/examinerProfile",{
-            templateUrl: "app/shared/views/studentFiles/viewProfileFiles/examinerInfo/examinerInfo.html",
+            templateUrl: "app/users/views/examinerInfo.html",
             controller: "examinerInfoController"
         })
         .when("/student/messages",{
-            templateUrl:"app/shared/views/StudentFiles/studentMessages.html"
+            templateUrl:"app/users/views/studentMessages.html"
         })
         //End Author
         

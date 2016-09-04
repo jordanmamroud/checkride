@@ -1,4 +1,4 @@
-var app = angular.module('studentMod',['firebase', 'studentDirectives', 'commonServices', 'messages']);
+var app = angular.module('studentMod',['firebase', 'studentDirectives', 'commonServices', 'messages', 'crUserServices']);
 
 app.controller("studentHomePageController",  function($scope, $firebaseArray,$firebaseObject){
     var ref = new Firebase("https://checkride.firebaseio.com/");

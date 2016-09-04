@@ -1,15 +1,20 @@
 var checkrider = angular.module('checkrider',[
     'crRoutes',
     'crComponents',
+    'crUserServices',
     'crUser',
     'crDirectives',
+    'crSession',
+  
+    'commonServices',
+    
     
     'ngMaterial',    
     'ngAnimate',
     'ngAria',
-    
     'firebase',
     
+     
     /*
     'Components.Module',
     'UserServices.Module',
@@ -57,7 +62,7 @@ var checkrider = angular.module('checkrider',[
             $scope.isSearch = false;
         }
     });
-
+    $scope.goToLogin = 
     this.login = RoutePaths.login;
     this.signUp = RoutePaths.signUp;
     
@@ -66,4 +71,29 @@ var checkrider = angular.module('checkrider',[
 //FOOTER CONTROLLER
 .controller('crFooter', ["$scope", function($scope){
 
-}]);
+}])
+
+.directive('crSidebar', function(){
+    return{
+
+        controller:function($scope){
+            
+            $scope.profile = function(){
+                $location.path("/examiner/profile")
+            }
+              
+            $scope.calendar = function(){
+                $location.path("/examiner/calendar");
+            }
+            
+            $scope.messages = function(){
+                $location.path("/examiner/messages")
+            }
+            
+            $scope.home = function(){
+                $location.path('/examiner')
+            }
+            
+        }
+    }
+});

@@ -41,10 +41,16 @@
             <script type="text/javascript" src="app/checkrider.directives.js"></script>
             <script type="text/javascript" src="app/checkrider.routes.js"></script>
             <script type="text/javascript" src="app/components/components.js"></script>
-            <script type="text/javascript" src="app/users/user.js"></script>
-            <script type="text/javascript" src="app/components/search/search.js"></script>
 
             
+            <script type="text/javascript" src="app/components/search/search.js"></script>
+            
+            <script type="text/javascript" src="app/sessions/session.js"></script>
+            <script type="text/javascript" src="app/services/commonservices.js"></script>
+            <script type="text/javascript" src="app/users/user.js"></script>
+
+            <script type="text/javascript" src="app/users/user.service.js"></script>
+            <script type="text/javascript" src="app/users/userDirectives.js"></script>
 
             
             
@@ -85,16 +91,16 @@
         <div flex layout="row">
             
             <!-- SIDEBAR -->          
-            <md-sidebar  md-is-open="$mdMedia('sm')" class="" ng-show="false">
+            <md-sidebar  md-is-open="$mdMedia('sm')" class="" ng-show="true">
                 <cr-sidebar></cr-sidebar>
             </md-sidebar>
        
             <!-- CONTENT -->
-            <md-content flex id="content">
+            <div flex layout="column" id="content">
                 <div class="container" role="main" layout-fill layout-row>
                     <div ng-view layout-fill></div>
                 </div>
-            </md-content>
+            </div>
 
         </div>
 
