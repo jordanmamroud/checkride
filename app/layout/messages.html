@@ -11,7 +11,6 @@
     }
     .setColor{
         background-color:red;
-
     }
     </style>
 
@@ -54,7 +53,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr show-modal modal-to-open="#msgDetailsModal" ng-repeat="msg in messagesList track by $index" ng-class="{setColor: msg.opened==false}" ng-init="$last && checkIfOpened()" ng-click="viewMessageDetails(msg)">
+                    <tr show-modal modal-to-open="#msgDetailsModal" ng-repeat="msg in messagesList | reverse track by $index" ng-class="{setColor: msg.opened==false}" ng-init="$last && checkIfOpened()" ng-click="viewMessageDetails(msg)">
                       <td>{{msg.sender}}</td>
                       <td>{{msg.subject}}</td>
                       <td></td>

@@ -1,0 +1,55 @@
+
+    
+<div id="{{myid}}" } class="modal">
+    <div class="modal-content">
+         <span close-modal>x</span>
+        
+        <h2>Event</h2><br>
+        <input type="text" placeholder="enter Your event" ng-model="eventTitle" id="eventInput">
+        <h4>When:</h4>
+        <p id="eventStart" ng-model="eventStart">{{eventStartObj.toString()}}</p>
+        <p id="eventEnd" ng-model="eventEnd">{{eventEndObj.toString()}}</p>
+        <label>das Event?</label>
+        <input type="checkbox" id="dowCheckBox" ng-model="dowCheckBox">
+        <div id="recur" ng-class="{hide: dowCheckBox == false}">
+            <label>choose frequency</label>
+                 <select ng-model="frequency" id="freq" name="frequency">
+                        <option>daily</option>
+                        <option>weekly</option>
+                        <option>monthly</option>
+            </select><br>
+
+            <form id="repeatForm">
+                <label>starts on <input id='startDate' type="date"></label><br>
+                <label><input type="checkbox" value="never" id="never">never</label>
+                <br>
+                <input type="checkbox" value="occurences" id="occurences"><label>after <input id="numOccur" ng-model="numOccur" type="number"> occurences</label><br>
+                <input type="checkbox" value="endsOn" id="endsOn">
+                <label>Ends on</label>
+                <input type="date" ng-model="endDate">
+            </form>
+
+            <div id="dow" ng-class="{hide: frequency != 'weekly'}">    
+                <form id="dowForm">
+                    <label>Sunday</label>
+                    <input type="checkbox" id="sunday" value="0">
+                    <label>Monday</label>
+                    <input type="checkbox" id="monday" value="1">
+                    <label>Tuesday</label>
+                    <input type="checkbox" id="tuesday" value="2">
+                    <label>Wednesday</label>
+                    <input type="checkbox" id="wednesday" value="3">
+                    <label>Thursday</label>
+                    <input type="checkbox" id="thursday" value="4">
+                    <label>Friday</label>
+                    <input type="checkbox" id="friday" value="5">
+                    <label>Saturday</label>
+                    <input type="checkbox" id="saturday" value="6">
+                </form>
+            </div>
+        </div>
+        <button close-modal id="createEventButton" ng-click="createEvent()">Create</button>
+
+  </div>
+</div>
+          

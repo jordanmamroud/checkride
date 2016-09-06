@@ -19,11 +19,10 @@ angular.module('crRoutes',['ngRoute'])
         .otherwise({
             templateUrl:'app/shared/system/404.html'
         })
-
         //Author: Jordan
         .when("/log-in",{
             templateUrl:'app/sessions/login.html',
-            controller:"LoginController",
+            controller:"crLogin",
             controllerAs:"login"
         })
         .when("/createAccount", {
@@ -32,14 +31,15 @@ angular.module('crRoutes',['ngRoute'])
         })
         .when("/examiner/calendar",{
             templateUrl:"app/users/views/examinerCalendar.html",
-            controller:"examinerCalendar"
+            controller:"examinerCalendarController",
+            controllerAs:"vm"
         })
         .when("/examiner/profile", {
             templateUrl:'app/users/views/profile.html',
             controller:'profileController'
         })
         .when("/examiner/messages",{
-            templateUrl:'app/components/messaging/messages.html'
+            templateUrl:'app/users/views/examinerMessages.html'
         })
          .when("/student",{
             templateUrl:'app/users/views/examinerList.html',

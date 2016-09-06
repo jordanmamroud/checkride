@@ -1,10 +1,24 @@
-var app = angular.module('myApp', ['ui.calendar', 'firebase','crExaminer']);
+var app = angular.module('crCalendar', ['ui.calendar', 'firebase', 'crCalendar.service', 'calDir']);
+        // takes the users saved calendar settings from db and adds events in events[] to calendar  
+//        var setUpCalendar = function (calendarConfigRef) {
+//            ref.on("value", function (snapshot){
+//                $("#loggedInUser").text(userEmail);
+//                if(snapshot.hasChild("minTime")){
+//                    var startTime = snapshot.val().minTime;
+//                    var endTime = snapshot.val().maxTime;
+//                    // giving owner document error
+///*                    $scope.uiConfig.calendar.minTime = startTime.toString();
+//                    $scope.uiConfig.calendar.maxTime = endTime.toString();*/
+//                }
+//            });
+//        }
 
 
+app.controller("examinerCalendarController",  ['$window','$scope', '$firebaseArray', '$firebaseObject', '$compile', 'uiCalendarConfig','commonServices',"calendarService",
+      function ($window,$scope, $firebaseArray, $firebaseObject, $compile, uiCalendarConfig, commonServices, calendarService){
+        var vm = this ;  
+          
 
-app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$firebaseObject', '$compile', 'uiCalendarConfig',
-      function ($window,$scope, $firebaseArray, $firebaseObject, $compile, uiCalendarConfig) {
-   
         var userListRef = new Firebase("https://checkride.firebaseio.com/users");
         var authData = userListRef.getAuth();           
         var userEmail = authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, '');                        
@@ -16,66 +30,48 @@ app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$fi
         var appointmentRequestsListRef = userRef.child("appointmentRequests");                 
         var userInfo = $firebaseObject(userRef); 
         var calSettingsInfo = $firebaseObject(calendarConfigRef);
-        var check= [];
-        var arr= [];      
+        var test=[];  
         var events = $firebaseArray(userEventsRef);
         var approvedApointments = $firebaseArray(approvedAppointmentsRef);
+        var userInfo = $firebaseObject(userRef);
           
-        // the requests list is a list of all student appointment request for the logged in examiner                             
-        $scope.requestsList = $firebaseArray(appointmentRequestsListRef);
         
-        var callFunctions = function(){
-            newRequestToast(appointmentRequestsListRef);
-            configureCalendar(userEventsRef, userListRef, approvedAppointmentsRef);
-            setUpCalendar(calendarConfigRef);
-            closeModal();
-            saveCalSettings(calendarConfigRef);
-            approveApptRequest(userListRef, userEventsRef ,approvedAppointmentsRef);
-            syncWithGcal(calSettingsInfo);
-            setNameField();
-        };
-
-        var initializeRequestsList = function(){
-          $scope.requestsList = $filter('orderBy')($scope.requestsList, '-sentAt');
-        };
+        var today = moment(vm.eventStart).format('YYYY/MM/DD').replace(/-/g, "/");
           
-         //shows when a new appointment request has been received                            
-         var newRequestToast = function(ref){
-            ref.child("appointmentRequests").on("child_added", function (datasnapshot){
-                                $('.toast').fadeIn(400).delay(3000).fadeOut(400);
-            });
-         }
-         
-        // username object is used to set the user name in the top left corner of navbar                             
-        var setNameField = function(){        
-            userInfo.$loaded().then(function(){
-               $("#userName").text(userInfo.userData.firstName + " " + userInfo.userData.lastName); 
-            });
-        }
-                
-        //used to get the users gmail if they have chosen to sync with gcal                                   
-        var syncWithGcal = function(data){
-            data.$loaded().then(function(){
-                 if(data.synced == true){
-                     $scope.uiConfig.calendar.events.googleCalendarId = data.googleCalendarId ;
-                 };
-             });
-        }
-        var test=[];
-        
-         // event sources is where the calendar is pulling all of its events from.                            
+        vm.requestsList = $firebaseArray(appointmentRequestsListRef);
+        vm.dowCheckBox= false ;
+        vm.frequency = 'daily';
+        vm.calStartTime = 0 ;
+        vm.calStartTime = "00:00:00";
+        vm.calEndTime = "24:00:00";
+        vm.gcalId = null ;
+        vm.eventTitle =''; 
+        vm.endDate = '';
       
-        $scope.eventSources = [];
-//        $("#cal").fullCalendar("addEventSource", events);
+
+        vm.saveCalSettings =function(){
+                calendarService.saveCalSettings(vm.calStartTime , vm.calEndTime, vm.gcalId, userCalendarRef);
+                console.log(vm.calEndTime);
+        }
+
+        vm.approveAppointment = function(index) {
+            calendarService.approveAppointment(vm.requestsList,index ,userListRef, userEventsRef ,approvedAppointmentsRef,userInfo);
+        };
           
-        // ui config where we set up all of our calendar configurations
-        var configureCalendar = function(userEventsRef, userListRef, approvedAppointmentsRef){
+        userInfo.$loaded().then(function(){
+           vm.name = userInfo.userData.firstName +" " + userInfo.userData.lastName ;
+        });
+          
+           /* calendarService.syncGcal(calSettingsInfo, $scope.uiConfig.calendar.events.googleCalendarId);*/
+        commonServices.showToastOnEvent(appointmentRequestsListRef,"child_added");
+        commonServices.orderArray($scope.requestsList, "-sentAt")
+    
+        
+        $scope.eventSources = [];
             $scope.uiConfig = {
                 calendar: {
 //                    googleCalendarApiKey: 'AIzaSyA0IwuIvriovVNGQiaN-q2pKYIpkWqSg0c',
-                    // reason why events is empty is because it needs to be added as a property to later access it to add the gcal events from settings data
                     events: events,
-                 
                     slotEventOverlap:false,
                     allDayDefault: false,
                     defaultView:"agendaWeek",
@@ -88,13 +84,13 @@ app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$fi
                         pendingRequestsButton: {
                             text: 'Pending Requests',
                             click: function (){
-                                pendingRequestButtonEvent($scope.requestsList);
+                                pendingRequestButtonEvent(vm.requestsList);
                             }
                         },
                         settingsButton: {
                             text: 'settings',
                             click: function () {
-                                $("#settingsModal").css("display", "block");
+                                $("#settingsModal").addClass("showing");
                             },
                             buttonIcons: false,
                             themeButtonIcons: false
@@ -113,39 +109,29 @@ app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$fi
                     },
                     unselectAuto: true,
                     select: function (start, end, ev) {
-                        $("#addEventModal").css("display", "block");
-                        $("#eventStart").text(start.toString());
-                        $("#eventEnd").text(end.toString());
-                        $("#createEventButton").unbind();
-                        createEvent(start, end);
+                        $("#addEventModal").addClass("showing");
+                        vm.eventStartObj = start ;
+                        vm.eventEndObj = end ;
+                        vm.eventStart = start.toString() ;
+                        vm.eventEnd = end.toString() ;  
                     },
                     editable: true,
                     eventClick: function (event, element) {
-                         console.log(event.start);
-                        $("#eventTitle").text("Event: " + event.title);
-                        $("#eventDetailsModal #eventStart").text("start: " + event.start.toISOString());
-                        $("#eventDetailsModal #eventEnd").text("end: " + event.end.toISOString());
-                        $("#eventDetailsModal").css("display", "block");
-                        $("#deleteButton").unbind();
-                        deleteEvent(event, userEventsRef, userListRef);
-                        deleteEvent(event, approvedAppointmentsRef, userListRef);
+                        calendarService.eventClick(event,userEventsRef,approvedAppointmentsRef, "#deleteButton");
                     },
                     eventDrop: function ( event , element) {
-                        onEventChange(event, userEventsRef);
+                        calendarService.onEventChange(event, userEventsRef);
                     },
                     eventResize: function (event , element) {
-                        console.log(event);
-                        onEventChange(event, userEventsRef);
+                        calendarService.onEventChange(event, userEventsRef);
                     },
                     eventRender: function(event,element,view){  
-                        console.log('h');
                         if(event.recur != "once" && event.hasOwnProperty("range")){
-                            var eventDate = moment(event.start).format("YYYY/MM/DD");
-                            if(event.range.start > eventDate || event.range.end <eventDate){
-                                return false;
+                                var eventDate = moment(event.start).format("YYYY/MM/DD");
+                                if(event.range.start > eventDate || event.range.end < eventDate){
+                                    return false;
                             }
-                        }
-                      
+                        }               
                     },
                     viewRender:function(view, element){
                     },
@@ -154,475 +140,28 @@ app.controller('calendarController', ['$window','$scope', '$firebaseArray', '$fi
                     }
                 }
             }
-        }
-
-          
-        // takes the users saved calendar settings from db and adds events in events[] to calendar  
-        var setUpCalendar = function (ref) {
-            ref.on("value", function (snapshot){
-                $("#loggedInUser").text(userEmail);
-                if(snapshot.hasChild("minTime")){
-                    var startTime = snapshot.val().minTime;
-                    var endTime = snapshot.val().maxTime;
-                    $scope.uiConfig.calendar.minTime = startTime.toString();
-                    $scope.uiConfig.calendar.maxTime = endTime.toString();
-                }
-                if(snapshot.val().synced == true){
-                    $("#googleSync").prop("checked", true);
-                }
-            });
-        }
-                              
-        //when a event gets changed it updates the event in the database
-        var onEventChange = function (event,  ref) {
-                if(event.recur == 'once'){
-                        ref.child(event.$id).update({
-                            title: event.title,
-                            start: event.start.toISOString(),
-                            end: event.end.toISOString(),
-                            id: event.title + event.start.toISOString() + event.end.toISOString()
-                        }); 
-                    }
-                if(event.recur =="weekly"){
-                    recurringEventMethods().updateWeeklyEvent(event,ref);
-                }
-            
-                if(event.recur == "monthly"){
-                    recurringEventMethods().updateMonthlyEvent(event, ref);
-                }
-            }
-            
-            
-//                for (var i = 0; i < events.length; i++) {
-//                    if (event.title == events[i].title) {
-//                        ref.once("value", function (snapshot) {
-//                            snapshot.forEach(function (childSnapshot){
-//                                if (childSnapshot.val().title == event.title){
-//                                    // here we are checking to see if the event is a recurring event
-//                                    if(!childSnapshot.val().hasOwnProperty("dow")){
-//                                       
-//                                        ref.child(childSnapshot.key()).update({
-//                                            title: event.title,
-//                                            start: event.start.toString(),
-//                                            end: event.end.toString(),
-//                                            id: event.title + event.start.toString() + event.end.toString()}); 
-//                                    } 
-//                                    else{   
-//                                        updateRecurringEvent(event, ref, childSnapshot);
-//                                        }                              
-//                                    }  
-//                                });
-//                        });
-//                    }
-//                }
-        
-        
-/*      here we are rendering a new event so it shows immediately on the calendar instead of having to be reloaded, 
-        also we are removing the event object passed in by the resize and drop methods so we dont have it show in the month view*/
-//        var updateRecurringEvent = function(event, ref, childSnapshot){
-//                if(event.recur== 'weekly'){
-//                    recurringEventMethods().updateWeeklyEvent(event,ref);
-//                }
-////                if(event.recur == 'monthly'){
-//////                    recurringEventMethods().updateMonthlyEvent(event,ref);
-////                }
-//            } 
-        
-        // button inside of addEventModal, called in select function inside of calendar config to get access to selected start and end time. calls createReccurringEvent() or createRegularEvent() 
-        var createEvent = function (start, end, ref){
-            $("#createEventButton").on("click", function (){
-                var test = [];
-                var eventId = $("#eventInput").val() + start.toString() + end.toString();
-                userEventsRef.once("value", function (snapshot) {
-                    snapshot.forEach(function (childsnapshot) {
-                        test.push(childsnapshot.val().id);
-                    });
-                });
-                
-                if (test.indexOf(eventId.replace(/[\s+\*\^\.\'\!\@\:\-\$]/g, '').toLowerCase()) == -1 &&            $("#eventInput").val().length != 0){
-                    if($("#dowCheckBox").prop("checked")){
-                            createRecurringEvent(start,end,eventId);
-                    }else{
-                            createRegularEvent(start,end,eventId);
-                    }
-                     $("#addEventModal").css("display", "none");
-                     $("#dowCheckBox").prop("checked", false);
-                     $("#recur").addClass("hide");
-                     $("#eventInput").val('');
-                 }
-                    else {
-                    alert("If this event already exists or you have not a entered a value, you can not create the event");
-                }   
-            });
-
-        }
-
-        var refreshEvents = function(){
-            $('#cal').fullCalendar('removeEventSource', events);
-            $('#cal').fullCalendar('removeEvents');
-            $('#cal').fullCalendar('addEventSource', events);
-        }
-        
-        var recurringEventMethods = function(start, end, eventId){
-             var today = moment(start).format('YYYY/MM/DD').replace(/-/g, "/");
-            // the reason that the substring cuts of the time string after 8 characters is because the full calendar will only add repeating events to the week view if it is just the the time like so 08:00:00.
-             var eventObj = {
-                    title:$("#eventInput").val(),
-                    range:{start:today, end:"2020/11/24"},
-                    start: new Date(start).toTimeString().substring(0,8),
-                    end: new Date(end).toTimeString().substring(0,8),
-                    id: eventId,
-                    recur:"weekly",
-                    eventType:"recurring event"
-            }
-            
-            
-//            var eventObj = {
-//                    title:$("#eventInput").val(),
-//                    range:{start:today, end:"2020/11/24"},
-////                    start: start.toISOString(),
-////                    end: end.toISOString(),
-////                    id: eventId,
-//                    recur:"weekly",
-//                    eventType:"recurring event"
-//            }
-             
-             var setDaysOfWeek = function(start){
-                var daysOfWeek = [];
-                if($("#sunday").prop("checked")){
-                    daysOfWeek.push(0);
-                };
-                if($("#monday").prop("checked")){
-                    daysOfWeek.push(1);
-                };
-                if($("#tuesday").prop("checked")){
-                    daysOfWeek.push(2);
-                };
-                if($("#wednesday").prop("checked")){
-                    daysOfWeek.push(3);
-                };
-                if($("#thursday").prop("checked")){
-                    daysOfWeek.push(4);
-                }; 
-                if($("#friday").prop("checked")){
-                    daysOfWeek.push(5);
-                }; 
-                if($("#saturday").prop("checked")){
-                    daysOfWeek.push(6);
-                };  
-                 
-                 if(daysOfWeek[0]== undefined){
-                     daysOfWeek.push(moment(start).day());
-                 }
-                return daysOfWeek ;
-             }
-//             
-             
-             var checkOcc = function(occurBy){
-                    if($("#occurences").prop("checked")){
-                            eventObj.range = {
-                                start:today,
-                                end: moment(start).add($("#numOccur").val(), occurBy).format("YYYY/MM/DD").replace(/-/g,'/')
-                            }
-                    }
-                   if($("#endsOn").prop("checked")){
-                            eventObj.range = {
-                                start:today,
-                                end: $("#endDate").val().replace(/-/g,"/")
-                            }
-                    }
-                 return eventObj.range 
-             }
-             
-             var setAmtOfMonths = function(){
-                 if($("#occurences").prop("checked")){
-                     return $("#numOccur").val()
-                 } 
-                 if($("#endsOn").prop("checked")){
-                    var startMonth = new moment(start).month();
-                    var endMonth = $("#endDate").val().substring(5,7);
-                    return endMonth-startMonth ;
-                 };
-                    return 10 
-             };
-
-             var meth = {
-                 
-                    updateWeeklyEvent: function(event, ref){
-                          var clientEvents = $("#cal").fullCalendar("clientEvents");
-                          if(event.dow.length > 1){
-                                ref.child(event.$id).update({
-                                        start: event.start.toString().substring(16,24),
-                                        end: event.end.toString().substring(16,24),
-                                        id: event.title + event.start.toString() + event.end.toString()
-                                });
-                          }else{
-                               ref.child(event.$id).update({
-                                        dow:event.start.day(),
-                                        start: event.start.toString().substring(16,24),
-                                        end: event.end.toString().substring(16,24),
-                                        id: event.title + event.start.toString() + event.end.toString()
-                                });
-                          }
-                    },
-                    updateMonthlyEvent:function(event, ref){
-                        //reminder properbel is _i is original time not new event time , look at event itself more
-                        ref.once("value", function(datasnapshot){
-                            datasnapshot.forEach(function(childsnapshot){
-                                if(childsnapshot.val().title == event.title){
-
-                                    var nsHour = event.start.toString().substring(16,18);
-                                    var nsMinute = event.start.toString().substring(19,21);                          
-                                    var neHour = event.end.toString().substring(16,18);
-                                    var neMinute = event.end.toString().substring(19,21);
-                                    var newStart = new moment(childsnapshot.val().start).set({hour:nsHour, minute:nsMinute})
-                                    var newEnd = new moment(childsnapshot.val().end).set({hour:neHour,minute: neMinute});
-                                    
-
-                                    ref.child(childsnapshot.key()).update({
-                                        start: newStart.toISOString(),
-                                        end:newEnd.toISOString()
-                                    });
-                                    
-                                };
-                            });
-                        });
-                    },
-                    showRecurringEventOptions: function(){
-                      $("#dowCheckBox").on("click", function(){
-                         $("#recur").toggleClass("hide"); 
-                      });
-                        $("#freq").on("change", function(){
-                             if($("#freq").val()== "weekly"){
-                                $("#dow").removeClass("hide");
-                             }else{
-                                 $("#dow").addClass('hide');
-                             }
-                        });
-                    },
-                    deleteMonthlyEvent:function(event){
-                        $('#deleteMonthlyEvent').removeClass("hide");
-                        $("#oneEvent").on("click", function(){
-                           var eventToDelete = userEventsRef.child(event.$id) ;
-                           eventToDelete.remove();
-                           $("#eventDetailsModal").css("display", "none");
-                        });
-                        $("#allEvents").on("click",function(){
-                            userEventsRef.once("value", function(datasnapshot){
-                                datasnapshot.forEach(function(childsnapshot){
-                                    if(childsnapshot.val().title == event.title){
-                                        userEventsRef.child(childsnapshot.key()).remove();
-                                    }
-                                });
-                            });
-                        });
-                    },
-            
-                    createDailyEvent:function(){ 
-                        eventObj.dow = [0,1,2,3,4,5,6];
-                        console.log(moment(start).format("YYYY/MM/DD"))
-                        eventObj.recur = "daily" ;
-                        checkOcc("days");
-                        userEventsRef.push(eventObj);
-                        console.log(eventObj.range);
-                        refreshEvents();
-                    },
-                 
-                    createWeeklyEvent: function(){
-                         eventObj.dow = setDaysOfWeek(start) 
-                         checkOcc("week");
-                         userEventsRef.push(eventObj);
-                         refreshEvents();
-                         console.log($("#cal").fullCalendar("clientEvents"));
-                    },
-
-                     createMonthlyEvent:function(){
-                        eventObj.recur = "monthly";
-                        var view = $("#cal").fullCalendar('getView');
-                        for(var i =0; i < setAmtOfMonths() ;i++){
-                              eventObj.start= new moment(start).clone().add(i,"month").toISOString()
-                              eventObj.title= $("#eventInput").val()
-                              eventObj.range.end = moment(start).add(setAmtOfMonths(), "month").format("YYYY/MM/DD").replace(/-/g,'/')
-                              eventObj.end =new moment(end).clone().add(i,"month").toISOString()
-                              eventObjrecur= "monthly";
-                              userEventsRef.push(eventObj); 
+                var pendingRequestButtonEvent = function (list){
+                    list.$loaded().then(function () {
+                        if (list.length != 0) {
+                            $("#pendingRequestsModal").addClass("showing");
+                        } else {
+                            alert("Sorry you have no requests");
                         }
-                        refreshEvents();
-                     }
-             }
-             return meth ;
-        }
-        
-        recurringEventMethods().showRecurringEventOptions();
-        
-        // creates recurring event, gets called in createEvent()
-        var createRecurringEvent = function(start, end,eventId){
-                    switch($("#freq").val().toLowerCase()){   
-                        case "daily":  
-                                recurringEventMethods(start,end,eventId).createDailyEvent();
-                                break;
-
-                        case "weekly":
-                                recurringEventMethods(start,end,eventId).createWeeklyEvent();
-                                break;
-
-                        case "monthly": 
-                                recurringEventMethods(start, end, eventId).createMonthlyEvent();
-                                break;
-            };
-        }
-                
-        // creates a regular event in the calendar 
-        var createRegularEvent = function(start, end, eventId, eventObj){
-            updateIcsFile(userInfo);
-            var eventObj ={
-                                title:$("#eventInput").val(),
-                                recur:"once",
-                                start:start.toISOString(),
-                                end: end.toISOString(),
-                                id: eventId.replace(/[\s+\*\^\.\'\!\@\:\-\$]/g, '').toLowerCase(),
-                                eventType:"regular event"
-                           }
-            userEventsRef.push(eventObj);   
-        }
-              
-       
-        var createMonthlyEvent = function(){
-             userEventsRef.push({
-                                title:$("#eventInput").val(),
-                                recur:"monthly",
-                                start:start.toISOString(),
-                                end: end.toISOString(),
-                                id: eventId.replace(/[\s+\*\^\.\'\!\@\:\-\$]/g, '').toLowerCase(),
-                                eventType:"regular event"
                     });
-        };
-        
-
-        // deletes the selected event from the calendar, if the event is an appointment it deletes the appointment from the students event list gets called in the event click method
-        var deleteEvent = function (event, ref, usersRef) {
-            $("#deleteButton").on("click", function () {
-                if(event.recur == "monthly"){
-                    recurringEventMethods().deleteMonthlyEvent(event);
                 }
-                   else{
-                       var eventToDelete = userEventsRef.child(event.$id) ;
-                       eventToDelete.remove();
-                       $("#eventDetailsModal").css("display", "none");
-                   }
-                });
-            }
-        
-        
-        var updateIcsFile = function(userObj){
-               $.ajax({
-                            type: "POST",
-                            url: "https://blooming-river-27917.herokuapp.com/work",
-                            contentType:'application/json',
-                            crossDomain: true,
-                            dataType: "json",
-                            data: JSON.stringify({
-                                name:'jordan',
-                                email:"jordanmamroudgmailcom"
-                            }),
-                            error: function(XMLHttpRequest, textStatus, errorThrown){
-                                console.log(errorThrown)
-                            }
-                        }).done(function (dataObj) {
-                            alert("ajax callback response: bame");
-                        });
-        };
-                       
+      }]);
+  
 
-        // constructor for the users calendar settings called in saveCalSettings function
-        var CalSettings = function (minTime, maxTime, googleCalendarId, synced) {
-            this.minTime = minTime;
-            this.maxTime = maxTime
-            this.googleCalendarId = googleCalendarId ;
-            this.synced = synced;
-        }
-
-        //click event for save button inside settings modal to save the users specified settings
-        var saveCalSettings = function(ref){
-            $scope.saveCalSettings = function () {
-                var startTime = $("#calendarStartTime").val();
-                var endTime = $("#calendarEndTime").val();
-                var googleCalendarId = $("#googleCalendarId").val();
-                
-                if($('#googleSync').prop('checked')){
-                    calendarConfigRef.set(new CalSettings(startTime, endTime,googleCalendarId, true));
-                }else{
-                    ref.set(new CalSettings(startTime, endTime,googleCalendarId, false));
-                    // calling setUpCalendar here again because when the settings are changed it will update it without having torefr
-                    setUpCalendar(ref);
-                }
-                $("#settingsModal").css("display", "none");
-                }
-            }
-        
-        //gets the pending appointment requests and shows it when the pending Request button is clicked, it is called in calendar config under custom buttons.
-         var pendingRequestButtonEvent = function (list){
-            list.$loaded().then(function () {
-                if (list.length != 0) {
-                    $("#pendingRequestsModal").css("display", "block");
-                } else {
-                    alert("Sorry you have no requests");
-                }
-            });
-        }
-
-        // alerts the student who requested the appointment that the appointment is confirmed and adds an appointment to the examiners calendar. gets called in html file with ng-click
-        var approveApptRequest = function(userListRef, userEventsRef,approvedAppointmentsRef){
-            $scope.approveButtonEvent = function (index) {
-                console.log(index);
-                var studentEmail = $scope.requestsList[index].emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
-                var studentRef = userListRef.child(studentEmail);
-               
-                var studentObj = {
-                        start: $scope.requestsList[index].requestedStartTime,
-                        end: $scope.requestsList[index].requestedEndTime,
-                        firstName: userInfo.userData.firstName,
-                        lastName: userInfo.userData.lastName,
-                        emailAddress: userInfo.userData.emailAddress
-                }
-              
-                var examinerObj = {
-                    start: $scope.requestsList[index].requestedStartTime,
-                    end: $scope.requestsList[index].requestedEndTime,
-                    emailAddress:$scope.requestsList[index].emailAddress,
-                    firstName:$scope.requestsList[index].firstName,
-                    lastName: $scope.requestsList[index].lastName,
-                    title: "appointment with " + $scope.requestsList[index].firstName +" " + $scope.requestsList[index].lastName,
-                    color: "red",
-                    eventType: "approved appointment"
-                }
-                userInfo.$loaded().then(function (){
-                    studentRef.child("upcomingAppointments").push(studentObj);
-                });
-                
-                userEventsRef.push(examinerObj);
-                approvedAppointmentsRef.push(examinerObj);
-                $scope.requestsList.$remove(index);
-                closeModal();
-            };   
-        }
-        
-        
-        //  closes modal boxes when x button is clicked
-        var closeModal = function () {
-            $("span.close").on("click", function () {
-                $(".modal").css("display", "none");
-                $("#addEventModal").removeClass("showing");
-                $("#recur").addClass("hide");
-                $("#dowCheckBox").prop("checked", false);
-            });
-        }
-        
-        
- callFunctions();
-}]);
-
-
+//          appointmentRequestsListRef.push({
+//                    requestedStartTime:"03:00:00",
+//                    requestedEndTime:"09:00:00",
+//                    emailAddress:"jane@yahoo.com",
+//                    firstName: "jane",
+//                    lastName:"mamroud",
+//                    title: "bane",
+//                    color: "red",
+//                    eventType: "approved appointment"
+//          })
 // note to josh do not worry about this section 
 //
 //        var userListRef = new Firebase("https://checkride.firebaseio.com/users");

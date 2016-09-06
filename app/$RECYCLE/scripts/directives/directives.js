@@ -6,9 +6,6 @@ app.directive("showModal", function(){
                 $(scope.modalToOpen).addClass('showing');
            })
        }, 
-        controller:function($scope){
-            console.log($scope);
-        },
        scope:{
             modalToOpen:"@modalToOpen",
             openFunc:"&"

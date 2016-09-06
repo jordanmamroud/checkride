@@ -1,13 +1,15 @@
-var myApp = angular.module("messages", ['firebase', 'examinerDirectives', 'commonServices']);
+angular.module("messages", ['firebase', 'commonServices'])
 
-angular.module('messages')
-  .filter('reverse', function() {
+/*
+
+.filter('reverse', function() {
     return function(items) {
       return items.slice().reverse();
     };
-  });
+  })
+*/
 
-myApp.service('messagesService', [function(){
+.service('messagesService', [function(){
     return{
         sendMessage:function(fireRef, sender){
                         var convoRef = fireRef.child("conversations/" + sender);
@@ -26,12 +28,11 @@ myApp.service('messagesService', [function(){
                         messageRef.push(msgObj);  
         }
     }
-}]);
+}])
 
-
-myApp.directive("sendMessageModal", ['messagesService',function(messagesService){
+.directive("sendMessageModal", ['messagesService',function(messagesService){
     return{
-        templateUrl:"app/shared/templates/directiveTemplates/sendMessageModal.html",
+        templateUrl:"app/layout/sendMessageModal.html",
         scope:{
             sendTo:"=",
             sender:"=",
@@ -45,12 +46,12 @@ myApp.directive("sendMessageModal", ['messagesService',function(messagesService)
             }
         }
     }
-}]);
+}])
 
 
-myApp.directive("messagesDirective",["$firebaseArray", "$firebaseObject","$filter", 'messagesService',"commonServices",function($firebaseArray, $firebaseObject, $filter, messagesService, commonServices){
+.directive("messagesDirective",["$firebaseArray", "$firebaseObject","$filter", 'messagesService',"commonServices",function($firebaseArray, $firebaseObject, $filter, messagesService, commonServices){
     return{
-        templateUrl: "app/shared/templates/directiveTemplates/messages.html",
+        templateUrl: "app/layout/messages.html",
         controller:function($scope){
             var userListRef = new Firebase("https://checkride.firebaseio.com/users");
             var authData = userListRef.getAuth();

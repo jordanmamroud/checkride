@@ -32,16 +32,11 @@ angular.module('crDirectives',[])
         }
     })
 
-/*
-
-
-
     .directive("showModal", function(){
         return{
            link: function(scope,element,attrs){
                $(element).on("click", function(){
                     $(scope.modalToOpen).addClass('showing');
-                   console.log('ham');
                })
            }, 
            scope:{
@@ -71,7 +66,10 @@ angular.module('crDirectives',[])
     .directive("myModal", function(){
        return{
            transclude: true,
-           templateUrl:"app/shared/templates/directiveTemplates/modalTemplate.html",
+           templateUrl:"app/layout/modalTemplate.html",
+           controller:function($scope, $transclude){
+      
+           },
            scope:{
                myid:"@"
            }
@@ -79,4 +77,3 @@ angular.module('crDirectives',[])
     })
 
 
-*/

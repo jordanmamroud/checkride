@@ -5,8 +5,10 @@ var checkrider = angular.module('checkrider',[
     'crUser',
     'crDirectives',
     'crSession',
-  
     'commonServices',
+    'crCalendar',
+    'messages',
+    
     
     
     'ngMaterial',    
