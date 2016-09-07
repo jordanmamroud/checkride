@@ -2,7 +2,7 @@ angular.module('crDirectives',[])
 
 
 
-    //DIRECTIVES
+    //HEADER
     .directive('crHeader', function(){
         return{
             restrict:'E',
@@ -13,15 +13,32 @@ angular.module('crDirectives',[])
             controller: 'crHeaderCtrl as header'
         };
     })
+
+
     //SIDEBAR
-    .directive('crSidebar', function(){
+    .directive('crSidebar', ['$cookies', function($cookies){
+        
+        var userType = $cookies.getObject('currentUser').userData.userType;
+        console.log(userType);
+        
         return{
             restrict:'E',
-            templateUrl: 'app/layout/sidebar.html',
+            templateUrl: function(){
+                
+                switch (userType){
+                        
+                    case 'Examiner' : console.log(true); return 'app/layout/sidebar.html';
+                    case 'Student' : return 'app/layout/studentSidebar.html';
+                }
+            },
             scope: true,
-            transclude: false
+            transclude: false,
+            controller: 'crSidebarCtrl'
         }
-    })
+    }])
+
+
+    //FOOTER
     .directive("crFooter", function(){
         return{
             restrict:'E',
@@ -31,6 +48,8 @@ angular.module('crDirectives',[])
             controller: 'crFooterCtrl'
         }
     })
+
+
 
     .directive("showModal", function(){
         return{
