@@ -1,4 +1,5 @@
-var checkrider = angular.module('checkrider',[
+'use strict'
+angular.module('checkrider',[
     'ngCookies',
     'ngMaterial',    
     'ngAnimate',
@@ -24,7 +25,8 @@ var checkrider = angular.module('checkrider',[
 .constant('GlobalConstants', {
     app : {
         name : "Checkrider",
-        title : "Checkrider"
+        title : "Checkrider",
+        logoPath:"assets/img/checkrider-logo-[unofficial].png"
     }
 })
 
@@ -34,6 +36,10 @@ var checkrider = angular.module('checkrider',[
     $scope.name = GlobalConstants.app.name;
     
    
+}])
+
+.config(['$locationProvider', function($locationProvider){
+    $locationProvider.html5Mode(true).hashPrefix('!');
 }])
 
 

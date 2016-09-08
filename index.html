@@ -42,8 +42,8 @@
             <link rel="stylesheet" href="assets/css/stylesheets/screen.css">     
             <!-- Scripts -->
             <script type="text/javascript" src="checkrider.js"></script>
-            <script type="text/javascript" src="app/checkrider.directives.js"></script>
-            <script type="text/javascript" src="app/checkrider.routes.js"></script>
+            <script type="text/javascript" src="app/directives.js"></script>
+            <script type="text/javascript" src="app/routes.js"></script>
             <script type="text/javascript" src="app/components/components.js"></script>
             <script type="text/javascript" src="app/components/search/search.js"></script>
             <script type="text/javascript" src="app/sessions/session.js"></script>
@@ -61,22 +61,24 @@
     </head>
 
     <body ng-controller="crIndexCtrl" layout="row" >
-
-        <!-- SIDEBAR -->          
-        <md-sidenav flex="15" md-is-locked-open="$mdMedia('gt-sm')">
-            <cr-sidebar></cr-sidebar>
-        </md-sidenav>
           
         <!-- Main Wrapper -->
-        <div layout="column" flex layout-fill>
+        <div layout="column" flex layout-fill ng-controller='crLayoutCtrl as layout'>
+            
+            
             
             <!-- HEADER -->
             <md-toolbar layout="row">
                 <cr-header></cr-header>    
             </md-toolbar>
        
-            <!-- CONTENT -->
+            
             <md-content layout="column" flex id="content" layout-fill>
+              
+               <!-- SIDEBAR -->
+                <cr-sidebar  ng-show="{{layout.showSidebar}}"></cr-sidebar>
+                
+                <!-- CONTENT -->
                 <div role="main" layout-fill layout-row>
                     <div ng-view layout-fill></div>
                 </div>

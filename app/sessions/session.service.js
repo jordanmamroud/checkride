@@ -62,7 +62,7 @@ var crSession = angular.module('crSession.services', ['firebase'])
                         
                         switch(userInfo.userData.userType.toLowerCase()){
                             case "examiner":
-                                $location.path('/examiner/calendar');
+                                $location.path('/user/profile');
                                 break;
 
                             case "student":

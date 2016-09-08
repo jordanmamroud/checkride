@@ -9,6 +9,12 @@
 @import "compass/utilities";
  
 
+//VARIABLES
+$logo-path: '../../img/checkrider-logo-[unofficial].png';
+
+
+
+
 body{
     //background-image: url('http://wallpapercave.com/wp/NcdUsHW.jpg');
     //background-size: cover;
@@ -57,3 +63,17 @@ body{
 }
 
 
+img.cr-logo,
+.cr-logo img{
+    width: auto;
+    height: auto;
+    display: block;
+    transform-origin: 0 43%;
+    transform: scale(.4);
+}
+
+
+.nav-header{
+    
+    .cr-logo{ }
+} 

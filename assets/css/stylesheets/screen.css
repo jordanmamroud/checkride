@@ -2,7 +2,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-/* line 12, ../sass/screen.scss */
+/* line 18, ../sass/screen.scss */
 body {
   background-color: #EEE;
 }
@@ -32,7 +32,7 @@ body {
     @include border-radius(0);
 }
 */
-/* line 51, ../sass/screen.scss */
+/* line 57, ../sass/screen.scss */
 .vertical-center {
   min-height: 100%;
   /* Fallback for browsers do NOT support vh unit */
@@ -40,4 +40,14 @@ body {
   /* These two lines are counted as one :-)       */
   display: flex;
   align-items: center;
+}
+
+/* line 66, ../sass/screen.scss */
+img.cr-logo,
+.cr-logo img {
+  width: auto;
+  height: auto;
+  display: block;
+  transform-origin: 0 43%;
+  transform: scale(0.4);
 }
