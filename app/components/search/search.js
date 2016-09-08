@@ -1,4 +1,4 @@
-crComponents.controller('crSearchCtrl',["$scope", "$window", "$firebaseArray", function($scope, $window, $firebaseArray){
+crComponents.controller('crSearchCtrl',["$scope", "$window", "$firebaseArray",'$cookies', function($scope, $window, $firebaseArray, $cookies){
 
         var ref = new Firebase("https://checkride.firebaseio.com");
 
@@ -12,7 +12,8 @@ crComponents.controller('crSearchCtrl',["$scope", "$window", "$firebaseArray", f
                 console.log(snapshot.val().userData);
             });
         };
-
+        var currUsr = $cookies.getObject('currentUser');
+        console.log(currUsr);
     }])
 
 

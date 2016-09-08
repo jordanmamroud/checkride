@@ -1,3 +1,121 @@
 
+<<<<<<< HEAD
         <examiner-navbar></examiner-navbar>
         <cal-directive></cal-directive>
+=======
+   
+            
+            <head>
+                <style>
+                    .hide{
+                        display: none;
+                    }
+                    .showing{
+                        display: block ;
+                    }
+                </style>
+            </head>
+
+
+            <examiner-navbar></examiner-navbar>
+            <h2 ng-model="name">{{name}}</h2>
+            <div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div> 
+            <div class='toast' style='display:none'>You have a new Appointment Request</div>
+            
+            <cal-directive myid="addEventModal" event-start-obj="vm.eventStartObj" event-end-obj="vm.eventEndObj"></cal-directive>
+<!--
+
+                <my-modal myid="addEventModal">
+                    <h2>Event</h2><br>
+                    <input type="text" placeholder="enter Your event" ng-model="vm.eventTitle" id="eventInput">
+                    <h4>When:</h4>
+                    <p id="eventStart" ng-model="vm.eventStart">{{vm.eventStartObj.toString()}}</p>
+                    <p id="eventEnd" ng-model="vm.eventStart">{{vm.eventEndObj.toString()}}</p>
+                    <label>Recurring Event?</label>
+                    <input type="checkbox" id="dowCheckBox" ng-model="vm.dowCheckBox">
+                    <div id="recur" ng-class="{hide: vm.dowCheckBox == false}">
+                        <label>choose frequency</label>
+                             <select ng-model="frequency" id="freq" name="frequency">
+                                    <option>daily</option>
+                                    <option>weekly</option>
+                                    <option>monthly</option>
+                        </select><br>
+
+                        <form id="repeatForm">
+                            <label>starts on <input id='startDate' type="date"></label><br>
+                            <label><input type="checkbox" value="never" id="never">never</label>
+                            <br>
+                             <input type="checkbox" value="occurences" id="occurences"><label>after <input id="numOccur" type="number"> occurences</label><br>
+                             <input type="checkbox" value="endsOn" id="endsOn">
+                             <label>Ends on</label>
+                             <input type="date" ng-model="vm.endDate"id="endDate">
+                        </form>
+
+                        <div id="dow" ng-class="{hide: frequency != 'weekly'}">    
+                            <form id="dowForm">
+                                <label>Sunday</label>
+                                <input type="checkbox" id="sunday" value="0">
+                                <label>Monday</label>
+                                <input type="checkbox" id="monday" value="1">
+                                <label>Tuesday</label>
+                                <input type="checkbox" id="tuesday" value="2">
+                                <label>Wednesday</label>
+                                <input type="checkbox" id="wednesday" value="3">
+                                <label>Thursday</label>
+                                <input type="checkbox" id="thursday" value="4">
+                                <label>Friday</label>
+                                <input type="checkbox" id="friday" value="5">
+                                <label>Saturday</label>
+                                <input type="checkbox" id="saturday" value="6">
+                            </form>
+                        </div>
+                    </div>
+                    <button close-modal id="createEventButton" ng-click="vm.createEvent()">Create</button>
+            </my-modal>
+-->
+
+          
+            <my-modal myid="settingsModal">
+                <input type="text" ng-model="vm.calStartTime" id="calendarStartTime" placeholder="enter calendar start time">
+                <input type="text" ng-model="vm.calEndTime" id="calendarEndTime" placeholder="enter calendar end time">
+                <input type="email" ng-model="vm.gcalId" id="googleCalendarId" placeholder="enter google calendar id">
+                <button close-modal id="saveButton" ng-click="vm.saveCalSettings()">Save</button>
+                <input type="checkbox" ng-checked="syncGcal()"id="googleSync">select box to sync with google calendar<br>
+            </my-modal>
+
+            <my-modal myid="eventDetailsModal">
+                <h2 id="eventTitle">Event</h2><br>
+                <h4>When:</h4>
+                <p ng-model="vm.start">{{vm.start}}</p>
+                <p id="eventEnd" ng-model="vm.end">{{vm.end}}</p>
+                <button close-modal id="deleteButton">Delete Event</button>
+                <div class="hide" id="deleteMonthlyEvent">
+                    <button id="oneEvent">remove just this event</button>
+                    <button id="allEvents">remove all events</button>
+                </div>
+            </my-modal>
+
+
+            <my-modal myid="pendingRequestsModal">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Start Time</th>
+                      <th>End Time</th>
+                      <th>Sent at</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="request in vm.requestsList | orderBy:'-sentAt' track by $index" ng-init="initializeRequestsList()">
+                      <td>{{vm.request.firstName + " " + request.lastName}}</td>
+                      <td>{{request.requestedStartTime}}</td>
+                      <td>{{request.requestedEndTime}}</td>
+                      <td>{{requset.sentAt}}</td>
+                      <td><button ng-click="vm.approveAppointment($index)">Approve</button></td>
+                    </tr>
+                      </tbody>
+                </table>       
+            </my-modal>
+
+>>>>>>> 808492e4e9433600b80240d4022e193dd9b2b9ab

@@ -1,4 +1,11 @@
 var checkrider = angular.module('checkrider',[
+    'ngCookies',
+    'ngMaterial',    
+    'ngAnimate',
+    'ngAria',
+    'firebase',
+    
+    
     'crRoutes',
     'crComponents',
     'crUserServices',
@@ -8,34 +15,9 @@ var checkrider = angular.module('checkrider',[
     'commonServices',
     'crCalendar',
     'messages',
+    'crLayout'
     
-    
-    
-    'ngMaterial',    
-    'ngAnimate',
-    'ngAria',
-    'firebase',
-    
-     
-    /*
-    'Components.Module',
-    'UserServices.Module',
-    'crExaminer',
-    'ui.bootstrap',
-    'ui.calendar',    
-    'examinerCalendar',
-    'loginMod',
-    "createAccountPage",
-    'messages', 
-    'profile', 
-    'examinerControllers', 
-    'studentMod',
-    'studentDirectives'
-    */
-    ]).config(['$logProvider',function($logProvider){
-        $logProvider.debugEnabled(true);
-
-    }])
+    ])
 
 
 //Global Constants
@@ -55,47 +37,4 @@ var checkrider = angular.module('checkrider',[
 }])
 
 
-//HEADER CONTROLLER
-.controller('crHeaderCtrl', ["$scope", "$location",'RoutePaths', function($scope, $location, RoutePaths){
-    $scope.$on('$routeChangeSuccess', function () {
-        if($location.path() == '/search'){
-            $scope.isSearch = true;    
-        }else{
-            $scope.isSearch = false;
-        }
-    });
-    $scope.goToLogin = 
-    this.login = RoutePaths.login;
-    this.signUp = RoutePaths.signUp;
-    
-}])
 
-//FOOTER CONTROLLER
-.controller('crFooter', ["$scope", function($scope){
-
-}])
-
-.directive('crSidebar', function(){
-    return{
-
-        controller:function($scope){
-            
-            $scope.profile = function(){
-                $location.path("/examiner/profile")
-            }
-              
-            $scope.calendar = function(){
-                $location.path("/examiner/calendar");
-            }
-            
-            $scope.messages = function(){
-                $location.path("/examiner/messages")
-            }
-            
-            $scope.home = function(){
-                $location.path('/examiner')
-            }
-            
-        }
-    }
-});

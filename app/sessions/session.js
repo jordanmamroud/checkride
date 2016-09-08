@@ -1,7 +1,5 @@
 var crSession = angular.module('crSession', ['firebase', 'crSession.services'])
 
-
-
 //Jordan
 .controller("crLogin", ["loginService","$scope","$firebaseObject", "commonServices",function(loginService, $scope, $firebaseObject,commonServices){
     
@@ -71,3 +69,4 @@ var crSession = angular.module('crSession', ['firebase', 'crSession.services'])
 //        });
 //    };
 }])
+

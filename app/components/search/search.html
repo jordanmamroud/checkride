@@ -1,23 +1,25 @@
-<div layout-fill style="background-image:url('http://cdn.wonderfulengineering.com/wp-content/uploads/2014/05/airplane-wallpaper-2.jpg'); background-size:cover; background-position:center center;">
+<div layout-fill layout-padding style="background-image:url('http://cdn.wonderfulengineering.com/wp-content/uploads/2014/05/airplane-wallpaper-2.jpg'); background-size:cover; background-position:center center;">
     <section layout-fill>
             
            
-        <div  layout layout-align="center center">
-            <div layout="row">
+        <div layout="column" flex layout-align="center center">
+            
+            <div>
                 <h1 class="md-display-1">Find an examiner near you...</h1>
             </div>
-            <div layout="row">
-                <form>
-                        <md-input-container layout="column" flex="50">
-                           <label>Search by airport code (ie.: 'ABE') </label>
-                            <input >                
-                        </md-input-container>
+            
+            <form>
+                <md-input-container>
+                   <label>Search by airport code (ie.: 'ABE') </label>
+                    <input >                
+                </md-input-container>
 
-                        <md-input-container layout-align="center" flex="10" layout="column">
-                            <md-button class="md-raised md-primary" type="submit">Search</md-button>
-                        </md-input-container>
-                </form>
-            </div>
+                <md-input-container >
+                    <md-button class="md-raised md-primary" type="submit">Search</md-button>
+                </md-input-container>
+            </form>
+            
         </div>
+        
     </section>
 </div>

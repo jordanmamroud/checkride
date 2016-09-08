@@ -35,34 +35,41 @@ var crSession = angular.module('crSession.services', ['firebase'])
       }
 }])
 
-.service('loginService', ["$firebaseObject", "$location",function($firebaseObject,$location){
+.service('loginService', ["$firebaseObject", "$location", '$cookies', function($firebaseObject,$location, $cookies){
     var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
     var auth = usersRef.getAuth();
     
+ 
+    
     return{
         signIn: function(email, pass){
-                usersRef.authWithPassword({
-                    email: email,
-                    password: pass
+            usersRef.authWithPassword({
+                email: email,
+                password: pass
             },
             function(error, authData){
                 if(error){
                     alert("login failed");
                 } 
                 else{
-                           var user = usersRef.child(email.replace(/[\*\^\.\'\!\@\$]/g , ''));
-                           var userInfo = $firebaseObject(user);
-                           userInfo.$loaded().then(function(){
-                                switch(userInfo.userData.userType.toLowerCase()){
-                                    case "examiner":
-                                          $location.path('/examiner/profile');
-                                        break;
-                                        
-                                    case "student":
-                                         $location.path("/student")
-                                        break;
-                                }
-                            });
+                    var user = usersRef.child(email.replace(/[\*\^\.\'\!\@\$]/g , ''));
+                    var userInfo = $firebaseObject(user);
+                    var abc;
+                    
+                    userInfo.$loaded().then(function(){
+                        
+                        $cookies.putObject('currentUser', userInfo);                        
+                        
+                        switch(userInfo.userData.userType.toLowerCase()){
+                            case "examiner":
+                                $location.path('/examiner/calendar');
+                                break;
+
+                            case "student":
+                                $location.path("/student")
+                                break;
+                        }
+                    });
                     }
                  
             })
