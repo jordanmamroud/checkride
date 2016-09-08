@@ -9,52 +9,15 @@ app.service("calendarService", ['$filter', function($filter){
             this.synced = synced;
         }
         
-        var deleteEvents = {
-             deleteMonthlyEvent:function(event, ref){
-                        $('#deleteMonthlyEvent').removeClass("hide");
-                        $("#oneEvent").on("click", function(){
-                           var eventToDelete = ref.child(event.$id) ;
-                           eventToDelete.remove();
-                           
-                        });
-                        $("#allEvents").on("click",function(){
-                            ref.once("value", function(datasnapshot){
-                                datasnapshot.forEach(function(childsnapshot){
-                                    if(childsnapshot.val().title == event.title){
-                                        ref.child(childsnapshot.key()).remove();
-                                    }
-                                });
-                            });
-                        });
-                    },
-             removeEvent: function(event, ref){
-                   var eventToDelete = ref.child(event.$id) ;
-                   eventToDelete.remove();
-            },
-            
-             deleteEvent: function(event, ref, selector){
-                $(selector).on("click", function () {
-                    if(event.recur == "monthly"){
-                        deleteEvents.deleteMonthlyEvent(event,ref)
-                    }
-                    else{
-                        deleteEvents.removeEvent(event, ref);
-                   }
-                });
-            }
-        }
-        
-        
         var updateEvents = function(event, ref){
         return{
              updateSingleEvent: function(){
-                 console.log('ham');
-             ref.child(event.$id).update({
-                        title: event.title,
-                        start: event.start.toISOString(),
-                        end: event.end.toISOString(),
-                        id: event.title + event.start.toISOString() + event.end.toISOString()
-                    }); 
+                 ref.child(event.$id).update({
+                            title: event.title,
+                            start: event.start.toISOString(),
+                            end: event.end.toISOString(),
+                            id: event.title + event.start.toISOString() + event.end.toISOString()
+                        }); 
              },
              
              updateWeeklyEvent: function(){
@@ -74,6 +37,7 @@ app.service("calendarService", ['$filter', function($filter){
                                     });
                               }
                         },
+            
             updateMonthlyEvent: function(){
                         ref.once("value", function(datasnapshot){
                             datasnapshot.forEach(function(childsnapshot){
@@ -122,6 +86,7 @@ app.service("calendarService", ['$filter', function($filter){
              eventObj.recur="once";
              ref.push(eventObj);      
         },
+        
        createDailyEvent:function(eventObj, ref){ 
                 eventObj.recur ="daily";
 //                eventObj.range = range ;
@@ -130,6 +95,7 @@ app.service("calendarService", ['$filter', function($filter){
                 eventObj.end = new Date(eventObj.end).toTimeString().substring(0,8);
                 ref.push(eventObj);
         },
+        
        createWeeklyEvent: function(eventObj, ref){
                  eventObj.start = new Date(eventObj.start).toTimeString().substring(0,8);
                  eventObj.end = new Date(eventObj.end).toTimeString().substring(0,8);
@@ -137,17 +103,18 @@ app.service("calendarService", ['$filter', function($filter){
                  console.log('ban')
                  console.log(eventObj);
                  ref.push(eventObj);
-            },
+        },
 
         createMonthlyEvent:function(eventObj, ref, amtOfMonths){
                 eventObj.recur = "monthly";
-                var view = $("#cal").fullCalendar('getView');
-                for(var i =0; i < amtOfMonths ;i++){
-                      eventObj.start= new moment(eventObj.start).clone().add(i,"month").toISOString()
-                      eventObj.range.end = moment(eventObj.start).add(amtOfMonths, "month").format("YYYY/MM/DD").replace(/-/g,'/')
-                      eventObj.end =new moment(eventObj.end).clone().add(i,"month").toISOString()
-                      eventObjrecur= "monthly";
-                      ref.push(eventObj); 
+                for(var i =0 ; i <= amtOfMonths ;i++){
+                      var newObj ={
+                          title: eventObj.title,
+                          recur:"monthly",
+                          start: eventObj.start.clone().add(i,"month").toISOString(),
+                          end: eventObj.end.clone().add(i,"month").toISOString()
+                      }
+                      ref.push(newObj); 
             }
          },
 
@@ -212,15 +179,28 @@ app.service("calendarService", ['$filter', function($filter){
         },
         
         eventClick: function(event, ref1, ref2, selector){
-            console.log(event.start);
             $("#eventTitle").text("Event: " + event.title);
             $("#eventDetailsModal #eventStart").text("start: " + event.start.toISOString());
             $("#eventDetailsModal #eventEnd").text("end: " + event.end.toISOString());
             $("#eventDetailsModal").addClass('showing');
             $("#deleteButton").unbind();
-        
             deleteEvents.deleteEvent(event, ref1,selector);
             deleteEvents.deleteEvent(event, ref2, selector);
+        },
+        
+        removeEvent: function(event, ref){
+            var eventToDelete = ref.child(event.$id) ;
+            eventToDelete.remove();
+        },
+        
+        deleteAllMonthlyEvents:function(event, ref){
+            ref.once("value", function(datasnapshot){
+                datasnapshot.forEach(function(childsnapshot){
+                    if(childsnapshot.val().title == event.title){
+                        ref.child(childsnapshot.key()).remove();
+                    }
+                });
+            });          
         }
     }
 }]);

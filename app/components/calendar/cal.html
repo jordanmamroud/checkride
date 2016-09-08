@@ -1,19 +1,22 @@
-
-    
-<div id="{{myid}}" } class="modal">
-    <div class="modal-content">
-         <span close-modal>x</span>
-        
+<style>
+    .hide{
+        display: none;
+    }
+</style>
+ <div class='toast' style='display:none'>You have a new Appointment Request</div>
+<h2 ng-model="ev.name">{{ev.name}}</h2>
+<div class="calendar" ng-model="ev.eventSources" id="cal" data-ui-calendar="ev.uiConfig.calendar"></div> 
+<my-modal myid="addEventModal">
         <h2>Event</h2><br>
-        <input type="text" placeholder="enter Your event" ng-model="eventTitle" id="eventInput">
+        <input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
         <h4>When:</h4>
-        <p id="eventStart" ng-model="eventStart">{{eventStartObj.toString()}}</p>
-        <p id="eventEnd" ng-model="eventEnd">{{eventEndObj.toString()}}</p>
-        <label>das Event?</label>
-        <input type="checkbox" id="dowCheckBox" ng-model="dowCheckBox">
-        <div id="recur" ng-class="{hide: dowCheckBox == false}">
+        <p id="eventStart" ng-model="ev.eventStart">{{eventStartObj.toString()}}</p>
+        <p id="eventEnd" ng-model="ev.eventEnd">{{eventEndObj.toString()}}</p>
+        <label>dasd Event?</label>
+        <input type="checkbox" id="dowCheckBox" ng-model="ev.dowCheckBox">
+        <div id="recur" ng-class="{hide: ev.dowCheckBox == false}">
             <label>choose frequency</label>
-                 <select ng-model="frequency" id="freq" name="frequency">
+                 <select ng-model="ev.frequevcy" id="freq" name="frequency">
                         <option>daily</option>
                         <option>weekly</option>
                         <option>monthly</option>
@@ -23,13 +26,13 @@
                 <label>starts on <input id='startDate' type="date"></label><br>
                 <label><input type="checkbox" value="never" id="never">never</label>
                 <br>
-                <input type="checkbox" value="occurences" id="occurences"><label>after <input id="numOccur" ng-model="numOccur" type="number"> occurences</label><br>
+                <input type="checkbox" value="occurences" id="occurences"><label>after <input id="numOccur" ng-model="ev.numOccur" type="number"> occurences</label><br>
                 <input type="checkbox" value="endsOn" id="endsOn">
                 <label>Ends on</label>
-                <input type="date" ng-model="endDate">
+                <input type="date" ng-model="ev.endDate">
             </form>
 
-            <div id="dow" ng-class="{hide: frequency != 'weekly'}">    
+<div id="dow" ng-class="{hide: frequency != 'weekly'}">    
                 <form id="dowForm">
                     <label>Sunday</label>
                     <input type="checkbox" id="sunday" value="0">
@@ -48,8 +51,53 @@
                 </form>
             </div>
         </div>
-        <button close-modal id="createEventButton" ng-click="createEvent()">Create</button>
+        <button close-modal id="createEventButton" ng-click="ev.createEvent()">Create</button>
+</my-modal>
 
-  </div>
-</div>
+
+<my-modal myid="eventDetailsModal">
+            <h1>bassnector</h1>
+            <h2 id="eventTitle">Evessdfnt</h2><br>
+            <h4>When:</h4>
+            <p ng-model="ev.start">{{ev.start}}</p>
+            <p id="eventEnd" ng-model="ev.end">{{ev.end}}</p>
+            <button ng-click="ev.deleteEvent()">Delete Event</button>
+             <div ng-class="{hide: ev.monthlyEvent != true}">
+                <button close-modal ng-click="ev.deleteSingleMonthlyEvent()">remove just this event</button>
+                <button close-modal ng-click="ev.deleteAllMonthlyEvents()">remove all events</button>
+            </div>
+</my-modal>
+
+ <my-modal myid="settingsModal">
+        <input type="text" ng-model="ev.calStartTime" id="calendarStartTime" placeholder="enter calendar start time">
+        <input type="text" ng-model="ev.calEndTime" id="calendarEndTime" placeholder="enter calendar end time">
+        <input type="email" ng-model="ev.gcalId" id="googleCalendarId" placeholder="enter google calendar id">
+        <button close-modal id="saveButton" ng-click="ev.saveCalSettings()">Save</button>
+        <input type="checkbox" ng-checked="syncGcal()"id="googleSync">select box to sync with google calendar<br>
+</my-modal>
+
+<my-modal myid="pendingRequestsModal">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Sent at</th>
+            </tr>
+          </thead>
+            
+          <tbody>
+            <tr ng-repeat="request in ev.requestsList | orderBy:'-sentAt' track by $index">
+              <td>{{vm.request.firstName + " " + request.lastName}}</td>
+              <td>{{request.requestedStartTime}}</td>
+              <td>{{request.requestedEndTime}}</td>
+              <td>{{request.sentAt}}</td>
+              <td><button ng-click="ev.approveAppointment($index)">Approve</button></td>
+            </tr>
+              </tbody>
+        </table>       
+</my-modal>
+
+
           

@@ -26,8 +26,8 @@ angular.module('crRoutes',['ngRoute'])
             controllerAs:"login"
         })
         .when("/createAccount", {
-            templateUrl: 'app/sessions/createAccountPage.html',
-            controller:'createAccountController'
+            templateUrl: 'app/sessions/create-user.html',
+            controller:'createUser'
         })
         .when("/examiner/calendar",{
             templateUrl:"app/users/views/examinerCalendar.html",
