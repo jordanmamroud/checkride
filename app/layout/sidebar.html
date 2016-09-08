@@ -3,20 +3,31 @@
 
 </header>
 
-<md-content flex role="navigation">
+<md-content ng-hide="!examinerView" flex role="navigation">
     <ul>
         <li>
             <menu-link section="page" class="ng-isolate-scope"><a href="#/calendar" class="md-button md-ink-ripple">Calendar</a></menu-link>
         </li>
         <li>
-            <menu-link><a ng-href="#/messages" href="#/calendar" class="md-button">Messages</a></menu-link>
+        <li>
+            <menu-link><a ng-href="#/examiner/messages" href="#/calendar" class="md-button">Messages</a></menu-link>
         </li>
         <li>
-            <menu-link><a ng-href="#/profile" href="#/calendar" class="md-button">Profile</a></menu-link>
+            <menu-link><a ng-href="#/examiner/profile" href="#/calendar" class="md-button">Profile</a></menu-link>
         </li>
     </ul>
-        <!--
-        <md-list-item ng-click="calendar()">Calendar</md-list-item>
-        <md-list-item ng-click="messages()">Messages</md-list-item>
-        <md-list-item ng-click="profile()">Profile</md-list-item>-->
+</md-content>
+
+<md-content ng-hide="!studentView" flex role="navigation">
+    <ul>
+        <li>
+            <menu-link section="page" class="ng-isolate-scope"><a href="#/calendar" class="md-button md-ink-ripple">asdf</a></menu-link>
+        </li>
+        <li>
+            <menu-link><a ng-href="#/examiner/messages" href="#/calendar" class="md-button">Messafdages</a></menu-link>
+        </li>
+        <li>
+            <menu-link><a ng-href="#/examiner/profile" href="#/calendar" class="md-button">Profisadfle</a></menu-link>
+        </li>
+    </ul>
 </md-content>

@@ -1,4 +1,4 @@
-var crSession = angular.module('crSession.services', ['firebase'])
+var crSession = angular.module('crSession.services', ['firebase', 'commonServices'])
 
 //CREATE ACCOUNT
 .service('createAccountService',[function(){
@@ -34,12 +34,11 @@ var crSession = angular.module('crSession.services', ['firebase'])
             }
       }
 }])
+ 
+.service('loginService', ['commonServices', function(commonServices){
 
-.service('loginService', ["$firebaseObject", "$location", '$cookies', function($firebaseObject,$location, $cookies){
     var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
     var auth = usersRef.getAuth();
-    
- 
     
     return{
         signIn: function(email, pass){
@@ -53,25 +52,21 @@ var crSession = angular.module('crSession.services', ['firebase'])
                 } 
                 else{
                     var user = usersRef.child(email.replace(/[\*\^\.\'\!\@\$]/g , ''));
-                    var userInfo = $firebaseObject(user);
-                    var abc;
-                    
+                    var userInfo = commonServices.createFireObj(user);
                     userInfo.$loaded().then(function(){
+                           commonServices.setCookieObj('currentUser', userInfo);  
                         
-                        $cookies.putObject('currentUser', userInfo);                        
-                        
-                        switch(userInfo.userData.userType.toLowerCase()){
-                            case "examiner":
-                                $location.path('/examiner/calendar');
-                                break;
+                            switch(userInfo.userData.userType.toLowerCase()){
+                                case "examiner":
+                                    commonServices.changePath("/examiner/calendar");
+                                    break;
 
-                            case "student":
-                                $location.path("/student")
-                                break;
-                        }
-                    });
+                                case "student":
+                                    commonServices.changePath("/student");
+                                    break;
+                            }
+                        });
                     }
-                 
             })
         },
         

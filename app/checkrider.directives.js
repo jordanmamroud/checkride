@@ -1,4 +1,4 @@
-angular.module('crDirectives',[])
+angular.module('crDirectives',['ngCookies'])
 
 
 
@@ -16,24 +16,36 @@ angular.module('crDirectives',[])
 
 
     //SIDEBAR
-    .directive('crSidebar', ['$cookies', function($cookies){
-        
+    .directive('crSidebar', ['$cookies', function($cookies){    
         var userType = $cookies.getObject('currentUser').userData.userType;
-        console.log(userType);
-        
         return{
             restrict:'E',
             templateUrl: function(){
-                
-                switch (userType){
+                switch (userType.toLowerCase()){      
+                    case 'examiner' : 
+                        return 'app/layout/sidebar.html';
                         
-                    case 'Examiner' : console.log(true); return 'app/layout/sidebar.html';
-                    case 'Student' : return 'app/layout/studentSidebar.html';
+                    case 'student' : 
+                        return 'app/layout/sidebar.html';
                 }
             },
-            scope: true,
+            scope:false,
             transclude: false,
-            controller: 'crSidebarCtrl'
+            controller:function($scope){
+////                console.log($scope);
+//                var sb = this;
+//                sb.studentView = false ;
+//                sb.examinerView =false;
+//                
+//                if(userType == 'Examiner'){
+//                    sb.examinerView = true ;
+//                    sb.studentView = false ;
+//                }
+//                if(userType == 'Student'){
+//                    sb.studentView =true ;
+//                    sb.examinerView = false ;
+//                }
+            },
         }
     }])
 
@@ -66,7 +78,6 @@ angular.module('crDirectives',[])
     })
 
     .directive("closeModal", function(){
-
        var linkFunction = function(scope,element, attrs){
            element.bind('click', function(){
                $('.modal').removeClass("showing");
@@ -82,10 +93,27 @@ angular.module('crDirectives',[])
        }
     })
 
+//    .directive("myModal", function(){
+//       return{
+//           transclude: true,
+//           templateUrl:function(){
+//               return "app/layout/modalTemplate.html?" +new Date();   
+//           },
+//           controller:function($scope, $transclude){
+//      
+//           },
+//           scope:{
+//               myid:"@"
+//           }
+//       } 
+//    })
+
     .directive("myModal", function(){
        return{
            transclude: true,
-           templateUrl:"app/layout/modalTemplate.html",
+           templateUrl:function(){
+               return "app/layout/modalTemplate.html?" +new Date();   
+           },
            controller:function($scope, $transclude){
       
            },

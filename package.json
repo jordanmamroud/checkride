@@ -2,7 +2,7 @@
   "name": "checkride",
   "version": "1.0.0",
   "description": "Application to connect student pilots with FAA examiners ",
-  "main": "app.js",
+  "main": "checkrider.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

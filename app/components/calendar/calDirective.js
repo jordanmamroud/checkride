@@ -15,7 +15,6 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         controllerAs:"ev",
         controller:function($scope,$firebaseArray,$firebaseObject , calendarService, commonServices){
             var ev = this;
-            
             var userListRef = new Firebase("https://checkride.firebaseio.com/users");
             var authData = userListRef.getAuth();           
             var userEmail = authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, '');                        

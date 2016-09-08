@@ -56,22 +56,27 @@
             <script type="text/javascript" src="app/components/calendar/examinerCalendar.js"></script>
             <script type="text/javascript" src="app/components/calendar/calDirective.js"></script>
             <script type="text/javascript" src="app/components/messaging/checkrider-messages.js"></script>
-            <script type="text/javascript" src="app/layout/layout.js"></script>
+            
+            <script type="text/javascript" src="app/layout/layout.js"></script><script type="text/ng-template" id="save-dialog.tmpl.html">
+            </script>
         
     </head>
 
-    <body ng-controller="crIndexCtrl" layout="row" >
+    <body ng-controller="crIndexCtrl as ba" layout="row" >
 
         <!-- SIDEBAR -->          
-        <md-sidenav flex="15" md-is-locked-open="$mdMedia('gt-sm')">
+        
+        <md-sidenav ng-show="ba.view" flex="15" md-is-locked-open="$mdMedia('gt-sm')">
             <cr-sidebar></cr-sidebar>
         </md-sidenav>
+          
+
           
         <!-- Main Wrapper -->
         <div layout="column" flex layout-fill>
             
             <!-- HEADER -->
-            <md-toolbar layout="row">
+            <md-toolbar layout="row" >
                 <cr-header></cr-header>    
             </md-toolbar>
        

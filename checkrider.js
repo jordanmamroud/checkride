@@ -4,6 +4,7 @@ var checkrider = angular.module('checkrider',[
     'ngAnimate',
     'ngAria',
     'firebase',
+    'ngRoute',
     
     
     'crRoutes',
@@ -30,10 +31,32 @@ var checkrider = angular.module('checkrider',[
 
 
 //MAIN CONTROLLERS
-.controller('crIndexCtrl', ["$scope", "$location", 'GlobalConstants',function($scope,$location,GlobalConstants){
+.controller('crIndexCtrl', ["$scope","$cookies", "$location", 'GlobalConstants',function( $scope,$cookies,$location,GlobalConstants){
     $scope.name = GlobalConstants.app.name;
+    this.view = false ;
     
-   
+    var setSidebarView = function(){
+        var userType = $cookies.getObject("currentUser").userData.userType;
+        if($location.path().indexOf("examiner") == -1 && $location.path().indexOf('student')==-1){
+                        $scope.ba.view = false ;
+                    }else{
+                        $scope.ba.view = true ;
+
+                        if(userType.toLowerCase() == 'examiner'){
+                            $scope.examinerView = true;
+                            $scope.studentView = false ;
+                        }
+                        if(userType =='Student'){
+                            $scope.examinerView = false;
+                            $scope.studentView = true ;
+                        }
+                    }
+    }
+    setSidebarView();
+
+    $scope.$on('$locationChangeSuccess',function(){
+            setSidebarView();
+    });
 }])
 
 

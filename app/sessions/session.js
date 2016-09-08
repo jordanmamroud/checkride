@@ -1,7 +1,7 @@
 var crSession = angular.module('crSession', ['firebase', 'crSession.services'])
 
 //Jordan
-.controller("crLogin", ["loginService","$scope","$firebaseObject", "commonServices",function(loginService, $scope, $firebaseObject,commonServices){
+.controller("crLogin", ["loginService", "$scope", "$firebaseObject", "commonServices",function(loginService, $scope, $firebaseObject, commonServices){
     
    var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
     
@@ -14,7 +14,6 @@ var crSession = angular.module('crSession', ['firebase', 'crSession.services'])
     }
 
    this.createAccountPage = function(){
-        console.log('hammy');
         commonServices.changePath("/createAccount");
    }
 }])
@@ -23,7 +22,6 @@ var crSession = angular.module('crSession', ['firebase', 'crSession.services'])
 .controller('createUser',['$scope','createAccountService', function($scope, createAccountService){
     //CREATE USER - Jordan
     $scope.createAccount = function(){
-        console.log("ham");
         var user = {
             firstName: $scope.firstName,
             lastName: $scope.lastName,

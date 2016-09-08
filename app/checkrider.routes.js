@@ -47,11 +47,16 @@ angular.module('crRoutes',['ngRoute'])
         })
         .when("/student/examinerProfile",{
             templateUrl: "app/users/views/examinerInfo.html",
-            controller: "examinerInfoController"
+            controller: "examinerInfoController",
+            controllerAs:"vm"
         })
         .when("/student/messages",{
             templateUrl:"app/users/views/studentMessages.html"
         })
+        .when("/student/examinerAvailability",{
+            templateUrl:"app/users/views/examinerAvailability.html",
+            controller:'examinerAvailabilityController'
+    })
         //End Author
         
         
