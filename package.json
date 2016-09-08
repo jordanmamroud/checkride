@@ -26,4 +26,9 @@
     "angular-touch": "^1.5.8",
     "font-awesome": "^4.6.3"
   }
+},
+"scripts": {
+    "postinstall": "bower install",
+
+    "prestart": "npm install"
 }
