@@ -15,19 +15,12 @@ angular.module('crDirectives',[])
 
     //SIDEBAR
     .directive('crSidebar', ['commonServices', function(commonServices){
-        
         var user = commonServices.getCookieObj('currentUser');
         var userType = user ? user.userData.userType : null;
         
         return{
             restrict:'E',
-            templateUrl: function(){
-                if(userType){
-                    return 'app/users/views/' + userType + '-sidebar.html';
-                }else{
-                    return 'app/layout/sidebar.html';
-                }
-            },
+            templateUrl: 'app/layout/sidebar.html',
             scope: true,
             transclude: false,
             controller: 'crSidebarCtrl',
@@ -93,4 +86,33 @@ angular.module('crDirectives',[])
        } 
     })
 
+
+    .directive('crNavigation', ['crUserNavData', 'commonServices' ,function(crUserNavData, commonServices){
+    
+        return {
+            template:   '<md-content>'+
+                            '<md-list>' +
+                                '<md-list-item ng-repeat="item in navItems">'+
+                                    '<a href="{{item.path}}">{{item.title}}</a>' +
+                                '</md-list-item>' +
+                            '</md-list>' +
+                        '</md-content>',
+            scope: true,
+            controller: function crNavCtrl($scope){
+                
+                $scope.navItems = function(){
+                    
+                    var userType = commonServices.getCookieObj('currentUser').userData.userType.toLowerCase();
+                    console.log(userType);
+                    
+                    switch(userType){
+                        case 'examiner' : return crUserNavData.examiner;
+                        case 'student' : return crUserNavData.student;
+                        default : return null;
+                    };
+                    
+                }();
+            }
+        }
+    }])
 

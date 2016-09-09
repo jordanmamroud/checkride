@@ -7,7 +7,7 @@ angular.module('crRoutes',['ngRoute'])
         templateUrl : 'app/components/search/search.html'
     })
     .when( RoutePaths.login.path, {
-        templateUrl:'app/sessions/login.html',
+        templateUrl:'app/auth/login.html',
         controller:"crAuthCtrl",
         controllerAs:"auth"
     })
@@ -16,7 +16,7 @@ angular.module('crRoutes',['ngRoute'])
     })
 
     .when('/user/profile', {
-        templateUrl: 'app/users/views/profile.html'            
+        templateUrl: 'app/users/views/profile.html'          
     })
     .when('/user/calendar', {
         templateUrl: 'app/users/views/calendar.html'            
@@ -24,19 +24,19 @@ angular.module('crRoutes',['ngRoute'])
 
     //Author: Jordan
     .when("/log-in",{
-        templateUrl:'app/sessions/login.html',
+        templateUrl:'app/auth/login.html',
         controller: 'crAuthCtrl',
         controllerAs: 'auth'
     })
     .when("/createAccount", {
-        templateUrl: 'app/sessions/createAccountPage.html'
+        templateUrl: 'app/auth/createAccountPage.html'
     })
     .when("/examiner/calendar",{
         templateUrl:"app/users/views/examinerCalendar.html",
         controller:"examinerCalendarController",
         controllerAs:"vm"
     })
-    .when("/examiner/profile", {
+    /*.when("/examiner/profile", {
         templateUrl:'app/users/views/profile.html',
         controller:'profileController'
     })
@@ -53,7 +53,7 @@ angular.module('crRoutes',['ngRoute'])
     })
     .when("/student/messages",{
         templateUrl:"app/users/views/studentMessages.html"
-    })
+    })*/
 
 
     .otherwise({

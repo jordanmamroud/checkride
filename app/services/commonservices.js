@@ -20,14 +20,19 @@ app.service("commonServices", ["$location",'$routeParams','$timeout',"$firebaseA
         },
         
         getCookie: function(key){
-            return $cookies.getObject(key);
+            return $cookies.get(key);
         },
         
         getCookieObj: function(key){
             return $cookies.getObject(key);  
         },
+        
+        setCookie: function(key){
+            return $cookies.set(key);//This sets strings  
+        },
+        
         setCookieObj:function(key, obj){
-            $cookies.putObject(key, obj);
+            $cookies.putObject(key, obj);//This sets objects
         },
         
         createFireObj: function(ref){
