@@ -1,8 +1,11 @@
 var app = angular.module('commonServices', []);
 
-app.service("commonServices", ["$location",'$routeParams','$timeout',"$firebaseArray",'$firebaseObject', '$filter', '$cookies',function($location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies){
+app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray",'$firebaseObject', '$filter', '$cookies',function(RoutePaths,$location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies){
     return{
         
+        getRoutePaths:function(){
+            return RoutePaths
+        },
         changePath: function(urlString){
                 $timeout(function(){
                          $location.path(urlString)

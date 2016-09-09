@@ -1,27 +1,63 @@
-<h2 id="name" ng-model="name">{{name}}</h2>
-<h3>Location</h3>
-<h3>certifications</h3>
+<div layout="column" layout-align="center center">
+    <h2 id="name" ng-model="name">{{name}}</h2>
+    <h3>Location</h3>
+    <form class="signin">
+        <ms-input-container layout>
+            <input placeholder='Enter your certifications' id="certifications" ng-model="certification" ng-keypress="saveCertification($event.keyCode)" type="text">
+        </ms-input-container>
 
-<input id="certifications" ng-model="certification" ng-keypress="saveCertification($event.keyCode)" type="text">
+         <md-content class="md-padding" layout="column">
+            <form name="certificationsForm">
+                  <md-chips ng-model="certificationsList"name="fruitName" readonly="false"
+                            md-on-remove="deleteCert($chip)" md-max-chips="30">
+                    <md-chip-template>
+                      <strong>{{$chip.title}}</strong>
+                    </md-chip-template>
+                  </md-chips>
+            </form>
+            
+            <ms-input-container layout>
+                <label>Enter airports you serve here</label><span> </span><input placeholder='Enter airports you serve' type="text" ng-keypress="saveAirport($event.keyCode)" id="airports" ng-model="airport">
+            </ms-input-container>
+            
+            <form name="airportsForm">
+                  <md-chips class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-add="saveAirport($chip)" md-on-remove="deleteAirport($chip)"md-max-chips="30">
+                    <md-chip-template>
+                      <strong>{{$chip.title}}</strong>
+                    </md-chip-template>
+                  </md-chips>
+            </form>
+            
+        </md-content>  
+    </form>
+        
+      
+        <br>
+        <label>Enter your bio here</label>
+        <br>
+        <textarea name="about" id="bio" cols="30" readrows="10" ng-model="bio">asdl;akjl;df</textarea>
+        <br>
+        <label>Enter new password here if you would like to change it</label>
+        <input type="text" id="oldPass" placeholder="old password" ng-model='oldPassword'>
+        <input type="text" id="newPass" placeholder="new password" ng-model="newPassword">
+        <br>
+        <button id="save" ng-click="saveChanges()">Save Changes</button>
+    </form>
+</div>
 
-<ul ng-repeat="cert in certificationsList track by $index">
-  <li>{{cert.description}}<span ng-click="deleteCert($index)"> delete</span></li>
-</ul>
-
-<label>Enter airports you serve here</label>
-
-<input type="text" ng-keypress="saveAirport($event.keyCode)" id="airports" ng-model="airport">
-<br>
-<ul ng-repeat="airport in airportsList track by $index">
-  <li>{{airport.name}}<span ng-click="deleteAirport($index)">  delete</span></li>
-</ul>
-
-<label>Enter your bio here</label>
-<br>
-<textarea name="about" id="bio" cols="30" readrows="10" ng-model="bio">asdl;akjl;df</textarea>
-<br>
-<label>Enter new password here if you would like to change it</label>
-<input type="text" id="oldPass" placeholder="old password" ng-model='oldPassword'>
-<input type="text" id="newPass" placeholder="new password" ng-model="newPassword">
-<br>
-<button id="save" ng-click="saveChanges()">Save Changes</button>
+<!--
+<div ng-show="userType == student">
+     <h1 ng-model="vm.examinerName">{{vm.examinerName}}</h1>
+        <md-button class="md-raised md-primary" ng-click="vm.viewSchedule()">View Schedule</md-button>
+          <h2>Certifications</h2>
+           <ul ng-repeat="cert in vm.certificationsList">
+               <li>{{cert.description}}</li>
+           </ul> 
+           <h2>Airports served</h2>
+           <ul ng-repeat="appt in vm.airportList">
+               <li>{{appt.name}}</li>
+           </ul>
+           <h2>About</h2>
+           <p ng-model="bio">{{bio}}</p>
+</div>
+-->

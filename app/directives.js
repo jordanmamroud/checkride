@@ -88,7 +88,6 @@ angular.module('crDirectives',[])
 
 
     .directive('crNavigation', ['crUserNavData', 'commonServices' ,function(crUserNavData, commonServices){
-    
         return {
             template:   '<md-content>'+
                             '<md-list>' +
@@ -101,16 +100,12 @@ angular.module('crDirectives',[])
             controller: function crNavCtrl($scope){
                 
                 $scope.navItems = function(){
-                    
                     var userType = commonServices.getCookieObj('currentUser').userData.userType.toLowerCase();
-                    console.log(userType);
-                    
                     switch(userType){
                         case 'examiner' : return crUserNavData.examiner;
                         case 'student' : return crUserNavData.student;
                         default : return null;
                     };
-                    
                 }();
             }
         }
