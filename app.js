@@ -15,7 +15,6 @@ angular.module('checkrider',[
     'crComponents',
     'crUser',
     'crCalendar',
-    
     'commonServices',
     'messages'    
     ])
@@ -35,7 +34,6 @@ angular.module('checkrider',[
     }
 })
 
-
 .value('crUserNavData',{
     'examiner':{
         calendar:{
@@ -52,13 +50,14 @@ angular.module('checkrider',[
         }
     },
     'student':{
-        boom:{
+        examiners:{
             title: 'Calendar',
             path: '/user/calendar'
         },
-        fam:{
+        messages:{
             title:'Messages',
             path: '/user/messages'
         }
     }
 })
+

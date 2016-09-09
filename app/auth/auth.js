@@ -2,23 +2,19 @@ angular.module('crAuth', ['firebase'])
 
 
 .controller("crAuthCtrl", ["loginService", "$scope", "$firebaseObject", "commonServices",function(loginService, $scope, $firebaseObject, commonServices){
-    
-   var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
-    
-   this.signIn = function(){
+    console.log('ham');
+    console.log($scope)
+    this.signIn = function(){
         loginService.signIn(this.email, this.password);
     }
-
     this.sendNewPassWord = function(){
         loginService.sendNewPassWord(this.email);
     }
-
-   this.createAccountPage = function(){
-        commonServices.changePath("/createAccount");
-   }
-   
-   
-    $scope.createAccount = function(){
+    this.createAccountPage = function(){
+        console.log(commonServices.getRoutePaths().signUp);
+        commonServices.changePath(commonServices.getRoutePaths().signUp.path);
+    }
+    this.createAccount = function(){
         var user = {
             firstName: $scope.firstName,
             lastName: $scope.lastName,
@@ -29,13 +25,11 @@ angular.module('crAuth', ['firebase'])
         }
         createAccountService.createUser(user);
     }
-
 }])
 
 //CREATE ACCOUNT
 .service('createAccountService',[function(){
-      var ref  = new Firebase("https://checkride.firebaseio.com/");
-     
+      var ref  = new Firebase("https://checkride.firebaseio.com/"); 
       var onSuccess = function(newUser){ 
       ref.child("users/" + newUser.emailAddress.replace( /[\*\^\.\'\!\@\$]/g , '')).set({
                     userData:newUser
@@ -68,10 +62,8 @@ angular.module('crAuth', ['firebase'])
 }])
  
 .service('loginService', ['commonServices', function(commonServices){
-
-    var usersRef  = new Firebase("https://checkride.firebaseio.com/users/");
+    var usersRef =  commonServices.getCommonRefs().usersRef
     var auth = usersRef.getAuth();
-    
     return{
         signIn: function(email, pass){
             usersRef.authWithPassword({
@@ -80,17 +72,15 @@ angular.module('crAuth', ['firebase'])
             },
             function(error, authData){
                 if(error){
-                    alert("login failed");
+                        alert("login failed");
                 } 
                 else{
-                    var user = usersRef.child(email.replace(/[\*\^\.\'\!\@\$]/g , ''));
-                    var userInfo = commonServices.createFireObj(user);
-                    userInfo.$loaded().then(function(){
-                    commonServices.setCookieObj('currentUser', userInfo);  
-                                              
-                    commonServices.changePath('/user/profile');
-                                            
-                    })
+                        var user = usersRef.child(email.replace(/[\*\^\.\'\!\@\$]/g , ''));
+                        var userInfo = commonServices.createFireObj(user);
+                        userInfo.$loaded().then(function(){
+                            commonServices.setCookieObj('currentUser', userInfo);
+                            commonServices.changePath(commonServices.getRoutePaths().profile.path);                       
+                        })
                 }
             })
         },

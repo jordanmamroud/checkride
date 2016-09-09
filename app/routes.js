@@ -6,60 +6,54 @@ angular.module('crRoutes',['ngRoute'])
     .when('/', {
         templateUrl : 'app/components/search/search.html'
     })
-    .when( RoutePaths.login.path, {
+    .when(RoutePaths.login.path, {
         templateUrl:'app/auth/login.html',
         controller:"crAuthCtrl",
         controllerAs:"auth"
     })
-    .when( RoutePaths.signUp.path, {
-            templateUrl: 'app/users/views/create-user.html'
+    .when(RoutePaths.signUp.path, {
+            templateUrl: 'app/auth/create-user.html',
+            controller:'crAuthCtrl',
+            controllerAs:"auth"
     })
-
-    .when('/user/profile', {
-        templateUrl: 'app/users/views/profile.html'          
+    .when(RoutePaths.examinerCal.path, {
+             templateUrl:"app/users/views/examinerCalendar.html",
+             controller:"examinerCalendarController",
+             controllerAs:"vm"       
     })
-    .when('/user/calendar', {
-        templateUrl: 'app/users/views/calendar.html'            
+    .when(RoutePaths.profile.path, {
+          templateUrl: 'app/users/views/profile.html',
+            controller:"profileController"
     })
-
-    //Author: Jordan
-    .when("/log-in",{
-        templateUrl:'app/auth/login.html',
-        controller: 'crAuthCtrl',
-        controllerAs: 'auth'
+    .when(RoutePaths.examinerMessages.path,{
+         templateUrl:'app/users/views/examinerMessages.html'
     })
-    .when("/createAccount", {
-        templateUrl: 'app/auth/createAccountPage.html'
-    })
-    .when("/examiner/calendar",{
-        templateUrl:"app/users/views/examinerCalendar.html",
-        controller:"examinerCalendarController",
-        controllerAs:"vm"
-    })
-    /*.when("/examiner/profile", {
-        templateUrl:'app/users/views/profile.html',
-        controller:'profileController'
-    })
-    .when("/examiner/messages",{
-        templateUrl:'app/users/views/examinerMessages.html'
-    })
-     .when("/student",{
+    
+    //studentPaths
+    .when(RoutePaths.examinerList.path,{
         templateUrl:'app/users/views/examinerList.html',
         controller:"examinerListController"
     })
-    .when("/student/examinerProfile",{
-        templateUrl: "app/users/views/examinerInfo.html",
-        controller: "examinerInfoController"
+
+    .when(RoutePaths.examinerInfo.path,{
+            templateUrl: "app/users/views/examinerInfo.html",
+            controller: "examinerInfoController"
     })
-    .when("/student/messages",{
+
+    
+    .when(RoutePaths.viewExaminerAvailability.path,{
+        templateUrl: "app/users/views/examinerAvailability.html",
+        controller: "examinerAvailabilityController"
+    })
+    .when(RoutePaths.studentMessages.path,{
         templateUrl:"app/users/views/studentMessages.html"
-    })*/
-
-
-    .otherwise({
-        redirectTo:'/'
-        
     })
+//  
+//
+//    .otherwise({
+//        redirectTo:'/'
+//        
+//    })
     //End Author
 }])
 
@@ -69,7 +63,7 @@ angular.module('crRoutes',['ngRoute'])
 .constant('RoutePaths', {
     login: {
         name: 'Log in',
-        path: '/login',
+        path: '/log-in',
         eula: '/login/eula',
         noSubscription: '/no-subscription',
         myAccount: '/my-account',
@@ -81,6 +75,34 @@ angular.module('crRoutes',['ngRoute'])
         name: 'Sign-Up',
         path: '/create-account'
         // more routes here
+    },
+    examinerCal:{  
+        path:'/user/calendar'
+    },
+    examinerMessages:{
+        path:"/user/messages"
+    },
+    profile:{
+        path:"/user/profile"
+    },
+    //student paths
+    
+    examinerInfo:{
+        path:"/user/examiner-info"
+    },
+    examinerList:{
+        path:"/user/list-of-examiners"
+    },
+    viewExaminerProfile:{
+        path:"/user/view-profile-info"
+    },
+    viewExaminerAvailability:{
+        path:"/user/view-availability"
+    },
+    studentMessages:{
+        path:"/user/student-messages"
     }
+    
+    
     // more objects here
 })
