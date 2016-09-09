@@ -1,4 +1,4 @@
-angular.module('crAuth', ['firebase', 'crSession.services'])
+angular.module('crAuth', ['firebase'])
 
 
 .controller("crAuthCtrl", ["loginService", "$scope", "$firebaseObject", "commonServices",function(loginService, $scope, $firebaseObject, commonServices){

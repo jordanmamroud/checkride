@@ -14,7 +14,7 @@ angular.module('checkrider',[
     'crComponents',
     'crUserServices',
     'crUser',
-    'crSession',
+    'crAuth',
     'commonServices',
     'crCalendar',
     'messages'    
