@@ -16,38 +16,39 @@ angular.module("crUser",[])
 
 //Examiner Controllers
 .controller("profileController", ['$scope','profileService', 'commonServices', function($scope, profileService,commonServices){
-    var userInfo = commonServices.getCookieObj("currentUser").userData; 
-    var userEmail = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
-    var userRef =   commonServices.getCommonRefs().usersRef.child(userEmail);
-    console.log('fans');
-    $scope.oldPassword='';
-    $scope.newPassword='';
+    var userInfo = commonServices.getCookieObj("currentUser"); 
+    var userRef =   commonServices.getCommonRefs().usersRef.child(userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, ''));
+    $scope.userType = '';
+    switch(userInfo.userType.toLowerCase()){
+        case 'examiner' : 
+
+            $scope.userType ='examiner'
+            break;
+        case 'student' : 
+            $scope.userType = 'student' 
+            break ;
+    };
+    console.log($scope);
     $scope.certificationsList = commonServices.createFireArray(userRef.child("/userData/certifications"));
-    $scope.airportsList = commonServices.createFireArray(userRef.child("/userData/airports"));    
-    $scope.name = userInfo.firstName + " " + userInfo.lastName;
-    $scope.bio = userInfo.bio ;
-    $scope.saveCertification = function(keycode){
-        if(keycode===13){
-             userRef.child("/userData/certifications").push({title:$scope.certification});
-             $scope.certification = '';
+    $scope.airportsList = commonServices.createFireArray(userRef.child("/userData/airports"));
+    $scope.saveCertification = function(chip){
+          if(chip.hasOwnProperty("$id") == false){
+              userRef.child("/userData/certifications").push({title:chip});
+              return null ;
         }
     }
-    $scope.saveAirport = function(chip){
+    $scope.saveAirport= function(chip){
+        if(chip.hasOwnProperty("$id") == false){
             userRef.child("/userData/airports").push({title:chip});
-        return false ;
+            return null ;
+        }
     }
     $scope.deleteAirport = function(chip){
-        userRef.child("/userData/airports" + chip.$id).remove();
+        userRef.child("/userData/airports/" + chip.$id).remove();
     }
-    
-    $scope.deleteCert = function(chip){
-        console.log(index);
+    $scope.deleteCertication = function(chip){
         userRef.child("/userData/certifications/" + chip.$id).remove()
     }
-    $scope.saveChanges = function(){
-//        userRef.child("userData/bio").set($scope.bio);
-//        profileService.changePassword(userRef, $scope.oldPassword, $scope.newPassword, authData.password.email);
-    } 
 }])
 
 

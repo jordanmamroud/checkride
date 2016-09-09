@@ -22,7 +22,7 @@ angular.module('crRoutes',['ngRoute'])
              controllerAs:"vm"       
     })
     .when(RoutePaths.profile.path, {
-          templateUrl: 'app/users/views/profile.html',
+            templateUrl: 'app/users/views/profile.html',
             controller:"profileController"
     })
     .when(RoutePaths.examinerMessages.path,{

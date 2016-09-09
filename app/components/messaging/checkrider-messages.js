@@ -12,7 +12,6 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
 .service('messagesService', [function(){
     return{
         sendMessage:function(userData, recipientData, msgObj){
-            
             var recipientRef = new Firebase("https://checkride.firebaseio.com/users/" + recipientData.$id);
             var userRef = new Firebase("https://checkride.firebaseio.com/users/" + userData.$id); 
             var recConvoRef = recipientRef.child("conversations/" + userData.$id);
@@ -44,19 +43,18 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
         },
         controllerAs:'mg',
         controller:function($scope){
-
                 var mg =this ;
                 var userData = commonServices.getCookie('currentUser');
                 var listRef = new Firebase($scope.lister);
-                mg.listRef = '';
-                mg.recipientsList = commonServices.createFireArray(listRef);
-                mg.recipient = '';          
-                mg.sendMessage = function(){
+                this.listRef = '';
+                this.recipientsList = commonServices.createFireArray(listRef);
+                this.recipient = '';          
+                this.sendMessage = function(){
                     var recipientData = JSON.parse(mg.recipient);
                     var recipientRef = new Firebase("https://checkride.firebaseio.com/users/" + recipientData.$id);
                     var msgObj = {
-                            subject: mg.subject,
-                            body: mg.body,
+                            subject: this.subject,
+                            body: this.body,
                             sender: userData.userData.firstName + " " + userData.userData.lastName,
                             order: Date.now(),
                             opened: false,
@@ -75,69 +73,59 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
         },
         controllerAs:"msg",
         controller:function($scope){
-            var msg = this;
-            var userInfo = commonServices.getCookie('currentUser');
-            console.log(userInfo);
-            var userListRef = new Firebase("https://checkride.firebaseio.com/users");
-            var authData = userListRef.getAuth();
-            var userId = authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, '');
-            var userRef = userListRef.child(userId);
-            var user =  $firebaseObject(userRef);
+            var userInfo = commonServices.getCookieObj('currentUser');
+            var userId = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
+            var userRef = commonServices.getCommonRefs().usersRef.child(userId);
             var conversationsRef = userRef.child("conversations");
             var allMessagesRef = userRef.child("messages");
-            var convoRef = conversationsRef.child('fabs');  
-            
-            msg.conversationsList = $firebaseArray(conversationsRef);
-            msg.messagesList = $firebaseArray(allMessagesRef);
-            msg.view = false ;
-            commonServices.showToastOnEvent(conversationsRef, "child_added");
-
-            msg.initializeConvoView = function(){
-                msg.conversationsList = $filter('orderBy')(msg.conversationsList, '-lastReceivedMsg');
+            this.conversationsList = commonServices.createFireArray(conversationsRef);
+            this.messagesList = commonServices.createFireArray(allMessagesRef);
+            this.view = false ;
+            this.initializeConvoView = function(){
+                this.conversationsList = $filter('orderBy')(msg.conversationsList, '-lastReceivedMsg');
             };
-
-            msg.viewConvoMessages = function(convo){   
+            commonServices.showToastOnEvent(conversationsRef, "child_added");
+            this.viewConvoMessages = function(convo){   
                 conversationsRef.child(convo.$id + "/hasNewMsg").set(false);
                 var senderRef = conversationsRef.child(convo.$id + "/messages");
-                msg.convoMessagesList = $firebaseArray(senderRef);
-                msg.convo = convo.$id.toString();
+                this.convoMessagesList = $firebaseArray(senderRef);
+                this.convo = convo.$id.toString();
             }
-
-            msg.viewMessageDetails = function(mesg){
-                msg.sender = mesg.sender ;
-                msg.message = mesg.body ;
-                msg.senderRef = mesg.key;
+            this.viewMessageDetails = function(mesg){
+                this.sender = mesg.sender ;
+                this.message = mesg.body ;
+                this.senderRef = mesg.key;
                 console.log(msg.sender);
-                allMessagesRef.child(msg.$id).update({opened: true});
+                allMessagesRef.child(thismesg.$id).update({opened: true});
             }
 
-            msg.sendMessage = function(){
-                var senderRef = userListRef.child(msg.sender);
+            this.sendMessage = function(){
+                var senderRef = userListRef.child(this.sender);
                 var msgObj = {
-                        subject: msg.subject,
-                        body: msg.body,
-                        sender: msg.sender,
+                        subject: this.subject,
+                        body: this.body,
+                        sender: this.sender,
                         order: Date.now(),
                         opened: false,
                         key:"janeyahoocom"
                 }
-                messagesService.sendMessage(senderRef, msg.sender, msgObj);
+                messagesService.sendMessage(userInfo, this.sender, msgObj);
             }
             
-            if(userInfo.userData.userType.toLowerCase() == "examiner"){
-                msg.listRef = "https://checkride.firebaseio.com/student" ;
+            if(userInfo.userType.toLowerCase() == "examiner"){
+                this.listRef = "https://checkride.firebaseio.com/student" ;
             }
-            if(userInfo.userData.userType.toLowerCase() == "student"){
-                msg.listRef = "https://checkride.firebaseio.com/examiner" ;
+            if(userInfo.userType.toLowerCase() == "student"){
+                this.listRef = "https://checkride.firebaseio.com/examiner" ;
             }
-
-            msg.op = function(){
+            
+            this.op = function(){
                 $mdDialog.show({
                     scope:$scope.$new(),
                     template:'<send-message-modal lister="msg.listRef"></send-message-modal>',
                     clickOutsideToClose:true
                 });
+            }
         }
-    }
     }
 }]);
