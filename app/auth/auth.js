@@ -76,10 +76,14 @@ angular.module('crAuth', ['firebase'])
                 } 
                 else{
                         var user = usersRef.child(email.replace(/[\*\^\.\'\!\@\$]/g , ''));
-                        var userInfo = commonServices.createFireObj(user);
+                        var userInfo = commonServices.createFireObj(user.child('userData'))
                         userInfo.$loaded().then(function(){
+                            
                             commonServices.setCookieObj('currentUser', userInfo);
-                            commonServices.changePath(commonServices.getRoutePaths().profile.path);                       
+                            commonServices.changePath(commonServices.getRoutePaths().profile.path);  
+                            
+                            console.log(commonServices.createFireObj(user));
+                            console.log(commonServices.getCookieObj('currentUser'));
                         })
                 }
             })

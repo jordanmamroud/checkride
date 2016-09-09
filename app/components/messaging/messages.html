@@ -17,7 +17,8 @@
 
 <body>
        <h2 id="as">Messages</h2>
-        <md-button class="md-raised md-primary" ng-click="msg.op()">Send Message</md-button>       <my-modal>
+       
+       <md-button class="md-raised md-primary" ng-click="msg.op()">Send Message</md-button>       <my-modal>
            
        </my-modal>
         <div>
@@ -65,14 +66,14 @@
             </table>
 
             <my-modal myid='msgDetailsModal'>
-                 <h2 ng-model="msg.sender" id="sender">hello</h2><br>
+                 <h2 ng-model="msg.sender">hello</h2><br>
                  <p ng-model="msg.message">{{message}}</p>
                  <textarea id="message"></textarea>
                  <button ng-click="msg.sendMessage()"id="replyButton"> Reply</button>
              </my-modal>
       
         <div class='toast' style='display:none'>You have a new Appointment Request</div>
-        <button ng-click="view = !view" id="switchView" ng-class="">switch views</button>
+        <button ng-click="view = !view" ng-class="">switch views</button>
 
 </body>
 </html>

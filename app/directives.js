@@ -16,7 +16,7 @@ angular.module('crDirectives',[])
     //SIDEBAR
     .directive('crSidebar', ['commonServices', function(commonServices){
         var user = commonServices.getCookieObj('currentUser');
-        var userType = user ? user.userData.userType : null;
+        var userType = user ? user.userType : null;
         
         return{
             restrict:'E',
@@ -98,9 +98,8 @@ angular.module('crDirectives',[])
                         '</md-content>',
             scope: true,
             controller: function crNavCtrl($scope){
-                
                 $scope.navItems = function(){
-                    var userType = commonServices.getCookieObj('currentUser').userData.userType.toLowerCase();
+                    var userType = commonServices.getCookieObj('currentUser').userType.toLowerCase();
                     switch(userType){
                         case 'examiner' : return crUserNavData.examiner;
                         case 'student' : return crUserNavData.student;
@@ -110,4 +109,43 @@ angular.module('crDirectives',[])
             }
         }
     }])
+
+    .directive('accountDetails', ['commonServices','profileService',function(commonServices,profileService){
+            return{
+                templateUrl:"app/users/views/accountDetails.html",
+                scope:false,
+                controllerAs:'user',
+                controller: function(){
+                    var userInfo = commonServices.getCookieObj('currentUser');
+                    this.firstName = userInfo.firstName ;
+                    this.lastName = userInfo.lastName;
+                    this.bio = userInfo.bio ;
+                    this.oldPassword='';
+                    this.newPassword='';
+                    this.phoneNumber = userInfo.phoneNumber ;
+                    this.emailAddress = userInfo.emailAddress ;
+                    this.updateUser = function(ref){
+                        if(this.newPassword.length>0){
+                            profileService.changePassword(userRef, this.oldPassword, this.newPassword, userInfo.emailAddress)
+                        }
+                        ref.child("userData").update({
+                            firstName: this.firstName,
+                            lastName: this.lastName,
+                            phoneNumber: this.phoneNumber,
+                            emailAddress:this.emailAddress,
+                            bio: this.bio
+                        });
+                    } 
+            }   
+        }
+    }])
+ .config(function($mdThemingProvider) {
+
+    // Configure a dark theme with primary foreground yellow
+    $mdThemingProvider.theme('docs-dark', 'default')
+      .primaryPalette('yellow')
+      .dark();
+  });
+    
+
 

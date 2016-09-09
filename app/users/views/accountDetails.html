@@ -1,0 +1,59 @@
+     <md-content class="md-primary"layout-padding>
+      <div>
+              <form name="userForm" >
+                <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-md>
+                    <label>First name</label>
+                    <input ng-model="user.firstName">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" flex-gt-md>
+                    <label>Last Name</label>
+                    <input ng-model="user.lastName">
+                  </md-input-container>
+                </div>
+                
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-md>
+                          <label>Email Address</label>
+                          <input ng-model="user.emailAddress">
+                    </md-input-container>
+                    
+                    <md-input-container class="md-block" flex-gt-md>
+                          <label>Phone Number</label>
+                          <input ng-model="user.phoneNumber">
+                    </md-input-container>
+                </div>
+            
+                
+                <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>City</label>
+                    <input ng-model="user.city">
+                  </md-input-container>
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>State</label>
+                        <input ng-model="user.city">
+                  </md-input-container>
+                </div>
+                
+                 <div layout-gt-sm="row">  
+                      <md-input-container  class="md-block" flex-gt-sm>
+                              <label>Old Password</label>
+                              <input ng-model='user.oldPassword'>
+                    </md-input-container>
+
+                     <md-input-container class="md-block" flex-gt-sm>
+                              <label>New Password</label>
+                              <input ng-model="user.newPassword">
+                    </md-input-container>
+                </div>
+
+                <md-input-container class="md-block">
+                  <label>Biography</label>
+                  <textarea ng-model="user.bio" md-maxlength="150" rows="3"></textarea>
+                </md-input-container>
+              </form>
+              <md-button class='md-primary' ng-click="user.updateUser()">Update Account</md-button>
+     </div>
+</md-content>
