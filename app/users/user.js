@@ -55,7 +55,7 @@ angular.module("crUser",['firebase', 'userDirectives', 'commonServices',  'crUse
 
 
 // STUDENT CONTROLLERS
-.controller('examinerAvailabilityController', ['$scope', "$firebaseObject", '$firebaseArray', '$compile', 'uiCalendarConfig',"$routeParams", '$location', function ($scope, $firebaseObject, $firebaseArray, $compile, uiCalendarConfig,$routeParams, $location) {
+.controller('examinerAvailabilityController', ['$scope', '$mdDialog',"$firebaseObject", '$firebaseArray', '$compile', 'uiCalendarConfig',"$routeParams", '$location', function ($scope, $mdDialog, $firebaseObject, $firebaseArray, $compile, uiCalendarConfig,$routeParams, $location) {
     
     $scope.examinerId = $routeParams.username ; 
     var usersRef = new Firebase("https://checkride.firebaseio.com/users");
@@ -70,8 +70,7 @@ angular.module("crUser",['firebase', 'userDirectives', 'commonServices',  'crUse
     var eventsList = $firebaseArray(eventsref);
     var approvedAppointmentsList = $firebaseArray(appointmentsRef);
     var studentData = $firebaseObject(loggedInStudent);
-    
-    
+
     $scope.goBack = function(){
          $location.path("/student/examinerProfile");
     }
@@ -92,8 +91,19 @@ angular.module("crUser",['firebase', 'userDirectives', 'commonServices',  'crUse
             requestedEndTime: $scope.eventEnd,
         });
     }
-        $scope.eventSources = [];
     
+        $scope.eventSources = [];
+        $scope.fun = function(){
+            $mdDialog.show({
+                scope:$scope.$new(),
+                clickOutsideToClose:true,
+                template:'<h2>Time</h2><br>'
+                +'<p ng-model="eventStart">{{eventStart}}</p>'
+                +'<p ng-model="eventEnd">{{eventEnd}}</p>'
+                +'<button id="requestButton" ng-click="sendRequest()">Request Appointment</button>'
+            })
+        }
+        
         $scope.uiConfig = {
             calendar: {
 //                googleCalendarApiKey: 'AIzaSyA0IwuIvriovVNGQiaN-q2pKYIpkWqSg0c',
@@ -118,6 +128,7 @@ angular.module("crUser",['firebase', 'userDirectives', 'commonServices',  'crUse
                     $("#requestModal").addClass("showing");
                     $scope.eventStart = start.toString();
                     $scope.eventEnd = end.toString();
+                    $scope.fun();
                 },
                 editable: false,
                 eventClick: function (event, element) {
@@ -141,60 +152,47 @@ angular.module("crUser",['firebase', 'userDirectives', 'commonServices',  'crUse
 
     $scope.list = $firebaseArray(examinersRef);  
     
-    $scope.goToProfile = function(index){   
+    $scope.goToProfile = function(index){                   
         $location.path("/student/examinerProfile").search({username:$scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , '')});
     }    
 }])
 
-.controller('examinerInfoController', ['$routeParams','$scope', '$firebaseArray','$firebaseObject', 'commonServices', "$location",function($routeParams,$scope, $firebaseArray, $firebaseObject,commonServices,$location){
-    $scope.examinerId = $routeParams.username ;
-    var usersRef = new Firebase("https://checkride.firebaseio.com/users");
-    var authData = usersRef.getAuth();
-    var userRef = usersRef.child(authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, ''));
-    var examinerRef = usersRef.child($scope.examinerId)
-    var certificationsRef = examinerRef.child("userData/certifications");
-    var airportsRef = examinerRef.child("userData/airports");
-    var bioRef = examinerRef.child("userData/bio");
-    var studentData = $firebaseObject(userRef);
-    var examinerData = $firebaseObject(examinerRef);
-    $scope.certificationsList = $firebaseArray(certificationsRef);
-    $scope.airportList = $firebaseArray(airportsRef);
-    
-    examinerData.$loaded().then(function(){
-        var data = examinerData.userData;
-        $scope.bio = data.bio ;
-        $scope.examinerName = data.firstName +" " + data.lastName ;
-    });
-    
-    $scope.viewSchedule = function(){
-        $location.path("/student/examinerAvailability");
-    }    
-}])
 
-.controller('examinerInfoController', ['$routeParams','$scope', '$firebaseArray','$firebaseObject', 'commonServices', "$location",function($routeParams,$scope, $firebaseArray, $firebaseObject,commonServices,$location){
-    $scope.examinerId = $routeParams.username ;
+
+.controller('examinerInfoController', ['$routeParams','$scope', '$firebaseArray','$firebaseObject', 'commonServices',function($routeParams,$scope, $firebaseArray, $firebaseObject, commonServices){
+    var vm = this ; 
+    vm.examinerId = $routeParams.username ;
+    vm.examinerListRef = "https://checkride.firebaseio.com/examiner" ;
     var usersRef = new Firebase("https://checkride.firebaseio.com/users");
     var authData = usersRef.getAuth();
     var userRef = usersRef.child(authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, ''));
-    var examinerRef = usersRef.child($scope.examinerId)
+    var examinerRef = usersRef.child(vm.examinerId);
     var certificationsRef = examinerRef.child("userData/certifications");
     var airportsRef = examinerRef.child("userData/airports");
-    var bioRef = examinerRef.child("userData/bio");
-    var studentData = $firebaseObject(userRef);
-    var examinerData = $firebaseObject(examinerRef);
-    $scope.certificationsList = $firebaseArray(certificationsRef);
-    $scope.airportList = $firebaseArray(airportsRef);
+    var studentData = commonServices.createFireObj(userRef);
+    var examinerData = commonServices.createFireObj(examinerRef);
+    
+    vm.certificationsList = $firebaseArray(certificationsRef);
+    vm.airportList = $firebaseArray(airportsRef);
     
     examinerData.$loaded().then(function(){
         var data = examinerData.userData;
-        $scope.bio = data.bio ;
-        $scope.examinerName = data.firstName +" " + data.lastName ;
+        vm.bio = data.bio ;
+        vm.examinerName = data.firstName +" " + data.lastName ;
     });
     
-    $scope.viewSchedule = function(){
-        $location.path("/student/examinerAvailability");
+    vm.viewSchedule = function(){
+       commonServices.changePath("/student/examinerAvailability");
     }    
+}]);
+
+app.controller("examinerCalendarController",  ['$window','$scope', '$firebaseArray', '$firebaseObject', '$compile', 'uiCalendarConfig','commonServices',"calendarService",
+      function ($window,$scope, $firebaseArray, $firebaseObject, $compile, uiCalendarConfig, commonServices, calendarService){
+          var vm = this ;
+          console.log('funions dope fudge');
 }])
+  
+
 
 .controller("studentHomePageController",  function($scope, $firebaseArray,$firebaseObject){
     var ref = new Firebase("https://checkride.firebaseio.com/");

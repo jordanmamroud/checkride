@@ -1,6 +1,47 @@
+<!--
 <my-modal myid="{{modalId}}">
-                <h2>Message</h2><br>
-                <input type="text" id="messageSubject" ng-model="messageSubject">
-                <textarea cols="50" rows="4" name="body" ng-model="messageBody"></textarea>
-                <button ng-click="sendMessage()">Send Message</button>
+   <md-button ng-click="showDialog($event)" class="md-raised">
+      Custom Dialog
+      </md-button>
+    <form action="" layout-align="center center">
+        <h2>Message</h2><br>
+
+        <ms-input-container layout>
+            <input type="text" id="messageSubject" ng-model="mg.subject">
+        </ms-input-container>
+
+        <ms-input-container layout>
+            <textarea cols="50" rows="4" name="body" ng-model="mg.body"></textarea>
+        </ms-input-container>
+        
+        <ms-input-container layout>
+            <select ng-model="mg.recipient">
+                <option value="{{rec}}" ng-repeat="rec in mg.recipientsList" ng-repeat="rec in mg.recipientsList">{{rec.userData.firstName}}</option>
+            </select>       
+         <ms-input-container layout>
+        <button ng-click="mg.sendMessage()">funion</button> 
+    </form>
 </my-modal>     
+-->
+
+
+<form action="" layout-align="center center">
+    <h2 layout-align="center">Message</h2><br>
+    <ms-input-container layout>
+        <input type="text" placeholder="subject" ng-model="mg.subject">
+    </ms-input-container>
+
+    <ms-input-container layout>
+        <textarea placeholder="enter message"cols="50" rows="4" name="body" ng-model="mg.body"></textarea>
+    </ms-input-container>
+
+    <ms-input-container layout>
+        <select ng-model="mg.recipient">
+            <option value="{{rec}}" ng-repeat="rec in mg.recipientsList" ng-repeat="rec in mg.recipientsList">{{rec.userData.firstName}}</option>
+        </select>       
+    </ms-input-container>
+    
+     <md-input-container layout>
+        <md-button class="md-raised md-primary" ng-click="mg.sendMessage()">funion</md-button> 
+    </md-input-container>
+</form>

@@ -1,76 +1,38 @@
-var app = angular.module("checkrideApp", 
-                         ['ngRoute',
-                          'ui.calendar',
-                          'firebase',
-                          'examinerDirectives',
-                          'examinerCalendar',
-                          'loginMod',
-                          "createAccountPage",
-                          'messages', 
-                          'profile', 
-                          'examinerControllers', 
-                          'studentMod',
-                          'studentDirectives']);
-
-// logic for showing recurring event options, put in directive
-//           showRecurringEventOptions: function(){
-//                      $("#dowCheckBox").on("click", function(){
-//                         $("#recur").toggleClass("hide"); 
-//                      });
-//                        $("#freq").on("change", function(){
-//                             if($("#freq").val()== "weekly"){
-//                                $("#dow").removeClass("hide");
-//                             }else{
-//                                 $("#dow").addClass('hide');
-//                             }
-//                        });
-//                    },
+'use strict'
+angular.module('checkrider',[
+    'ngCookies',
+    'ngMaterial',    
+    'ngAnimate',
+    'ngAria',
+    'firebase',
+    'ngRoute',
+    
+    'crControllers',
+    'crDirectives',
+    'crRoutes',
+    
+    'crComponents',
+    'crUserServices',
+    'crUser',
+    'crSession',
+    'commonServices',
+    'crCalendar',
+    'messages'    
+    ])
 
 
-/*
-//MERGED
-app.config(function($routeProvider){
-    $routeProvider
-    .when("/",{
-        templateUrl:"app/shared/views/user/login/loginPage.html",
-        controller:"LoginController",
-        controllerAs:"login"
-    })
-    .when("/createAccount", {
-        templateUrl: 'app/shared/views/user/createAccount/createAccountPage.html',
-        controller:'createAccountController'
-    })
-    .when("/examiner/calendar",{
-        templateUrl:"app/shared/views/examinerFiles/examinerCalendar/examinerCalendar.html",
-        controller:"examinerCalendar"
-    })
-    .when("/examiner/profile", {
-        templateUrl:'app/shared/views/examinerFiles/profile/profile.html',
-        controller:'profileController'
-    })
-    .when("/examiner/messages",{
-        templateUrl:'app/shared/views/examinerFiles/examinerMessages.html',
-        controller:'messagesController'
-    })
-     .when("/student",{
-        templateUrl:'app/shared/views/StudentFiles/studentTemplates/studentHomePage.html',
-        controller:"studentHomePageController"
-    })
-    .when("/student/examinersList",{
-        templateUrl:'app/shared/views/StudentFiles/studentTemplates/examinerList.html',
-        controller:"examinerListController"
-    })
-    .when("/student/examinerProfile",{
-        templateUrl: "app/shared/views/StudentFiles/studentTemplates/examinerInfo.html",
-        controller: "examinerInfoController"
-    })
-    .when("/student/messages",{
-        templateUrl:"app/shared/views/StudentFiles/studentTemplates/studentMessages.html"
-    })
-    .when("/student/examinerAvailability",{
-        templateUrl: "app/shared/views/StudentFiles/studentTemplates/examinerAvailability.html",
-        controller:"examinerAvailabilityController"
-    })
-});
-*/
 
+.config(['$locationProvider', function($locationProvider){
+    $locationProvider.html5Mode(true).hashPrefix('!');
+}])
+
+
+
+//Global Constants
+.constant('GlobalConstants', {
+    app : {
+        name : "Checkrider",
+        title : "Checkrider",
+        logoPath:"assets/img/checkrider-logo-[unofficial].png"
+    }
+})
