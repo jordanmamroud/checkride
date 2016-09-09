@@ -13,13 +13,8 @@
     </style>
 <body>  
         <!-- comes from studentDirective in studentDirectives.js -->
-        <student-header></student-header>
         <h1 ng-model="studentName">{{studentName}}</h1>
-    
-        <button ng-click="goBack()">Back to profile</button>
-    
-        <div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div> 
-      
-
+       <viewing-cal></viewing-cal>
+       
 </body>
 </html>
