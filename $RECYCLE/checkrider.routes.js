@@ -41,7 +41,11 @@ angular.module('crRoutes',['ngRoute'])
         .when("/examiner/messages",{
             templateUrl:'app/users/views/examinerMessages.html'
         })
-         .when("/student",{
+        .when("/student",{
+            templateUrl:'app/users/views/studentHomePage.html',
+            controller:"studentHomePageController"
+        })
+         .when("/student/examinerList",{
             templateUrl:'app/users/views/examinerList.html',
             controller:"examinerListController"
         })

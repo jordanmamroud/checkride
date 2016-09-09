@@ -201,6 +201,18 @@ app.service("calendarService", ['$filter', function($filter){
                     }
                 });
             });          
+        },
+        
+        sendAppointmentRequest:function(ref, userInfo, eventStart,eventEnd){
+            var examinerRequestListRef = ref.child("appointmentRequests/" + userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, ''));
+            examinerRequestListRef.set({
+                firstName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                emailAddress: userInfo.emailAddress,
+                sentAt: new Date(Date.now()).toString(),
+                requestedStartTime: eventStart,
+                requestedEndTime: eventEnd,
+            });
         }
     }
 }]);

@@ -254,4 +254,78 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                 }
             }
         }
-});
+})
+.directive('viewingCal',function(){
+    return{
+        template:'<div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div>',
+        controller: ['$scope', '$mdDialog','commonServices', 'calendarService', function ($scope, $mdDialog, commonServices, calendarService){
+            $scope.examinerId = commonServices.getRouteParams().username;
+            var userInfo = commonServices.getCookie("currentUser").userData;
+            var loggedInStudentKey = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
+            var examinerRef = commonServices.getCommonRefs().usersRef.child($scope.examinerId); 
+            var examinerData = commonServices.createFireObj(examinerRef);
+            
+            var eventsRef = examinerRef.child("calendar/events");
+            var settingsRef = examinerRef.child("calendar/settings");
+            var eventsList = commonServices.createFireArray(eventsRef);
+
+            examinerData.$loaded().then(function(){
+                $scope.examinerName = examinerData.userData.firstName + " " + examinerData.userData.lastName ;
+            });
+
+            $scope.sendRequest = function(){
+                calendarService.sendAppointmentRequest(examinerRef, userInfo,$scope.eventStart, $scope.eventEnd);
+            }
+
+            $scope.eventSources = [];
+            $scope.showApptDialog = function(){
+                $mdDialog.show({
+                    scope:$scope.$new(),
+                    clickOutsideToClose:true,
+                    template:'<h2>Time</h2><br>'
+                    +'<p ng-model="eventStart">{{eventStart}}</p>'
+                    +'<p ng-model="eventEnd">{{eventEnd}}</p>'
+                    +'<md-button  class="md-raised md-primary" ng-click="sendRequest()">Request Appointment</md-button>'
+                })
+            }
+
+            $scope.uiConfig = {
+                calendar: {
+        //                googleCalendarApiKey: 'AIzaSyA0IwuIvriovVNGQiaN-q2pKYIpkWqSg0c',
+
+                    events: eventsList,
+                    height: '100%',
+                    timezone: "local",
+                    editable: true,
+                    defaultView: 'agendaWeek',
+                    header: {
+                        left: 'month agendaWeek  agendaDay ',
+                        center: 'title',
+                        right: 'today prev,next settingsButton'
+                    },
+                    selectable: true,
+                    selectable: {
+                        month: true,
+                        agenda: true
+                    },
+                    unselectAuto: true,
+                    select: function (start, end, ev) {
+                        $scope.eventStart = start.toString();
+                        $scope.eventEnd = end.toString();
+                        $scope.showApptDialog();
+                        console.log('vain bane')
+                    },
+                    editable: false,
+                    eventClick: function (event, element) {
+                        // stops gcal events from going to google calendar
+                          if (event.url) {
+                              alert("sorry this time is not available");
+                                return false;
+                        }
+                        alert("sorry this time is not available");
+                    }
+                }
+            }; 
+        }]
+    }
+})
