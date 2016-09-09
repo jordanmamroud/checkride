@@ -10,13 +10,13 @@ angular.module('checkrider',[
     'crControllers',
     'crDirectives',
     'crRoutes',
+    'crAuth',
     
     'crComponents',
-    'crUserServices',
     'crUser',
-    'crAuth',
-    'commonServices',
     'crCalendar',
+    
+    'commonServices',
     'messages'    
     ])
 
@@ -26,13 +26,39 @@ angular.module('checkrider',[
     $locationProvider.html5Mode(true).hashPrefix('!');
 }])
 
-
-
 //Global Constants
 .constant('GlobalConstants', {
     app : {
         name : "Checkrider",
         title : "Checkrider",
         logoPath:"assets/img/checkrider-logo-[unofficial].png"
+    }
+})
+
+
+.value('crUserNavData',{
+    'examiner':{
+        calendar:{
+            title: 'Calendar',
+            path: '/user/calendar'
+        },
+        messages:{
+            title:'Messages',
+            path: '/user/messages'
+        },
+        punani:{
+            title:'Punani',
+            path: '/user/punani'
+        }
+    },
+    'student':{
+        boom:{
+            title: 'Calendar',
+            path: '/user/calendar'
+        },
+        fam:{
+            title:'Messages',
+            path: '/user/messages'
+        }
     }
 })

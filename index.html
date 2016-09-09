@@ -52,8 +52,6 @@
             <script type="text/javascript" src="app/auth/auth.js"></script>
             <script type="text/javascript" src="app/services/commonservices.js"></script>
             <script type="text/javascript" src="app/users/user.js"></script>
-            <script type="text/javascript" src="app/users/user.service.js"></script>
-            <script type="text/javascript" src="app/users/userDirectives.js"></script>
             <script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
             <script type="text/javascript" src="app/components/calendar/examinerCalendar.js"></script>
             <script type="text/javascript" src="app/components/calendar/calDirective.js"></script>
@@ -67,20 +65,14 @@
 
 
     <body ng-controller="crIndexCtrl" layout="row" >
-          
-
-          
+        
         <!-- Main Wrapper -->
         <div layout="column" flex layout-fill ng-controller='crLayoutCtrl as layout'>
-            
-            
-            
             <!-- HEADER -->
             <md-toolbar layout="row" >
                 <cr-header></cr-header>    
             </md-toolbar>
        
-            
             <div id="content" layout="row" layout-fill>
               
                <!-- SIDEBAR -->

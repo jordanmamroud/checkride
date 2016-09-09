@@ -3,28 +3,30 @@ angular.module('crControllers',[])
 //MAIN CONTROLLER
 .controller('crIndexCtrl', ["$scope","$cookies", "$location", 'GlobalConstants',function( $scope,$cookies,$location,GlobalConstants){
     $scope.name = GlobalConstants.app.name;
-    this.view = false ;
+    $scope.view = false ;
+    $scope.type = '' ;
     
     var setSidebarView = function(){
         
         var user = $cookies.getObject('currentUser');
-        var userType = user ? user.userData.userType : null;
+        var userType = user ? user.userData.userType : null ;
         
-        if($location.path().indexOf("examiner") == -1 && $location.path().indexOf('student')==-1){
+     if($location.path().indexOf("user") == -1){
                         $scope.view = false ;
                     }else{
                         $scope.view = true ;
-
                         if(userType.toLowerCase() == 'examiner'){
+                            $scope.type = 'examiner';
                             $scope.examinerView = true;
                             $scope.studentView = false ;
                         }
-                        if(userType =='Student'){
+                        if($scope.type == 'student'){
                             $scope.examinerView = false;
                             $scope.studentView = true ;
                         }
                     }
     }
+    
     setSidebarView();
 
     $scope.$on('$locationChangeSuccess',function(){
@@ -37,9 +39,7 @@ angular.module('crControllers',[])
     
     var user = $cookies.getObject('currentUser');
     $scope.showSidebar = null;
-    
     $scope.$on('$routeChangeSuccess', function () {
-        
         $scope.showSidebar = ($location.path().indexOf('/user/') > -1);
     })
 }])
