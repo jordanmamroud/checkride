@@ -1,18 +1,4 @@
 angular.module("crUser",[])
-//  var userType = commonServices.getCookieObj('currentUser').userData.userType.toLowerCase();
-//    $scope.userType= '';
-//    switch(userType){
-//        case 'examiner' : 
-//            $scope.userType ='examiner'
-//            break;
-//        case 'student' : 
-//            $scope.userType = 'student' 
-//            break ;
-//    };
-
-//Delete below
-//'firebase', 'commonServices', 'crCalendar.service'
-
 
 //Examiner Controllers
 .controller("profileController", ['$scope','profileService', 'commonServices', function($scope, profileService,commonServices){
@@ -21,7 +7,6 @@ angular.module("crUser",[])
     $scope.userType = '';
     switch(userInfo.userType.toLowerCase()){
         case 'examiner' : 
-
             $scope.userType ='examiner'
             break;
         case 'student' : 
@@ -51,22 +36,24 @@ angular.module("crUser",[])
     }
 }])
 
-
 // STUDENT CONTROLLERS
-.controller('examinerAvailabilityController', ['$scope', function($scope){
-    var userInfo = commonServices.getCookie("currentUser").userData;
+.controller('examinerAvailabilityController', ['$scope', 'commonServices',function($scope, commonServices){
+    var userInfo = commonServices.getCookie("currentUser");
     $scope.studentName = userInfo.firstName +" " + userInfo.lastName ;
  }])
 
 
-.controller('examinerListController',["$scope","$location","$firebaseArray",function($scope,$location, $firebaseArray){
+.controller('examinerListController',["$scope",'$location','commonServices',function($scope,$location,commonServices, $firebaseArray){
     var ref = new Firebase("https://checkride.firebaseio.com/");
     var examinersRef = new Firebase("https://checkride.firebaseio.com/examiner");
     var authData = ref.getAuth();
     var studentRef = ref.child("student/" + authData.password.email.replace( /[\*\^\.\'\!\@\$]/g , ''));
-    $scope.list = $firebaseArray(examinersRef);  
-    $scope.goToProfile = function(index){                   
-    $location.path("/student/examinerProfile").search({username:$scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , '')});
+    $scope.list = commonServices.createFireArray(examinersRef);  
+    $scope.goToProfile = function(index){ 
+            
+            $location.path(commonServices.getRoutePaths().examinerInfo.path).search({
+                username: $scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , '')
+            });
     }    
 }])
 
@@ -74,9 +61,8 @@ angular.module("crUser",[])
 
 .controller('examinerInfoController', ['$scope', 'commonServices',function($scope, commonServices){
     var vm = this ; 
-    var userInfo = commonServices.getCookieObj('currentUser').userData;
+    var userInfo = commonServices.getCookieObj('currentUser');
     vm.examinerId = commonServices.getRouteParams().username;
-    vm.examinerListRef = "https://checkride.firebaseio.com/examiner" ;
     var usersRef = commonServices.getCommonRefs().usersRef;
     var userRef = usersRef.child(userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, ''));
     var examinerRef = usersRef.child(vm.examinerId);
@@ -122,25 +108,6 @@ angular.module("crUser",[])
         var examinerListRef = new Firebase("https://checkride.firebaseio.com/examiner");
     
     return{
-        addCertification:function(ref,keycode, cert){
-                 var certification = {
-                    description: cert
-                 }
-                 if(keycode == 13){
-                     ref.push(certification);
-              
-                 }
-        },
-        
-        addAirport: function(ref, keycode, airport){
-             var airportObj = {
-                    name: airport
-                 }
-            if(keycode == 13){
-                 ref.child(airportObj.name).set(airportObj);
-            }
-        },
-        
         changePassword: function(ref,oldPassword, newPassword, email){
             if(oldPassword.length > 0 && newPassword.length > 0){
                 ref.changePassword({
@@ -165,18 +132,6 @@ angular.module("crUser",[])
                       }
                 });
             }
-        },
-        remove:function(ref, obj){
-//             var arr = [];
-//             ref.once("value", function(datasnapshot){
-//               datasnapshot.forEach(function(childsnapshot){
-//                   arr.push(childsnapshot.key());
-//               });
-//                var itemToDelete = ref.child(arr[index]);
-//                itemToDelete.remove();
-//                console.log(arr[index]);
-            console.log(obj);
-            }
-        
+        }
     }
 }])

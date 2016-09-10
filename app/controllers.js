@@ -17,7 +17,7 @@ angular.module('crControllers',[])
 
 //HEADER CONTROLLER
 .controller('crHeaderCtrl', ["$scope", "$location",'RoutePaths','$cookies', function($scope, $location, RoutePaths, $cookies){
-
+    
 }])
 
 

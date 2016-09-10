@@ -3,15 +3,21 @@ angular.module('crDirectives',[])
     //HEADER
     .directive('crHeader', function(){
         return{
-            restrict:'E',
+        
             templateUrl: 'app/layout/header.html',
             scope: true,
-            replace:true,
             transclude: false,
-            controller: 'crHeaderCtrl as header'
+            controllerAs:"hd",
+            controller:['$rootScope','$scope','commonServices',function($rootScope,$scope,commonServices){
+                var userType = commonServices.getCookieObj('currentUser').userType ;
+                this.loggedIn = false;
+                 $scope.$on('$routeChangeSuccess', function (){
+                     console.log((commonServices.getPath().indexOf('/user/') > -1))
+                     $scope.hd.loggedIn = (commonServices.getPath().indexOf('/user/') > -1);
+                 })
+            }]
         };
     })
-
 
     //SIDEBAR
     .directive('crSidebar', ['commonServices', function(commonServices){

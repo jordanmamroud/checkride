@@ -11,6 +11,9 @@ app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout
                          $location.path(urlString)
                     },1);
         },
+        getPath:function(){
+            return $location.path();
+        },
         
         orderArray: function(list, orderBy){
             list = $filter('orderBy')(list, orderBy);
@@ -37,7 +40,9 @@ app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout
         setCookieObj:function(key, obj){
             $cookies.putObject(key, obj);//This sets objects
         },
-        
+        removeCookieObj: function(key){
+            $cookies.remove(key);
+        },
         createFireObj: function(ref){
             return $firebaseObject(ref)
         },

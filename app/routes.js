@@ -37,10 +37,10 @@ angular.module('crRoutes',['ngRoute'])
 
     .when(RoutePaths.examinerInfo.path,{
             templateUrl: "app/users/views/examinerInfo.html",
-            controller: "examinerInfoController"
+            controller: "examinerInfoController",
+            controllerAs:'vm'
     })
 
-    
     .when(RoutePaths.viewExaminerAvailability.path,{
         templateUrl: "app/users/views/examinerAvailability.html",
         controller: "examinerAvailabilityController"
@@ -48,12 +48,12 @@ angular.module('crRoutes',['ngRoute'])
     .when(RoutePaths.studentMessages.path,{
         templateUrl:"app/users/views/studentMessages.html"
     })
-//  
-//
-//    .otherwise({
-//        redirectTo:'/'
-//        
-//    })
+  
+
+    .otherwise({
+        redirectTo:'/'
+        
+    })
     //End Author
 }])
 
@@ -91,7 +91,7 @@ angular.module('crRoutes',['ngRoute'])
         path:"/user/examiner-info"
     },
     examinerList:{
-        path:"/user/list-of-examiners"
+        path:'/user/list-of-examiners'
     },
     viewExaminerProfile:{
         path:"/user/view-profile-info"
@@ -102,7 +102,4 @@ angular.module('crRoutes',['ngRoute'])
     studentMessages:{
         path:"/user/student-messages"
     }
-    
-    
-    // more objects here
 })
