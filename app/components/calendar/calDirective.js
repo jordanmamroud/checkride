@@ -260,11 +260,10 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         template:'<div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div>',
         controller: ['$scope', '$mdDialog','commonServices', 'calendarService', function ($scope, $mdDialog, commonServices, calendarService){
             $scope.examinerId = commonServices.getRouteParams().username;
-            var userInfo = commonServices.getCookie("currentUser").userData;
+            var userInfo = commonServices.getCookieObj("currentUser");
             var loggedInStudentKey = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
             var examinerRef = commonServices.getCommonRefs().usersRef.child($scope.examinerId); 
-            var examinerData = commonServices.createFireObj(examinerRef);
-            
+            var examinerData = commonServices.createFireObj(examinerRef);            
             var eventsRef = examinerRef.child("calendar/events");
             var settingsRef = examinerRef.child("calendar/settings");
             var eventsList = commonServices.createFireArray(eventsRef);

@@ -13,14 +13,89 @@
         background-color:red;
 
     }
+    
+    .toolbardemoScrollShrink .face {
+  width: 48px;
+  margin: 16px;
+  border-radius: 48px;
+  border: 1px solid #ddd; }
     </style>
 
 <body>
+  <div layout-gt-sm="row" layout="column">
+      <div flex-gt-sm="50" flex>
+      <md-toolbar class="md-primary md-whiteframe-z1" md-scroll-shrink>
+          <div class="md-toolbar-tools">
+            <span>Normal</span>
+          </div>
+        </md-toolbar>
+        
+        <md-content >
+          <md-list flex>
+            <md-list-item ng-click="msg.viewConvoMessages(convo)" class="md-3-line" ng-repeat="convo in msg.conversationsList" ng-click="null">
+              <div class="md-list-item-text" layout="column">
+                <h3 >{{convo.$id}}</h3>
+              </div>
+            </md-list-item>
+          </md-list>
+            <md-button class="md-raised md-primary" ng-click="msg.op()">Send Message</md-button>   
+        </md-content>
+      </div>
+      
+      <md-divider></md-divider>
+  
+
+         
+<div flex-gt-sm="row" flex>
+ <md-content>
+      <md-toolbar md-scroll-shrink ng-if="true">
+        <div class="md-toolbar-tools">
+          <h3>
+            <span>banners</span>
+          </h3>
+        </div>
+      </md-toolbar>
+
+        <md-list flex scroll-y="true">
+          <md-list-item class="md-3-line"ng-repeat="cv in msg.convo">
+            <div class="md-list-item-text">
+              <h3>{{cv.sender}}</h3>
+              <h4>{{cv.body}}</h4>
+            </div>
+            <md-divider inset></md-divider>
+          </md-list-item>
+           <textarea id="message"></textarea>
+        </md-list>
+ </md-content>
+  
+</div>
+
+
+
+<!--
+  <md-content flex>
+    <md-list>
+       <md-list-item ng-click="msg.viewConvoMessages(convo)" class="md-3-line" ng-repeat="cv in msg.convo" ng-click="null">
+        <div class="md-list-item-text">
+          <h3 >{{cv.sender}}</h3>
+          <h3>{{cv.subject}}</h3>
+          <h4>{{item.body}}</h4>
+
+        </div>
+        <md-divider inset></md-divider>
+      </md-list-item>
+
+    </md-list>
+
+  </md-content>
+-->
+
+<!--<send-message-modal></send-message-modal>-->
+<!--
+
        <h2 id="as">Messages</h2>
+       <md-button class="md-raised md-primary" ng-click="msg.op()">Send Message</md-button>   
        
-       <md-button class="md-raised md-primary" ng-click="msg.op()">Send Message</md-button>       <my-modal>
-           
-       </my-modal>
         <div>
          <table class="table" ng-show="!msg.view" id="convoView">
               <thead>
@@ -31,7 +106,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="convo in msg.conversationsList | orderBy:'-lastReceivedMsg' track by $index" ng-class="{setColor: convo.hasNewMsg == true}" ng-init="$last && msg.initializeConvoView()" ng-click="msg.viewConvoMessages(convo)" show-modal modal-to-open="#detailsModal">
+                <tr ng-repeat="convo in msg.conversationsList | orderBy:'-lastReceivedMsg' track by $index" ng-class="{setColor: convo.hasNewMsg == true}" ng-init="$last && msg.initializeConvoView()" ng-click="msg.viewConvoMessages(convo)">
                   <td>{{convo.$id}}</td>
                   <td>{{convo.has}}</td>
                 </tr>
@@ -44,7 +119,7 @@
                          <li>{{mesg.subject}}</li>
                      </ul>
                      <textarea id="message"></textarea>
-                    <button id="replyButton"> reply</button>
+                    <button ng-click="msg.sendMessage()"> reply</button>
                 </my-modal>
               </div>
        <div>
@@ -65,7 +140,7 @@
                   </tbody>
             </table>
 
-            <my-modal myid='msgDetailsModal'>
+             <my-modal myid='msgDetailsModal'>
                  <h2 ng-model="msg.sender">hello</h2><br>
                  <p ng-model="msg.message">{{message}}</p>
                  <textarea id="message"></textarea>
@@ -74,6 +149,7 @@
       
         <div class='toast' style='display:none'>You have a new Appointment Request</div>
         <button ng-click="view = !view" ng-class="">switch views</button>
+-->
 
 </body>
 </html>

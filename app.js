@@ -37,29 +37,32 @@ angular.module('checkrider',[
 })
 
 .value('crUserNavData',{
-    'examiner':{
-        calendar:{
-            title: 'Calendar',
-            path: '/user/calendar'
+ 
+        'examiner':{
+            calendar:{
+                title: 'Calendar',
+                path: '/user/calendar'
+            },
+            messages:{
+                title:'Messages',
+                path: '/user/messages'
+            },
+            punani:{
+                title:'Punani',
+                path: '/user/punani'
+            }
         },
-        messages:{
-            title:'Messages',
-            path: '/user/messages'
-        },
-        punani:{
-            title:'Punani',
-            path: '/user/punani'
-        }
-    },
-    'student':{
-        examiners:{
-            title: 'Calendar',
-            path: '/user/calendar'
-        },
-        messages:{
-            title:'Messages',
-            path: '/user/messages'
-        }
+        'student':{
+            examiners:{
+                title: 'Examiners',
+                path: '/user/list-of-examiners'
+            },
+            messages:{
+                title:'Messages',
+                path: '/user/messages'
+            },
+
+        
     }
 })
 
