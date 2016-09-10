@@ -6,11 +6,13 @@ angular.module('checkrider',[
     'ngAria',
     'firebase',
     'ngRoute',
+    'elasticsearch',
     
     'crControllers',
     'crDirectives',
     'crRoutes',
     'crAuth',
+    'pcSearch',
     
     'crComponents',
     'crUser',
