@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="" ng-app='examinerInfo'>
+<head>
+
+</head>
+<style>
+    #sidebar{
+        display: inline-block;
+        width: 10%;
+    }
+    .showing{
+        display: block;
+    }
+    </style>
+
+<body>
+          
+        <h1 ng-model="vm.examinerName">{{vm.examinerName}}</h1>
+        
+        <md-button class="md-raised md-primary" ng-click="vm.viewSchedule()">View Schedule</md-button>
+         
+          <h2>Certifications</h2>
+           <ul ng-repeat="cert in vm.certificationsList">
+               <li>{{cert.description}}</li>
+           </ul> 
+
+           <h2>Airports served</h2>
+           <ul ng-repeat="appt in vm.airportList">
+               <li>{{appt.name}}</li>
+           </ul>
+
+           <h2>About</h2>
+           <p ng-model="bio">{{bio}}</p>
+           
+<!--    <send-message-modal send-to="vm.examinerId" sender="vm.examinerName" list="vm.examinerListRef" modal-id="messageModal"></send-message-modal>-->
+<!--
+    <my-modal myid="messageModal">
+                <h2>Message</h2><br>
+                <input type="text" id="messageSubject" ng-model="messageSubject">
+                <textarea cols="50" rows="4" name="body" id="messageBody" ng-model="messageBody"></textarea>
+                <button ng-click="sendMessage()" id="sendButton">Send Message</button>
+    </my-modal>     
+-->
+</html>

@@ -4,7 +4,8 @@ angular.module('crRoutes',['ngRoute'])
     
     $routeProvider
     .when('/', {
-        templateUrl : 'app/components/search/search.html'
+        templateUrl : 'app/components/search/search.html',
+        controller: 'SearchCtrl'
     })
     .when(RoutePaths.login.path, {
         templateUrl:'app/auth/login.html',
