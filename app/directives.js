@@ -8,11 +8,10 @@ angular.module('crDirectives',[])
             scope: true,
             transclude: false,
             controllerAs:"hd",
+            replace:true,
             controller:['$rootScope','$scope','commonServices',function($rootScope,$scope,commonServices){
-                var userType = commonServices.getCookieObj('currentUser').userType ;
-                this.loggedIn = false;
+                 this.loggedIn = false;
                  $scope.$on('$routeChangeSuccess', function (){
-                     console.log((commonServices.getPath().indexOf('/user/') > -1))
                      $scope.hd.loggedIn = (commonServices.getPath().indexOf('/user/') > -1);
                  })
             }]
@@ -23,7 +22,6 @@ angular.module('crDirectives',[])
     .directive('crSidebar', ['commonServices', function(commonServices){
         var user = commonServices.getCookieObj('currentUser');
         var userType = user ? user.userType : null;
-        
         return{
             restrict:'E',
             templateUrl: 'app/layout/sidebar.html',

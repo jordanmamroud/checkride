@@ -1,7 +1,5 @@
 <div layout="column" layout-align="center center">
   <form action="" >
-   
-
        <div class="alert" ng-class="{'alert-success': message, 'alert-danger': error}" role="alert">
            {{error}}
            {{message}}
@@ -41,7 +39,7 @@
         </md-input-container>
 
         <md-input-container layout-align="center center">
-            <md-button ng-click="createAccount()" class="md-raised md-primary">Create Account</md-button>
+            <md-button ng-click="auth.createAccount()" class="md-raised md-primary">Create Account</md-button>
         </md-input-container>
 
 

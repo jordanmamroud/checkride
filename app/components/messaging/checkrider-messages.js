@@ -16,7 +16,6 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
             var userId = userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
             var recipientRef = usersRef.child(recipientData.$id);
             var userRef = usersRef.child(userId); 
-            console.log(userId);
             var recConvoRef = recipientRef.child("conversations/" + userId);
             var recMessageRef = recipientRef.child("messages");    
             var userConvoRef = userRef.child("conversations/" + recipientData.$id);
@@ -24,6 +23,10 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
             recConvoRef.update({
                 lastReceivedMsg:new Date(Date.now()).toString(),
                 hasNewMsg: true
+            });
+            userConvoRef.update({
+                 lastReceivedMsg:new Date(Date.now()).toString(),
+                  hasNewMsg: true
             });
             recConvoRef.child("messages").push(msgObj);
             recipientRef.child('messages').push(msgObj);  
@@ -43,6 +46,7 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
             sender:"=",
             modalId:"@"  
         },
+       
         controllerAs:'mg',
         controller:function($scope){
                 var userInfo = commonServices.getCookieObj('currentUser');
@@ -71,37 +75,23 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
         templateUrl: function(){
              return "app/components/messaging/messages.html?" + new Date();
         },
+        
         controllerAs:"msg",
-        controller:function($scope){   
+        controller:function($scope){             
             var userInfo = commonServices.getCookieObj('currentUser');
             var userId = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
             var userRef = commonServices.getCommonRefs().usersRef.child(userId);
             var conversationsRef = userRef.child("conversations");
-            var allMessagesRef = userRef.child("messages");
-            this.conversationsList = commonServices.createFireArray(conversationsRef);
-            this.convo= [1,2,3,4,5]
-            this.messagesList = commonServices.createFireArray(allMessagesRef);
+            this.conversationsList= commonServices.createFireArray(conversationsRef);
+            this.convoMessages = $scope.$resolve.conversations[$scope.$resolve.conversations.length-1].messages;
+            this.convoName = $scope.$resolve.conversations[$scope.$resolve.conversations.length-1].$id
             this.view = false ;
-            this.initializeConvoView = function(){
-                this.conversationsList = $filter('orderBy')(this.conversationsList, '-lastReceivedMsg');
-            };
             commonServices.showToastOnEvent(conversationsRef, "child_added");
             this.viewConvoMessages = function(convo){
-                conversationsRef.child(convo.$id + "/hasNewMsg").set(false);
-                var senderRef = conversationsRef.child(convo.$id + "/messages");
-                this.convoMessagesList = $firebaseArray(senderRef);
-                this.convo = convo;
-                console.log(convo);
-                console.log(conversationsRef.child(convo.$id))
-                this.convo = $firebaseArray(conversationsRef.child(convo.$id+"/messages"));
-                console.log(this.convo);
-            };
-            this.viewMessageDetails = function(mesg){
-                this.sender = mesg.sender ;
-                this.message = mesg.body ;
-                this.senderRef = mesg.key;
-                console.log(msg.sender);
-                allMessagesRef.child(thismesg.$id).update({opened: true});
+                conversationsRef.child(convo.$id).child("hasNewMsg").set(false);
+                var messagesRef = conversationsRef.child(convo.$id + "/messages");
+                this.convoMessages= $firebaseArray(messagesRef);
+                this.convoName = convo.$id;
             };
             this.sendMessage = function(){
                 var msgObj = {
