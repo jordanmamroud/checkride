@@ -1,8 +1,15 @@
 #Pilot Checkrides
 ---
 ##Naming Conventions
-* #### Controllers: UpperCase 
+####Controllers: UpperCase 
 ```Javascript
 ControllerName
 ```
-* #### Modules
+
+####Modules
+Filename
+
+Module Name: Dot notation
+```
+app.moduleName
+```

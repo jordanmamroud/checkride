@@ -70,9 +70,9 @@
                 <cr-header></cr-header>    
             </md-toolbar>
        
-            <div id="content" layout="row" layout-fill>
+            <div layout="row" id="content">
                <!-- SIDEBAR -->
-                <cr-sidebar ng-if="showSidebar"></cr-sidebar>
+                <cr-sidebar ng-if="showSidebar" layout="column" flex="15"></cr-sidebar>
                 
                 <!-- CONTENT -->
                 <md-content layout="column" flex>
