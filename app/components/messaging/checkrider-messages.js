@@ -1,25 +1,22 @@
 angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
 
-/*
-
-.filter('reverse', function() {
-    return function(items) {
-      return items.slice().reverse();
-    };
-  })
-*/
-
 .service('messagesService', [function(){
     return{
         sendMessage:function(userData, recipientData, msgObj){
+            
+            console.log(userData);
+            console.log(recipientData);
+            console.log(msgObj);
+            
             var usersRef = new Firebase("https://checkride.firebaseio.com/users");
             var userId = userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
             var recipientRef = usersRef.child(recipientData.$id);
             var userRef = usersRef.child(userId); 
-            var recConvoRef = recipientRef.child("conversations/" + userId);
-            var recMessageRef = recipientRef.child("messages");    
+            var recConvoRef = recipientRef.child("conversations/" + userId); 
             var userConvoRef = userRef.child("conversations/" + recipientData.$id);
-            var userMessagesRef = userRef.child("messages");
+            
+            recConvoRef.child("messages").push(msgObj);
+            userConvoRef.child('messages').push(msgObj);
             recConvoRef.update({
                 lastReceivedMsg:new Date(Date.now()).toString(),
                 hasNewMsg: true
@@ -28,10 +25,6 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
                  lastReceivedMsg:new Date(Date.now()).toString(),
                   hasNewMsg: true
             });
-            recConvoRef.child("messages").push(msgObj);
-            recipientRef.child('messages').push(msgObj);  
-            userConvoRef.child('messages').push(msgObj);
-            userMessagesRef.push(msgObj);
         }
     }
 }])
@@ -46,7 +39,6 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
             sender:"=",
             modalId:"@"  
         },
-       
         controllerAs:'mg',
         controller:function($scope){
                 var userInfo = commonServices.getCookieObj('currentUser');
@@ -84,24 +76,27 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
             var conversationsRef = userRef.child("conversations");
             this.conversationsList= commonServices.createFireArray(conversationsRef);
             this.convoMessages = $scope.$resolve.conversations[$scope.$resolve.conversations.length-1].messages;
-            this.convoName = $scope.$resolve.conversations[$scope.$resolve.conversations.length-1].$id
+            this.convoInfo = $scope.$resolve.conversations[$scope.$resolve.conversations.length-1];
             this.view = false ;
+            this.convo ='';
             commonServices.showToastOnEvent(conversationsRef, "child_added");
             this.viewConvoMessages = function(convo){
                 conversationsRef.child(convo.$id).child("hasNewMsg").set(false);
                 var messagesRef = conversationsRef.child(convo.$id + "/messages");
                 this.convoMessages= $firebaseArray(messagesRef);
-                this.convoName = convo.$id;
+                this.convoInfo = convo ;
             };
-            this.sendMessage = function(){
+            console.log('ham');
+            this.sendReply = function(){
+                console.log(this.convoInfo);
                 var msgObj = {
-                        body: "this.body",
-                        sender: userInfo.firstName +" " + userInfo.lastName,
+                        body:this.body,
+                        sender: userInfo.firstName + " " + userInfo.lastName,
                         order: Date.now(),
                         opened: false,
-                        key:this.convo.$id 
+                        key:this.convoInfo.$id 
                 }
-                messagesService.sendMessage(userInfo, this.convo, msgObj);
+                messagesService.sendMessage(userInfo, this.convoInfo, msgObj);
             };
             if(userInfo.userType.toLowerCase() == "examiner"){
                 this.listRef = "https://checkride.firebaseio.com/student" ;
@@ -109,6 +104,7 @@ angular.module("messages", ['firebase', 'commonServices', 'ngMaterial'])
             if(userInfo.userType.toLowerCase() == "student"){
                 this.listRef = "https://checkride.firebaseio.com/examiner" ;
             };
+          
             this.op = function(){
                 $mdDialog.show({
                     scope:$scope.$new(),

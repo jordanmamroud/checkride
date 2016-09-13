@@ -12,132 +12,78 @@
     }
     
     .toolbardemoScrollShrink .face {
-  width: 48px;
-  margin: 16px;
-  border-radius: 48px;
-  border: 1px solid #ddd; }
+        width: 48px;
+        margin: 16px;
+        border-radius: 48px;
+        border: 1px solid #ddd;
+    }
 </style>
+<!--<div >
+    <md-toolbar class="md-hue-2">
+        <div class="md-toolbar-tools">
+            <span>Messages</span>
+        </div>
+    </md-toolbar>
+</div>-->
 
+     <div layout layout-fill>
 
- 
- <div layout layout-fill>
-    
-     <md-sidebar layout="column" flex="30" >
+         <md-sidebar layout="column" flex="30">
 
-         <md-toolbar>
-             <div class="md-toolbar-tools">
-                <span>People</span>
-              </div>
-         </md-toolbar>
+             <md-content>
+                 <md-list>
+                    <md-list-item 
+                     ng-class="{setColor: convo.hasNewMsg === true}" 
+                     ng-click="msg.viewConvoMessages(convo)" 
+                     class="md-3-line" 
+                     ng-repeat="convo in msg.conversationsList | orderBy:'-lastReceivedMsg'" 
+                     ng-click="null">
 
-         <md-content>
-             <md-list>
-                <md-list-item 
-                 ng-class="{setColor: convo.hasNewMsg === true}" 
-                 ng-click="msg.viewConvoMessages(convo)" 
-                 class="md-3-line" 
-                 ng-repeat="convo in msg.conversationsList | orderBy:'-lastReceivedMsg'" 
-                 ng-click="null">
+                      <div class="md-list-item-text" layout="column">
+                        <h3>{{convo.$id}}</h3>
+                      </div>
 
-                  <div class="md-list-item-text" layout="column">
-                    <h3>{{convo.$id}}</h3>
-                  </div>
+                    </md-list-item>
 
-                </md-list-item>
+                  </md-list>
 
-              </md-list>
+                <md-button class="md-raised md-primary" ng-click="msg.op()">Send Message</md-button>   
+            </md-content>
 
-            <md-button class="md-raised md-primary" ng-click="msg.op()">Send Message</md-button>   
-        </md-content>
+        </md-sidebar>
 
-    </md-sidebar>
+        <md-divider></md-divider>
 
-    <md-divider></md-divider>
-   
-    <div layout="column" flex >
+        <div layout="column" flex>
 
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <span>Conversation</span>
+            <!--<md-toolbar class="md-hue-1">
+                <div class="md-toolbar-tools">
+                    <span>{{msg.convoInfo.$id}}</span>
+                </div>
+            </md-toolbar>-->
+
+            <md-content>
+                <md-list>
+                    <md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages">
+
+                        <div class="md-list-item-text">
+                            <h3>{{cv.key}}</h3>
+                            <h4>{{cv.body}}</h3>
+                        </div>
+                        <md-divider inset></md-divider>
+                    </md-list-item>
+
+                </md-list>
+
+            </md-content>
+
+            <div layout>
+                <textarea id="message" rows="5" flex ng-model="msg.body"></textarea>
+                <md-button ng-click="msg.sendReply()" class="md-raised md-primary">Reply</md-button>         
             </div>
-        </md-toolbar>
 
-        <md-content>
 
-            <md-list>
-
-                <md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages">
-
-                    <div class="md-list-item-text">
-                        <h3>{{cv.key}}</h3>
-                        <h4>{{cv.body}}</h3>
-                    </div>
-
-                    <md-divider inset></md-divider>
-
-                </md-list-item>
-
-                
-
-            </md-list>
-            
-            
-            
-        </md-content>
-        
-        <textarea id="message"></textarea>
+        </div>
 
     </div>
-
-</div>
-
- <!--
- 
-  <div layout-gt-sm="row" layout="column">
-      <div flex-gt-sm="50" flex>
-      <md-toolbar class="md-primary md-whiteframe-z1" md-scroll-shrink>
-          <div class="md-toolbar-tools">
-            <span>Messages</span>
-          </div>
-        </md-toolbar>
-        
-        <md-content>
-          <md-list flex>
-            <md-list-item ng-class="{setColor: convo.hasNewMsg === true}" ng-click="msg.viewConvoMessages(convo)" class="md-3-line" ng-repeat="convo in msg.conversationsList | orderBy:'-lastReceivedMsg'" ng-click="null">
-              <div class="md-list-item-text" layout="column">
-                <h3>{{convo.$id}}</h3>
-              </div>
-            </md-list-item>
-          </md-list>
-            <md-button class="md-raised md-primary" ng-click="msg.op()">Send Message</md-button>   
-        </md-content>
-      </div>
-      
-      <md-divider></md-divider>
-  
-<div flex-gt-sm="row" flex>
- <md-content>
-      <md-toolbar md-scroll-shrink ng-if="true">
-        <div class="md-toolbar-tools">
-          <h3>
-            <span>{{msg.convoName}}</span>
-          </h3>
-        </div>
-      </md-toolbar>
-
-        <md-list flex scroll-y="true">
-          <md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages">
-            <div class="md-list-item-text">
-              <h3>{{cv.key}}</h3>
-              <h4>{{cv.body}}</h3>
-            </div>
-            <md-divider inset></md-divider>
-          </md-list-item>
-           <textarea id="message"></textarea>
-        </md-list>
- </md-content>
-  
-</div>
-
-    </div>-->
 

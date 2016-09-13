@@ -63,7 +63,7 @@
     </head>
     <body ng-controller="crIndexCtrl" layout="row" >
         <!-- Main Wrapper -->
-        <div layout="column" flex layout-fill ng-controller='crLayoutCtrl as layout'>
+        <div id="pc-main" layout="column" flex layout-fill ng-controller='crLayoutCtrl as layout'>
 
             <!-- HEADER -->
             <md-toolbar layout="row" >
@@ -73,7 +73,7 @@
             <div layout="row" id="content">
                <!-- SIDEBAR -->
                 <cr-sidebar ng-if="showSidebar" layout="column" flex="15"></cr-sidebar>
-                
+                <md-divider></md-divider>
                 <!-- CONTENT -->
                 <md-content layout="column" flex>
                     <div ng-view layout-fill></div>
