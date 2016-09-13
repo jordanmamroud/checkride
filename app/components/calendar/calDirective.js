@@ -13,7 +13,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             clickedEvent:"="
         },
         controllerAs:"ev",
-        controller:function($scope,$firebaseArray,$firebaseObject , calendarService, commonServices){
+        controller:function($scope,$firebaseArray,$firebaseObject , calendarService, $mdDialog,commonServices){
             var ev = this;
             var userListRef = new Firebase("https://checkride.firebaseio.com/users");
             var authData = userListRef.getAuth();           
@@ -55,6 +55,13 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                 ev.name = userInfo.userData.firstName + " " +userInfo.userData.lastName ;
                 setUpCalendar()
             });
+            var onSelect = function(){
+                $mdDialog.show({
+                    scope:$scope.$new(),
+                    templateUrl:'addEventModal',    
+                    clickOutsideToClose:true
+                });
+            }
                         
             var setDaysOfWeek = function(){
                  var daysOfWeek = $("#dow input:checkbox:checked").map(function(){
@@ -217,7 +224,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                         },
                         unselectAuto: true,
                         select: function (start, end) {
-                            $("#addEventModal").addClass("showing");
+                            onSelect();
                             ev.eventStartObj = start ;
                             ev.eventEndObj = end ;
                             console.log(ev);

@@ -20,7 +20,7 @@ angular.module('crRoutes',['ngRoute'])
     .when(RoutePaths.examinerCal.path, {
              templateUrl:"app/users/views/examinerCalendar.html",
              controller:"examinerCalendarController",
-             controllerAs:"vm"       
+             controllerAs:"ev"       
     })
     .when(RoutePaths.profile.path, {
             templateUrl: 'app/users/views/profile.html',
@@ -34,7 +34,6 @@ angular.module('crRoutes',['ngRoute'])
                     var userId = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
                     var userRef = commonServices.getCommonRefs().usersRef.child(userId);
                     var conversationsRef = userRef.child("conversations").orderByChild('lastReceivedMsg');
-                    
                     return commonServices.createFireArray(conversationsRef).$loaded();
              }
          }

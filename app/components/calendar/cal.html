@@ -2,18 +2,29 @@
     .hide{
         display: none;
     }
+    .showing{
+        display: block;
+    }
 </style>
- <div class='toast' style='display:none'>You have a new Appointment Request</div>
+<div class='toast' style='display:none'>You have a new Appointment Request</div>
 <h2 ng-model="ev.name">{{ev.name}}</h2>
 <div class="calendar" ng-model="ev.eventSources" id="cal" data-ui-calendar="ev.uiConfig.calendar"></div> 
-<my-modal myid="addEventModal">
-        <h2>Event</h2><br>
-        <input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
-        <h4>When:</h4>
-        <p id="eventStart" ng-model="ev.eventStart">{{eventStartObj.toString()}}</p>
-        <p id="eventEnd" ng-model="ev.eventEnd">{{eventEndObj.toString()}}</p>
-        <label>dasd Event?</label>
-        <input type="checkbox" id="dowCheckBox" ng-model="ev.dowCheckBox">
+<script type="text/ng-template" id="addEventModal">
+       <div layout="center">
+          <md-content layout-md="50" flex="100" layout="column">
+          <md-toolbar>
+                 <h2>Event</h2><br>
+                 <h4>When:</h4>
+                <p id="eventStart" ng-model="ev.eventStart">{{eventStartObj.toString()}}</p>
+                <p id="eventEnd" ng-model="ev.eventEnd">{{eventEndObj.toString()}}</p>
+           </md-toolbar>
+        <md-input-container>
+            <input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
+       </md-input-container>
+      
+            <md-checkbox ng-model="ev.dowCheckBox">Repeating Event?</md-checkbox>
+
+   
         <div id="recur" ng-class="{hide: ev.dowCheckBox == false}">
             <label>choose frequency</label>
                  <select ng-model="ev.frequevcy" id="freq" name="frequency">
@@ -32,7 +43,7 @@
                 <input type="date" ng-model="ev.endDate">
             </form>
 
-<div id="dow" ng-class="{hide: frequency != 'weekly'}">    
+            <div id="dow" ng-class="{hide: frequency != 'weekly'}">    
                 <form id="dowForm">
                     <label>Sunday</label>
                     <input type="checkbox" id="sunday" value="0">
@@ -51,8 +62,11 @@
                 </form>
             </div>
         </div>
-        <button close-modal id="createEventButton" ng-click="ev.createEvent()">Create</button>
-</my-modal>
+      
+        <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</button>
+        </md-content>
+        </div>
+</script>
 
 
 <my-modal myid="eventDetailsModal">
@@ -97,7 +111,6 @@
             </tr>
               </tbody>
         </table>       
-</my-modal>
-
+</script>
 
           
