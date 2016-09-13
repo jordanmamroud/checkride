@@ -96,6 +96,7 @@ angular.module("crUser",[])
 
 
 
+/*
 ////User.Services.js Ported below
 .factory("Auth", ["$firebaseAuth",
   function($firebaseAuth) {
@@ -103,6 +104,7 @@ angular.module("crUser",[])
     return $firebaseAuth(ref);
   }
 ])
+*/
 
 .service("profileService", ['$firebaseObject','$firebaseAuth', function($firebaseObject, $firebaseAuth){
         var examinerListRef = new Firebase("https://checkride.firebaseio.com/examiner");

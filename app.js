@@ -13,6 +13,7 @@ angular.module('checkrider',[
     'crRoutes',
     'crAuth',
     'pcSearch',
+    'pcDataService',
     
     'crComponents',
     'crUser',
@@ -28,11 +29,16 @@ angular.module('checkrider',[
 }])
 
 //Global Constants
-.constant('GlobalConstants', {
+.constant('globalConst', {
     app : {
         name : "Checkrider",
         title : "Checkrider",
-        logoPath:"assets/img/checkrider-logo-[unofficial].png"
+        logoPath: "assets/img/checkrider-logo-[unofficial].png"
+    },
+    database: {
+        ref: 'https://checkride.firebaseio.com/',
+        airportsRef: 'https://checkride.firebaseio.com/airports',
+        usersRef: 'https://checkride.firebaseio.com/users'
     }
 })
 
@@ -66,3 +72,7 @@ angular.module('checkrider',[
     }
 })
 
+//vv - Not Being used - vv
+.value('firebaseRef', function(){
+    var ref = new Firebase('https://checkride.firebaseio.com')
+})

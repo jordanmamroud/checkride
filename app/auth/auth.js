@@ -1,6 +1,15 @@
 angular.module('crAuth', ['firebase'])
 
 
+////User.Services.js Ported below
+.factory("Auth", ["$firebaseAuth",
+  function($firebaseAuth) {
+    var ref = new Firebase("https://checkride.firebaseio.com/users/");
+    return $firebaseAuth(ref);
+  }
+])
+
+
 .controller("crAuthCtrl", ["loginService", "$scope", "$firebaseObject", "commonServices",function(loginService, $scope, $firebaseObject, commonServices){
     console.log('ham');
     console.log($scope)
