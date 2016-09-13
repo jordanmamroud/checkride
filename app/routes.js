@@ -26,7 +26,17 @@ angular.module('crRoutes',['ngRoute'])
             controller:"profileController"
     })
     .when(RoutePaths.examinerMessages.path,{
-         templateUrl:'app/users/views/examinerMessages.html'
+         templateUrl:'app/users/views/examinerMessages.html',
+         resolve:{
+             conversations:function(commonServices){
+                    var userInfo = commonServices.getCookieObj('currentUser');
+                    var userId = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
+                    var userRef = commonServices.getCommonRefs().usersRef.child(userId);
+                    var conversationsRef = userRef.child("conversations").orderByChild('lastReceivedMsg');
+                    
+                    return commonServices.createFireArray(conversationsRef).$loaded();
+             }
+         }
     })
     
     //studentPaths

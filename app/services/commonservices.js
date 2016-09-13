@@ -50,6 +50,12 @@ app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout
         createFireArray: function(ref){
             return $firebaseArray(ref);
         },
+        createLoadedFireArray:function(ref){
+            $firebaseArray(ref).$loaded().then(function(){
+                console.log('ham');
+                return $firebaseArray(ref);
+            })
+        },
         getRouteParams:function(){
             return $routeParams ;
         },

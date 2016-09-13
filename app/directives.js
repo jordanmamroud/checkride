@@ -7,14 +7,12 @@ angular.module('crDirectives',[])
             templateUrl: 'app/layout/header.html',
             scope: true,
             transclude: false,
-            replace: true,
-            controllerAs:"header",
+            controllerAs:"hd",
+            replace:true,
             controller:['$rootScope','$scope','commonServices',function($rootScope,$scope,commonServices){
-                
-                this.loggedIn = false;
+                 this.loggedIn = false;
                  $scope.$on('$routeChangeSuccess', function (){
-                     console.log((commonServices.getPath().indexOf('/user/') > -1))
-                     $scope.header.loggedIn = (commonServices.getPath().indexOf('/user/') > -1);
+                     $scope.hd.loggedIn = (commonServices.getPath().indexOf('/user/') > -1);
                  })
             }]
         };
@@ -24,7 +22,6 @@ angular.module('crDirectives',[])
     .directive('crSidebar', ['commonServices', function(commonServices){
         var user = commonServices.getCookieObj('currentUser');
         var userType = user ? user.userType : null;
-        console.log('Gunit');
         return{
             restrict:'E',
             templateUrl: 'app/layout/sidebar.html',

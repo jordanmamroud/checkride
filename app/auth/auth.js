@@ -1,6 +1,7 @@
 angular.module('crAuth', ['firebase'])
 
 
+
 ////User.Services.js Ported below
 .factory("Auth", ["$firebaseAuth",
   function($firebaseAuth) {
@@ -10,9 +11,9 @@ angular.module('crAuth', ['firebase'])
 ])
 
 
-.controller("crAuthCtrl", ["loginService", "$scope", "$firebaseObject", "commonServices",function(loginService, $scope, $firebaseObject, commonServices){
-    console.log('ham');
-    console.log($scope)
+
+.controller("crAuthCtrl", ["loginService", "createAccountService","$scope", "$firebaseObject", "commonServices",function(loginService,createAccountService, $scope, $firebaseObject, commonServices){
+
     this.signIn = function(){
         loginService.signIn(this.email, this.password);
     }
