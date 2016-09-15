@@ -1,7 +1,7 @@
 angular.module('crControllers',[])
 
 //MAIN CONTROLLER
-.controller('crIndexCtrl', ["$scope","$cookies", "$location", 'globalConst',function( $scope,$cookies,$location,globalConst){
+.controller('crIndexCtrl', ["$scope","$cookies", "$location",function( $scope,$cookies,$location){
 }])
 
 //LAYOUT CONTROLLER

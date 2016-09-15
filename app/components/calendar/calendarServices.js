@@ -11,6 +11,7 @@ app.service("calendarService", ['$filter', function($filter){
         
         var updateEvents = function(event, ref){
         return{
+         
              updateSingleEvent: function(){
                  ref.child(event.$id).update({
                             title: event.title,
@@ -61,6 +62,21 @@ app.service("calendarService", ['$filter', function($filter){
         }
 
     return{
+        Event:function(title,start,range,end,id){
+                        this.title=title
+                        this.start= start
+                        this.range= range
+                        this.end=end
+                        this.id= id
+         },
+        setEventRange: function(val, eventObj, occurBy){
+            console.log("ham" + eventObj);
+                    if(val > 4){
+                        eventObj.range.end = moment(val,'YYYY-MM-DD hh:mm:ss').format("YYYY/MM/DD").replace(/-/g, "/");
+                    }else{
+                        eventObj.range.end = eventObj.start.add(val, occurBy).format("YYYY/MM/DD").replace(/-/g,'/');
+                    }
+            },
         onEventChange: function(event,ref){
              if(event.recur == 'once'){
                     updateEvents(event, ref).updateSingleEvent();   
@@ -151,7 +167,7 @@ app.service("calendarService", ['$filter', function($filter){
                 ref1.push(examinerObj);
                 ref2.push(examinerObj);
                 list.$remove(index);
-            },
+        },
         
         syncGcal:function(userData, calendarGcalId){
               userData.$loaded().then(function(){

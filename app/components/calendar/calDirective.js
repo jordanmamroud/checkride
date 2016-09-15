@@ -13,28 +13,22 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             clickedEvent:"="
         },
         controllerAs:"ev",
-        controller:function($scope,$firebaseArray,$firebaseObject , calendarService, commonServices){
+        controller:function($scope,$firebaseArray,$firebaseObject , calendarService, $mdDialog,commonServices){
             var ev = this;
-            var userListRef = new Firebase("https://checkride.firebaseio.com/users");
-            var authData = userListRef.getAuth();           
-            var userEmail = authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, '');                        
-            var userRef = userListRef.child(userEmail);
+            var usersRef = commonServices.getCommonRefs().usersRef;
+            var userInfo = commonServices.getCookieObj('currentUser');
+            var userEmail = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');                        
+            var userRef = usersRef.child(userEmail);
             var userCalendarRef = userRef.child("calendar");
             var userEventsRef = userCalendarRef.child("events");
-            var userListRef = new Firebase("https://checkride.firebaseio.com/users");
-            var authData = userListRef.getAuth();           
-            var userEmail = authData.password.email.replace(/[\*\^\.\'\!\@\$]/g, '');                        
-            var userRef = userListRef.child(userEmail);
-            var userCalendarRef = userRef.child("calendar");
-            var userEventsRef = userCalendarRef.child("events");
+            var userCalendarRef = userRef.child("calendar");          
             var approvedAppointmentsRef = userCalendarRef.child("approvedAppointments");
             var calendarSettings= userCalendarRef.child("settings");
             var appointmentRequestsListRef = userRef.child("appointmentRequests");                 
-            var userInfo = $firebaseObject(userRef); 
             var test=[];  
-            var events = $firebaseArray(userEventsRef);
-            var approvedApointments = $firebaseArray(approvedAppointmentsRef);
-            var userInfo = $firebaseObject(userRef);
+            var events = commonServices.createFireArray(userEventsRef);
+            var approvedApointments = commonServices.createFireArray(approvedAppointmentsRef);
+            
             
             ev.requestsList = $firebaseArray(appointmentRequestsListRef);
             ev.calStartTime = 0 ;
@@ -47,20 +41,47 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             ev.endRange = '2020/11/02';
             ev.numOccur = 0 ;
             ev.monthlyEvent = false ;
+            ev.repeatForm={};
             
             commonServices.showToastOnEvent(appointmentRequestsListRef,"child_added");
             commonServices.orderArray($scope.requestsList, "-sentAt");
+            ev.name = userInfo.firstName + " " +userInfo.lastName ;
+        
+            var onSelect = function(){
+                $mdDialog.show({
+                    scope:$scope.$new(),
+                    templateUrl:'addEventModal',    
+                    clickOutsideToClose:true
+                });
+            }
+            var eventClick =function(){
+                $mdDialog.show({
+                    scope:$scope.$new(),
+                    templateUrl:'eventDetailsModal',
+                    clickOutsideToClose:true
+                })
+            };
             
-            userInfo.$loaded().then(function(){
-                ev.name = userInfo.userData.firstName + " " +userInfo.userData.lastName ;
-                setUpCalendar()
-            });
+            var showSettings = function(){
+                $mdDialog.show({
+                    scope:$scope.$new(),
+                    templateUrl:'settingsModal',
+                    clickOutsideToClose:true
+                })
+            };
+            
+            var showRequestModal = function(){
+                $mdDialog.show({
+                    scope:$scope.$new(),
+                    templateUrl:'pendingRequestsModal',
+                    clickOutsideToClose:true
+                })
+            };
                         
             var setDaysOfWeek = function(){
                  var daysOfWeek = $("#dow input:checkbox:checked").map(function(){
                         return $(this).val();
                      }).get();
-
                      if(daysOfWeek[0] == undefined){
                          return [ev.eventStartObj.day()];
                      }
@@ -68,69 +89,42 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
              };
 
              var setAmtOfMonths = function(){
-                 if($("#occurences").prop("checked")){
-                     return ev.numOccur ;
-                 } 
-                 if($("#endsOn").prop("checked")){
+                if(ev.repeatForm.length > 4){
                     var startMonth = ev.eventStartObj.month();
-                    var endMonth = moment(ev.endDate).month();
+                    var endMonth = moment(ev.repeatForm, "YYYY-MM-DD", true).month();
                     if(endMonth < startMonth){
                         var lastMonth = 11 - startMonth ;
                         var amtOfMonths = lastMonth + endMonth ;
                         return amtOfMonths ;
                     }else{
                         var amtOfMonths = endMonth-startMonth
-                        console.log(amtOfMonths);
                         return amtOfMonths ;
                     }
-                 };
-                    return 10; 
+                 }else{
+                         return ev.repeatForm ;
+                }
              };
-                
-            var setEventRange = function(eventObj, occurBy){
-                    var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");
-                    var val = $("#repeatForm input:checkbox:checked").map(function(){
-                             return $(this).val();
-                    }).get();
-                    eventObj.range.start = today ;
-                    switch(val[0]){
-                           case "endsOn":
-                                 eventObj.range.end = moment(ev.endDate).format("YYYY/MM/DD").replace(/-/g,"/");    
-                                 break ;
-                            case "occurences":
-                                eventObj.range.end = ev.eventStartObj.add(ev.numOccur, occurBy).format("YYYY/MM/DD").replace(/-/g,'/');
-                               break;
-                     }
-             };
-            
+
             ev.createEvent = function(){
                       var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");
                       var eventId= ev.eventTitle + ev.eventStart;
-                      var eventObj = {
-                            title: ev.eventTitle,
-                            start: ev.eventStartObj,
-                            range: {start:today, end:"2020/02/01"},
-                            end: ev.eventEndObj,
-                            id: eventId
-                      }     
+                      var eventObj = new calendarService.Event(ev.eventTitle,ev.eventStartObj,{start:today, end:"2020/02/01"},ev.eventEndObj,eventId);
                       if(ev.dowCheckBox == true){
                             switch($("#freq").val().toLowerCase()){   
                                 case "daily":       
-                                        setEventRange(eventObj,"days");
+                                        calendarService.setEventRange(ev.repeatForm, eventObj, "days");
                                         calendarService.createDailyEvent(eventObj,userEventsRef);
                                         break;
-
                                 case "weekly":
                                         eventObj.dow = setDaysOfWeek();
-                                        setEventRange(eventObj,"week");
+                                        calendarService.setEventRange(ev.repeatForm, eventObj, "week");
                                         calendarService.createWeeklyEvent(eventObj,userEventsRef);
                                         break;
-
                                 case "monthly": 
+                                        console.log(setAmtOfMonths());
                                         calendarService.createMonthlyEvent(eventObj, userEventsRef, setAmtOfMonths());
                                         break;
                             };
-
                         }else{
                             calendarService.createRegularEvent(eventObj, userEventsRef)
                         }   
@@ -138,18 +132,18 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             };
             
             ev.deleteEvent = function(){
-               if($scope.clickedEvent.recur == "monthly"){
-                        console.log($scope.clickedEvent.recur);
+               if(ev.clickedEvent.recur == "monthly"){
                         ev.monthlyEvent = true ;
                     }
                     else{
-                        calendarService.removeEvent($scope.clickedEvent, userEventsRef);
+                        userEventsRef.child(ev.clickedEvent.$id).remove() ;
+                   
                         $("#eventDetailsModal").removeClass("showing");
                    }
             };
             
             ev.deleteSingleMonthlyEvent = function(){
-                    calendarService.removeEvent($scope.clickedEvent,userEventsRef);
+                    userEventsRef.child(ev.clickedEvent.$id).remove();
                     ev.monthlyEvent = false ;
             };
             
@@ -192,13 +186,13 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                             pendingRequestsButton: {
                                 text: 'Pending Requests',
                                 click: function (){
-                                    pendingRequestButtonEvent(ev.requestsList);
+                                    showRequestModal();
                                 }
                             },
                             settingsButton: {
                                 text: 'settings',
                                 click: function () {
-                                    $("#settingsModal").addClass("showing");
+                                    showSettings()
                                 },
                                 buttonIcons: false,
                                 themeButtonIcons: false
@@ -217,15 +211,15 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                         },
                         unselectAuto: true,
                         select: function (start, end) {
-                            $("#addEventModal").addClass("showing");
+                            onSelect();
                             ev.eventStartObj = start ;
                             ev.eventEndObj = end ;
                             console.log(ev);
                         },
                         editable: true,
                         eventClick: function (event, element) {
-                            $("#eventDetailsModal").addClass('showing');
                             ev.clickedEvent = event ;
+                            eventClick();
                         },
                         eventDrop: function ( event , element) {
                             calendarService.onEventChange(event, userEventsRef);
@@ -243,15 +237,15 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                         }
                     }  
                 }
-                var pendingRequestButtonEvent = function (list){
-                        list.$loaded().then(function () {
-                            if (list.length != 0) {
-                                $("#pendingRequestsModal").addClass("showing");
-                            } else {
-                                alert("Sorry you have no requests");
-                            }
-                    });
-                }
+//                 ev.pendingRequestButtonEvent = function (list){
+//                        list.$loaded().then(function () {
+//                            if (list.length != 0) {
+//                                $("#pendingRequestsModal").addClass("showing");
+//                            } else {
+//                                alert("Sorry you have no requests");
+//                            }
+//                    });
+//                }
             }
         }
 })
