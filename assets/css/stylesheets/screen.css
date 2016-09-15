@@ -32,7 +32,12 @@ body {
     @include border-radius(0);
 }
 */
-/* line 57, ../sass/screen.scss */
+/* line 56, ../sass/screen.scss */
+#pc-main {
+  background-color: #fafafa;
+}
+
+/* line 61, ../sass/screen.scss */
 .vertical-center {
   min-height: 100%;
   /* Fallback for browsers do NOT support vh unit */
@@ -42,7 +47,7 @@ body {
   align-items: center;
 }
 
-/* line 66, ../sass/screen.scss */
+/* line 70, ../sass/screen.scss */
 img.cr-logo,
 .cr-logo img {
   width: auto;
