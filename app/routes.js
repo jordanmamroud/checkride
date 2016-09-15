@@ -31,6 +31,7 @@ angular.module('crRoutes',['ngRoute'])
                     var userId = userInfo.$id;
                     var userRef = commonServices.getCommonRefs().accounts.child(userInfo.$id);
                     var conversationsRef = userRef.child("conversations").orderByChild('lastReceivedMsg');
+                    console.log(conversationsRef);
                     return commonServices.createFireArray(conversationsRef).$loaded();
              }
          }

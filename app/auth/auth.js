@@ -75,8 +75,7 @@ angular.module('crAuth', ['firebase'])
                         alert("login failed");
                 } 
                 else{   
-                        console.log(authData);
-                        var userInfo = commonServices.createFireObj(usersRef.child(authData.uid));                 
+                        var userInfo = commonServices.createFireObj(usersRef.child(authData.uid));   
                         userInfo.$loaded().then(function(){
                             console.log(userInfo);
                             commonServices.setCookieObj('currentUser', userInfo);
