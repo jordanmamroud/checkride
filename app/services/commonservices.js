@@ -1,8 +1,13 @@
-var app = angular.module('commonServices', []);
+angular.module('commonServices', [])
 
-app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray",'$firebaseObject', '$filter', '$cookies','firebaseRefs',function(RoutePaths,$location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies,firebaseRefs){
+.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray",'$firebaseObject', '$filter', '$cookies','firebaseRefs',function(RoutePaths,$location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies,firebaseRefs){
+
     return{
         
+        // firebaseRef: function(){
+        //     return new Firebase(globalConst.firebase.ref);
+        // },
+
         getRoutePaths:function(){
             return RoutePaths
         },
@@ -63,4 +68,4 @@ app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout
             return firebaseRefs();
         }    
     }
-}]);
+}])

@@ -35,7 +35,8 @@
             <script type='text/javascript' src="assets/bower_components/fullcalendar/dist/gcal.js"></script>
             <script type="text/javascript" src="node_modules/angular-cookies/angular-cookies.js"></script>
             
-        
+            <!--FOR DEV PURPOSES-->
+            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js"></script>
         
         
             <!-- APPLICATION FILES -->
@@ -44,6 +45,7 @@
             
             <!-- Scripts -->
             <script type="text/javascript" src="app.js"></script>
+            <script type="text/javascript" src="app/services/commonservices.js"></script>
             <script type="text/javascript" src="app/controllers.js"></script>
             <script type="text/javascript" src="app/directives.js"></script>
             <script type="text/javascript" src="app/routes.js"></script>
@@ -51,7 +53,7 @@
             <script type="text/javascript" src="app/components/components.js"></script>
             <script type="text/javascript" src="app/components/search/search.js"></script>
             <script type="text/javascript" src="app/auth/auth.js"></script>
-            <script type="text/javascript" src="app/services/commonservices.js"></script>
+            
             <script type="text/javascript" src="app/users/user.js"></script>
             <script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
             <script type="text/javascript" src="app/components/calendar/examinerCalendar.js"></script>
@@ -67,23 +69,28 @@
             
             </script>
     </head>
-    <body ng-controller="crIndexCtrl" layout="row" layout-fill >
+
+    <body ng-controller="crIndexCtrl" >
+
         <!-- Main Wrapper -->
-        <div id="pc-main" layout="column" flex layout-fill ng-controller='crLayoutCtrl as layout'>
+        <div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout'>
 
             <!-- HEADER -->
-            <md-toolbar layout="row" >
+            <md-toolbar id="pc-app-toolbar" layout="column" class="" >
                 <cr-header></cr-header>    
             </md-toolbar>
-       
-            <div layout="row" id="content">
+
+            <div layout="column" id="pc-app-page" >
+
                <!-- SIDEBAR -->
                 <cr-sidebar ng-if="showSidebar" layout="column" flex="15"></cr-sidebar>
-                <md-divider></md-divider>
+                
                 <!-- CONTENT -->
-                <md-content layout="column" layout-fill>
+                <md-content md-scroll-y id="pc-app-content" layout="column" flex>
+
                     <div ng-view layout-fill></div>
                 </md-content>
+
             </div>
 
         </div>

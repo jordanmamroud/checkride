@@ -1,0 +1,327 @@
+{
+	"users": {
+	  "accounts": {
+		"josh": {
+		  "name": {
+			"first": "josh",
+			"middle": "jost",
+			"last": "mamroud"
+		  },
+		  "email": "josh.mamroud@gmail.com",
+		  "phone": "7325704291",
+		  "role": "examiner",
+		  "password": "123456789",
+		  "bio":"I'm a 6 year pilot",
+		  "photoUrl":"http://storage.pilotcheckrides.com/josh",
+		  "isActive":true,
+		  "dateCreated": 1473809544162,
+		  "dateModified":1473809544162,
+		  "airports": {
+			"123": true,
+			"456": true
+		  },
+		  "certifications": {
+			"abc": true,
+			"def": true,
+			"ghi": true
+		  },
+		  "conversations": {
+			"conversation1": true,
+			"conversation7": true
+		  },
+		  "events":{
+			"event1":true,
+			"event6":true
+		  }
+		},
+		"jordan": {
+		  "name": {
+			"first": "jordan",
+			"middle": "alexander",
+			"last": "mamroud"
+		  },
+		  "email": "jordanmamroud@gmail.com",
+		  "phone": "7323127853",
+		  "role": "examiner",
+		  "bio":"I'm a 6 year pilot",
+		  "photoUrl":"http://storage.pilotcheckrides.com/josh",
+		  "isActive":true,
+		  "airports": {
+			"123": true,
+			"456": true
+		  },
+		  "certifications": {
+			"abc": true,
+			"def": true,
+			"ghi": true
+		  },
+		  "conversations": {
+			"1": true,
+			"7": true
+		  },
+		  "events":{
+			"event1":true,
+			"event6":true
+		  }
+		},
+		"charles": {
+		  "name": {
+			"first": "charles",
+			"middle": "robert",
+			"last": "barkley"
+		  },
+		  "email": "jordanmamroud@gmail.com",
+		  "phone": "7323127853",
+		  "role": "examiner",
+		  "password": "123456789",
+		  "bio":"I'm a 6 year pilot",
+		  "photoUrl":"http://storage.pilotcheckrides.com/josh",
+		  "isActive":true,
+		  "dateCreated": 1473809544162,
+		  "dateModified":1473809544162,
+		  "airports": {
+			"123": true,
+			"456": true
+		  },
+		  "certifications": {
+			"abc": true,
+			"def": true,
+			"ghi": true
+		  },
+		  "conversations": {
+			"1": true,
+			"7": true
+		  },
+		  "events":{
+			"event1":true,
+			"event6":true
+		  }
+		},
+		  "john": {
+		  "name": {
+			"first": "john",
+			"middle": "mo",
+			"last": "doe"
+		  },
+		  "email": "jordanmamroud@gmail.com",
+		  "phone": "7323127853",
+		  "role": "student",
+		  "password": "123456789",
+		  "bio":"I'm a 6 year pilot",
+		  "photoUrl":"http://storage.pilotcheckrides.com/josh",
+		  "isActive":true,
+		  "dateCreated": 1473809544162,
+		  "dateModified":1473809544162,
+		  "instructor":"wayne",
+		  "students":{
+		  },
+		  "airports": {
+			"123": true,
+			"456": true
+		  },
+		  "certifications": {
+			"abc": true,
+			"def": true,
+			"ghi": true
+		  },
+		  "conversations": {
+			"1": true,
+			"7": true
+		  },
+		  "events":{
+			"event1":true,
+			"event6":true
+		  }
+		},
+		  "malcom": {
+		  "name": {
+			"first": "malcom",
+			"middle": "",
+			"last": "x"
+		  },
+		  "email": "jordanmamroud@gmail.com",
+		  "phone": "7323127853",
+		  "role": "student",
+		  "password": "123456789",
+		  "bio":"I'm a 6 year pilot",
+		  "photoUrl":"http://storage.pilotcheckrides.com/josh",
+		  "isActive":true,
+		  "dateCreated": 1473809544162,
+		  "dateModified":1473809544162,
+		  "instructor":"wayne",
+		  "students":{
+		  },
+		  "airports": {
+			"123": true,
+			"456": true
+		  },
+		  "certifications": {
+			"abc": true,
+			"def": true,
+			"ghi": true
+		  },
+		  "conversations": {
+			"1": true,
+			"7": true
+		  },
+		  "events":{
+			"event1":true,
+			"event6":true
+		  }
+		},
+		"wayne": {
+		  "name": {
+			"first": "dwane",
+			"middle": "",
+			"last": "carter"
+		  },
+		  "email": "jordanmamroud@gmail.com",
+		  "phone": "7323127853",
+		  "role": "instructor",
+		  "password": "123456789",
+		  "bio":"I'm a 6 year pilot",
+		  "photoUrl":"http://storage.pilotcheckrides.com/josh",
+		  "isActive":true,
+		  "instructor":"",
+		  "students":{
+			"malcom":true
+		  },
+		  "dateCreated": 1473809544162,
+		  "dateModified":1473809544162,
+		  "airports": {
+			"123": true,
+			"456": true
+		  },
+		  "certifications": {
+			"abc": true,
+			"def": true,
+			"ghi": true
+		  },
+		  "conversations": {
+			"1": true,
+			"7": true
+		  },
+		  "events":{
+			"event1":true,
+			"event6":true
+		  }
+		},
+		"drake": {
+		  "name": {
+			"first": "aubrey",
+			"middle": "drake",
+			"last": "graham"
+		  },
+		  "email": "jordanmamroud@gmail.com",
+		  "phone": "7323127853",
+		  "role": "instructor",
+		  "password": "123456789",
+		  "bio":"I'm a 6 year pilot",
+		  "photoUrl":"http://storage.pilotcheckrides.com/josh",
+		  "isActive":true,
+		  "instructor":"",
+		  "students":{
+			"john":true
+		  },
+		  "dateCreated": 1473809544162,
+		  "dateModified":1473809544162,
+		  "airports": {
+			"123": true,
+			"456": true
+		  },
+		  "certifications": {
+			"abc": true,
+			"def": true,
+			"ghi": true
+		  },
+		  "conversations": {
+			"1": true,
+			"7": true
+		  },
+		  "events":{
+			"event1":true,
+			"event6":true
+		  }
+		}
+	  },
+	  "roles": {
+		"examiner": {
+		  "josh": true,
+		  "jordan": true,
+		  "charles": true
+		},
+		"student": {
+		  "john": true,
+		"malcom":true
+		},
+		"instructor": {
+		  "wayne": true,
+		  "drake": true
+		}
+	  }
+	},
+	"conversations": {
+	  "conversation1": {
+		"message1": {
+		  "body": "Yo, whats good bro?",
+		  "user": "josh",
+		  "timestamp": 1473809544162
+		},
+		"message2": {
+		  "body": "Not much bro, what's going on?",
+		  "user": "jordan",
+		  "timestamp": 1473809544162
+		}
+	  }
+	},
+	"airports": {
+		"3628": {
+			"name": "Kenai Muni",
+			"city": "Kenai",
+			"state": "Anchorage",
+			"country": "United States",
+			"region": "America",
+			"IATA": "ENA",
+			"ICAO": "PAEN",
+			"latitude": 60.573111,
+			"longitude": -151.245,
+			"elevation": 99,
+			"UTC": -9,
+			"DST": "A",
+			"users":{
+				"jordan":true,
+				"wayne":true
+			}
+		}
+	},
+	"events": {
+		"1":{
+			"start":1473809544162,
+			"end":1473809544162,
+			"certification":"abc",
+			"airport":"123",
+			"aircraftTailNumber":"N25899",
+			"users":{
+				"jordan":true,
+				"wayne":true
+			}
+		}
+	},
+	"certifications":{
+		"abc":{
+			"users":{
+				"jordan":true,
+				"josh":true,
+				"wayne":true
+			}
+		},
+		"def":{
+			"users":{
+				"jordan":true,
+				"josh":true,
+				"wayne":true
+			}
+		}
+	}
+
+}

@@ -12,7 +12,7 @@ angular.module('crControllers',[])
         $scope.showSidebar = ($location.path().indexOf('/user/') > -1);
     })
 }])
-
+ 
 
 //HEADER CONTROLLER
 .controller('crHeaderCtrl', ["$scope", "$location",'RoutePaths','$cookies', function($scope, $location, RoutePaths, $cookies){
