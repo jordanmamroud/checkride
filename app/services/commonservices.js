@@ -1,6 +1,6 @@
 var app = angular.module('commonServices', []);
 
-app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray",'$firebaseObject', '$filter', '$cookies',function(RoutePaths,$location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies){
+app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray",'$firebaseObject', '$filter', '$cookies','firebaseRefs',function(RoutePaths,$location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies,firebaseRefs){
     return{
         
         getRoutePaths:function(){
@@ -60,10 +60,7 @@ app.service("commonServices", ['RoutePaths',"$location",'$routeParams','$timeout
             return $routeParams ;
         },
         getCommonRefs:function(){
-            return{
-                usersRef: new Firebase("https://checkride.firebaseio.com/users")
-            }
-        }
-        
+            return firebaseRefs();
+        }    
     }
 }]);

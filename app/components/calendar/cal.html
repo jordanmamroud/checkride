@@ -11,13 +11,13 @@
 <div class="calendar" ng-model="ev.eventSources" id="cal" data-ui-calendar="ev.uiConfig.calendar"></div> 
 <script type="text/ng-template" id="addEventModal">
        <div layout="center">
-          <md-content layout-md="50" flex="100" layout="column">
+          <md-content flex="100" layout="column">
           <md-toolbar>
-                 <h2>Event</h2><br>
-                 <h4>When:</h4>
-                <p id="eventStart" ng-model="ev.eventStart">{{eventStartObj.toString()}}</p>
-                <p id="eventEnd" ng-model="ev.eventEnd">{{eventEndObj.toString()}}</p>
-           </md-toolbar>
+                <h2>Event</h2><br>
+                <h4>When:</h4>
+                <p ng-model="ev.eventStart">{{eventStartObj.toString()}}</p>
+                <p ng-model="ev.eventEnd">{{eventEndObj.toString()}}</p>
+         </md-toolbar>
         <md-input-container>
             <input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
        </md-input-container>
@@ -25,25 +25,27 @@
             <md-checkbox ng-model="ev.dowCheckBox">Repeating Event?</md-checkbox>
 
    
-        <div id="recur" ng-class="{hide: ev.dowCheckBox == false}">
+        <div ng-class="{hide: ev.dowCheckBox == false}">
             <label>choose frequency</label>
-                 <select ng-model="ev.frequevcy" id="freq" name="frequency">
+                 <select ng-model="ev.frequency" id="freq" name="frequency">
                         <option>daily</option>
                         <option>weekly</option>
                         <option>monthly</option>
             </select><br>
 
-            <form id="repeatForm">
-                <label>starts on <input id='startDate' type="date"></label><br>
-                <label><input type="checkbox" value="never" id="never">never</label>
-                <br>
-                <input type="checkbox" value="occurences" id="occurences"><label>after <input id="numOccur" ng-model="ev.numOccur" type="number"> occurences</label><br>
-                <input type="checkbox" value="endsOn" id="endsOn">
-                <label>Ends on</label>
-                <input type="date" ng-model="ev.endDate">
-            </form>
+            <md-radio-group ng-model="ev.repeatForm">
+                  <md-radio-button value="2020/02/01" class="md-primary">Never</md-radio-button>
+                   <div>
+                      <label>Occurences</label>
+                      <md-radio-button value="{{ev.numOccur}}">After</md-radio-button>
+                      <input ng-model="ev.numOccur" type="number">
+                  </div>
+                      <div>
+                           <md-radio-button value="{{ev.endDate}}">End Date</md-radio-button><input type="date" ng-model="ev.endDate">
+                     </div>
+            </md-radio-group>
 
-            <div id="dow" ng-class="{hide: frequency != 'weekly'}">    
+            <div id="dow" ng-class="{hide: ev.frequency != 'weekly'}">    
                 <form id="dowForm">
                     <label>Sunday</label>
                     <input type="checkbox" id="sunday" value="0">
@@ -68,29 +70,39 @@
         </div>
 </script>
 
+<script type="text/ng-template" id="eventDetailsModal">
+    <md-toolbar>
+         <h1>{{ev.clickedEvent.title}}</h1>
+    </md-toolbar>
+    <md-content>
+                <p>Start: {{ev.clickedEvent.start.toString()}}</p>
+                <p>End: {{ev.clickedEvent.end.toString()}}</p>
+                <md-button ng-class="{hide:ev.clickedEvent.recur =='monthly'}"class="md-raised md-primary" ng-click="ev.deleteEvent()">Delete Event</md-button>
+                <div ng-class="{hide: ev.clickedEvent.recur != 'monthly'}">
+                    <md-button class="md-primary md-raised" ng-click="ev.deleteSingleMonthlyEvent()">remove just this event</md-button>
+                    <md-button class="md-primary md-raised" ng-click="ev.deleteAllMonthlyEvents()">remove all events</md-button>
+                </div>
+    </md-content>
+</script>
 
-<my-modal myid="eventDetailsModal">
-            <h1>bassnector</h1>
-            <h2 id="eventTitle">Evessdfnt</h2><br>
-            <h4>When:</h4>
-            <p ng-model="ev.start">{{ev.start}}</p>
-            <p id="eventEnd" ng-model="ev.end">{{ev.end}}</p>
-            <button ng-click="ev.deleteEvent()">Delete Event</button>
-             <div ng-class="{hide: ev.monthlyEvent != true}">
-                <button close-modal ng-click="ev.deleteSingleMonthlyEvent()">remove just this event</button>
-                <button close-modal ng-click="ev.deleteAllMonthlyEvents()">remove all events</button>
-            </div>
-</my-modal>
-
- <my-modal myid="settingsModal">
-        <input type="text" ng-model="ev.calStartTime" id="calendarStartTime" placeholder="enter calendar start time">
-        <input type="text" ng-model="ev.calEndTime" id="calendarEndTime" placeholder="enter calendar end time">
-        <input type="email" ng-model="ev.gcalId" id="googleCalendarId" placeholder="enter google calendar id">
-        <button close-modal id="saveButton" ng-click="ev.saveCalSettings()">Save</button>
-        <input type="checkbox" ng-checked="syncGcal()"id="googleSync">select box to sync with google calendar<br>
-</my-modal>
-
-<my-modal myid="pendingRequestsModal">
+<script type="text/ng-template" id="settingsModal">
+    <md-input-container>
+        <label>Calendar Start Time</label>
+        <input ng-model="ev.calStartTime">
+    </md-input-container>
+    
+    <md-input-container>
+        <label>Calendar End Time</label>
+        <input ng-model="ev.calEndTime">
+    </md-input-container>  
+    <md-input-container>
+        <label>Gcal id</label>
+        <input ng-model="ev.calEndTime">
+    </md-input-container>
+     <md-button class="md-primary md-raised" id="saveButton" ng-click="ev.saveCalSettings()">Save</md-button>
+     <md-checkbox id="googleSync">select box to sync with google calendar</md-checkbox>
+</script>
+<script type="text/ng-template" id="pendingRequestsModal">
         <table class="table">
           <thead>
             <tr>
@@ -110,7 +122,7 @@
               <td><button ng-click="ev.approveAppointment($index)">Approve</button></td>
             </tr>
               </tbody>
-        </table>       
+        </table>  
 </script>
 
           

@@ -1,11 +1,8 @@
 angular.module('crRoutes',['ngRoute'])
 .config(['$routeProvider', '$locationProvider', '$logProvider', 'RoutePaths', function($routeProvider, $locationProvider, $logProvider, RoutePaths){
-    
-    
     $routeProvider
     .when('/', {
-        templateUrl : 'app/components/search/search.html',
-        controller: 'SearchCtrl'
+        templateUrl : 'app/components/search/search.html'
     })
     .when(RoutePaths.login.path, {
         templateUrl:'app/auth/login.html',
@@ -31,8 +28,8 @@ angular.module('crRoutes',['ngRoute'])
          resolve:{
              conversations:function(commonServices){
                     var userInfo = commonServices.getCookieObj('currentUser');
-                    var userId = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
-                    var userRef = commonServices.getCommonRefs().usersRef.child(userId);
+                    var userId = userInfo.$id;
+                    var userRef = commonServices.getCommonRefs().accounts.child(userInfo.$id);
                     var conversationsRef = userRef.child("conversations").orderByChild('lastReceivedMsg');
                     return commonServices.createFireArray(conversationsRef).$loaded();
              }
@@ -111,5 +108,21 @@ angular.module('crRoutes',['ngRoute'])
     },
     studentMessages:{
         path:"/user/student-messages"
+    }
+})
+
+.constant('firebaseRefs',function(){
+    var main = new Firebase("https://checkride.firebaseio.com/temp");
+    return{
+        root: new Firebase("https://checkride.firebaseio.com/"),
+        main: main,
+        airports: main.child('airports'),
+        certifications: main.child('certifications'),
+        conversations: main.child('conversations'),
+        events: main.child('events'),
+        accounts:main.child('users/accounts'),
+        roles:main.child('users/roles'),
+        examiners:main.child('users/roles/examiner'),
+        students:main.child('users/roles/student')
     }
 })

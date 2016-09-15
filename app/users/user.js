@@ -2,8 +2,10 @@ angular.module("crUser",[])
 
 //Examiner Controllers
 .controller("profileController", ['$scope','profileService', 'commonServices', function($scope, profileService,commonServices){
+    var refs = commonServices.getCommonRefs();
     var userInfo = commonServices.getCookieObj("currentUser"); 
-    var userRef =   commonServices.getCommonRefs().usersRef.child(userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, ''));
+    var userRef =   commonServices.getCommonRefs().accounts.child(userInfo.$id);
+    console.log(userRef.toString());
     $scope.userType = '';
     switch(userInfo.userType.toLowerCase()){
         case 'examiner' : 
@@ -13,26 +15,29 @@ angular.module("crUser",[])
             $scope.userType = 'student' 
             break ;
     };
-    console.log($scope);
-    $scope.certificationsList = commonServices.createFireArray(userRef.child("/userData/certifications"));
-    $scope.airportsList = commonServices.createFireArray(userRef.child("/userData/airports"));
+    $scope.certificationsList = commonServices.createFireArray(userRef.child("certifications"));
+    $scope.airportsList = commonServices.createFireArray(userRef.child("airports"));
     $scope.saveCertification = function(chip){
           if(chip.hasOwnProperty("$id") == false){
-              userRef.child("/userData/certifications").push({title:chip});
+              userRef.child("certifications/" + chip).set(true);
+              refs.certifications.child(chip + "/users/" + userInfo.$id).set(true);
               return null ;
         }
     }
     $scope.saveAirport= function(chip){
         if(chip.hasOwnProperty("$id") == false){
-            userRef.child("/userData/airports").push({title:chip});
+            userRef.child("airports/" + chip).set(true);
+            refs.airports.child(chip + "/users/" + userInfo.$id).set(true);
             return null ;
         }
     }
     $scope.deleteAirport = function(chip){
-        userRef.child("/userData/airports/" + chip.$id).remove();
+        userRef.child("airports/" + chip.$id).remove();
+        refs.airports.child(chip.$id+"/users/" +userInfo.$id).remove();
     }
     $scope.deleteCertication = function(chip){
-        userRef.child("/userData/certifications/" + chip.$id).remove()
+        userRef.child("certifications/" + chip.$id).remove();
+        refs.certifications.child(chip.$id+"/users/" +userInfo.$id).remove();
     }
 }])
 
@@ -96,6 +101,7 @@ angular.module("crUser",[])
 
 
 
+/*
 ////User.Services.js Ported below
 .factory("Auth", ["$firebaseAuth",
   function($firebaseAuth) {
@@ -103,6 +109,7 @@ angular.module("crUser",[])
     return $firebaseAuth(ref);
   }
 ])
+*/
 
 .service("profileService", ['$firebaseObject','$firebaseAuth', function($firebaseObject, $firebaseAuth){
         var examinerListRef = new Firebase("https://checkride.firebaseio.com/examiner");

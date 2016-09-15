@@ -9,7 +9,7 @@ angular.module('crDirectives',[])
             transclude: false,
             controllerAs:"hd",
             replace:true,
-            controller:['$rootScope','$scope','commonServices',function($rootScope,$scope,commonServices){
+            controller:['$scope','commonServices',function($scope,commonServices){
                  this.loggedIn = false;
                  $scope.$on('$routeChangeSuccess', function (){
                      $scope.hd.loggedIn = (commonServices.getPath().indexOf('/user/') > -1);

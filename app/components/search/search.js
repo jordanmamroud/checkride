@@ -7,13 +7,16 @@ angular.module('pcSearch',[])
       });
     })
 
-    .controller('SearchCtrl', function ($scope, client, esFactory) {
-        client.cluster.state({
-            metric: [
-            'cluster_name',
-            'nodes',
-            'master_node',
-            'version'
+
+
+.controller('SearchCtrl', function ($scope, client, esFactory, dataService) {
+    
+    client.cluster.state({
+        metric: [
+        'cluster_name',
+        'nodes',
+        'master_node',
+        'version'
         ]
       })
       .then(function (resp) {
@@ -23,6 +26,7 @@ angular.module('pcSearch',[])
       .catch(function (err) {
         $scope.clusterState = null;
         $scope.error = err;
+
         // if the err is a NoConnections error, then the client was not able to
         // connect to elasticsearch. In that case, create a more detailed error
         // message
@@ -32,8 +36,18 @@ angular.module('pcSearch',[])
         }
       });
 
+    dataService
+        .getUserData($scope)
+//        .then(function(data){
+//            $scope.users = data;
+//            console.log($scope.users);
+//        });
+    
+    
+})
 
- });
+
+
 
 
 
@@ -61,14 +75,6 @@ crComponents.controller('crSearchCtrl',["$scope", "$window", "$firebaseArray",'$
         console.log(currUsr);
     }])
 */
-
-
-
-
-
-
-
-
 
 
 //.factory('examinerSearch', ["$firebase", function examinerSearchFactory(searchQuery){   }]);

@@ -1,6 +1,17 @@
 angular.module('crAuth', ['firebase'])
 
 
+
+////User.Services.js Ported below
+.factory("Auth", ["$firebaseAuth",
+  function($firebaseAuth) {
+    var ref = new Firebase("https://checkride.firebaseio.com/users/");
+    return $firebaseAuth(ref);
+  }
+])
+
+
+
 .controller("crAuthCtrl", ["loginService", "createAccountService","$scope", "$firebaseObject", "commonServices",function(loginService,createAccountService, $scope, $firebaseObject, commonServices){
     this.signIn = function(){
         loginService.signIn(this.email, this.password);
@@ -26,25 +37,17 @@ angular.module('crAuth', ['firebase'])
 }])
 
 //CREATE ACCOUNT
-.service('createAccountService',[function(){
-      var ref  = new Firebase("https://checkride.firebaseio.com/"); 
-      var onSuccess = function(newUser){ 
-      ref.child("users/" + newUser.emailAddress.replace( /[\*\^\.\'\!\@\$]/g , '')).set({
-                    userData:newUser
-            });
-            
-            if(newUser.userType.toLowerCase() == "examiner" ){
-                ref.child("examiner/" + newUser.emailAddress.replace( /[\*\^\.\'\!\@\$]/g , '')).set({userData:newUser}); 
-            }
-            
-            if(newUser.userType.toLowerCase()== "student"){
-                ref.child("student/"+newUser.emailAddress.replace( /[\*\^\.\'\!\@\$]/g , '')).set({userData: newUser});
-            }
+.service('createAccountService',['commonServices',function(commonServices){
+      var refs = commonServices.getCommonRefs();
+      var createUserAccount = function(newUser, userId){ 
+          refs.accounts.child(userId).set(newUser);
+          console.log(refs.roles.child(newUser.userType.toLowerCase() + "/" + userId))
+          refs.roles.child(newUser.userType.toLowerCase() + "/" + userId).set({name:newUser.firstName +" " + newUser.lastName});
       }
       
       return{
           createUser:function(newUser){
-               ref.createUser({
+               refs.main.createUser({
                         email: newUser.emailAddress ,
                         password: newUser.password
                     }, function(error, userData){
@@ -52,16 +55,15 @@ angular.module('crAuth', ['firebase'])
                                 console.log("Error creating user:", error);
                             } 
                             else {
-                                onSuccess(newUser);
+                                createUserAccount(newUser, userData.uid);
                             }
                     });
             }
       }
 }])
  
-.service('loginService', ['$rootScope','commonServices', function($rootScope,commonServices){
-    var usersRef =  commonServices.getCommonRefs().usersRef
-    var auth = usersRef.getAuth();
+.service('loginService', ['commonServices', '$firebaseObject',function(commonServices,$firebaseObject){
+    var usersRef = commonServices.getCommonRefs().accounts;
     return{
         signIn: function(email, pass){
             usersRef.authWithPassword({
@@ -72,16 +74,14 @@ angular.module('crAuth', ['firebase'])
                 if(error){
                         alert("login failed");
                 } 
-                else{
-                        var user = usersRef.child(email.replace(/[\*\^\.\'\!\@\$]/g , ''));
-                        var userInfo = commonServices.createFireObj(user.child('userData'));
-                        $rootScope.loggedIn =true ;
+                else{   
+                        console.log(authData);
+                        var userInfo = commonServices.createFireObj(usersRef.child(authData.uid));                 
                         userInfo.$loaded().then(function(){
+                            console.log(userInfo);
                             commonServices.setCookieObj('currentUser', userInfo);
                             console.log(commonServices.getCookieObj('currentUser'));
                             commonServices.changePath(commonServices.getRoutePaths().profile.path);  
-                            console.log(commonServices.createFireObj(user));
-                            console.log(commonServices.getCookieObj('currentUser'));
                         })
                 }
             })
@@ -90,7 +90,7 @@ angular.module('crAuth', ['firebase'])
         sendNewPassWord: function(email){
                usersRef.resetPassword({
                       email: email
-                            }, 
+                    }, 
                       function(error) {
                           if (error) {
                             switch (error.code) {
@@ -100,7 +100,7 @@ angular.module('crAuth', ['firebase'])
                               default:
                                 console.log("Error resetting password:", error);
                             }
-                          } else {
+                          }else{
                             console.log("Password reset email sent successfully!");
                           }
                 });

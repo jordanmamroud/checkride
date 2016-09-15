@@ -5,7 +5,7 @@
               <md-chips md-select-on-focus ng-model="certificationsList" readonly="false"
                         md-on-remove="deleteCertication($chip)" md-transform-chip="saveCertification($chip)" md-max-chips="30">
                 <md-chip-template>
-                  <strong>{{$chip.title}}</strong>
+                  <strong>{{$chip.$id}}</strong>
                 </md-chip-template>
                </md-chips>
         </md-input-container>
@@ -14,7 +14,7 @@
             <label>Airports Your Serving</label>
             <md-chips md-select-on-focus  class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)" md-max-chips="30">
                 <md-chip-template>
-                  <strong>{{$chip.title}}</strong>
+                  <strong>{{$chip.$id}}</strong>
                     <em></em>
                 </md-chip-template>
             </md-chips>

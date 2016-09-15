@@ -37,7 +37,7 @@
 
     <ms-input-container layout>
         <select ng-model="mg.recipient">
-            <option value="{{rec}}" ng-repeat="rec in mg.recipientsList" ng-repeat="rec in mg.recipientsList">{{rec.userData.firstName}}</option>
+            <option value="{{rec}}" ng-repeat="rec in mg.recipientsList">{{rec.name}}</option>
         </select>       
     </ms-input-container>
     
