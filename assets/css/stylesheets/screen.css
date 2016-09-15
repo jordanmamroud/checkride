@@ -22,6 +22,11 @@ body {
 }
 
 */
+/* line 43, ../sass/screen.scss */
+#pc-app-toolbar {
+  background-color: #FFF;
+}
+
 /*HELPER CLASSES*/
 /*
 .text-white{
@@ -32,12 +37,12 @@ body {
     @include border-radius(0);
 }
 */
-/* line 56, ../sass/screen.scss */
+/* line 58, ../sass/screen.scss */
 #pc-main {
   background-color: #fafafa;
 }
 
-/* line 61, ../sass/screen.scss */
+/* line 63, ../sass/screen.scss */
 .vertical-center {
   min-height: 100%;
   /* Fallback for browsers do NOT support vh unit */
@@ -47,7 +52,7 @@ body {
   align-items: center;
 }
 
-/* line 70, ../sass/screen.scss */
+/* line 72, ../sass/screen.scss */
 img.cr-logo,
 .cr-logo img {
   width: auto;
@@ -55,4 +60,21 @@ img.cr-logo,
   display: block;
   transform-origin: 0 43%;
   transform: scale(0.4);
+}
+
+/* line 87, ../sass/screen.scss */
+.aaa {
+  background-image: url("http://cdn.wonderfulengineering.com/wp-content/uploads/2014/05/airplane-wallpaper-2.jpg");
+  background-size: cover;
+  background-position: center center;
+}
+
+/* line 93, ../sass/screen.scss */
+#pc-app-content {
+  background-color: #ECECEC;
+}
+
+/* line 98, ../sass/screen.scss */
+.pc-capitalize {
+  text-transform: capitalize;
 }

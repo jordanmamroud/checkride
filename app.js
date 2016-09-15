@@ -4,6 +4,7 @@ angular.module('checkrider',[
     'ngMaterial',    
     'ngAnimate',
     'ngAria',
+    
     'firebase',
     'ngRoute',
     'elasticsearch',
@@ -24,8 +25,9 @@ angular.module('checkrider',[
 
 
 
-.config(['$locationProvider', function($locationProvider){
+.config(['$locationProvider','$logProvider', function($locationProvider,$logProvider){
     $locationProvider.html5Mode(true).hashPrefix('!');
+    $logProvider.debugEnabled(true);
 }])
 
 //Global Constants
@@ -39,6 +41,9 @@ angular.module('checkrider',[
         ref: 'https://checkride.firebaseio.com/',
         airportsRef: 'https://checkride.firebaseio.com/airports',
         usersRef: 'https://checkride.firebaseio.com/users'
+    },
+    firebase:{
+        ref:"https://checkride.firebaseio.com"
     }
 })
 

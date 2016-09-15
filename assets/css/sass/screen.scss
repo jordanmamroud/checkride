@@ -40,7 +40,9 @@ body{
 
 
 
-
+#pc-app-toolbar{
+    background-color:#FFF;
+}
 
 
 /*HELPER CLASSES*/
@@ -81,3 +83,18 @@ img.cr-logo,
     
     .cr-logo{ }
 } 
+
+.aaa{
+    background-image:url('http://cdn.wonderfulengineering.com/wp-content/uploads/2014/05/airplane-wallpaper-2.jpg'); 
+    background-size:cover; 
+    background-position:center center;
+}
+
+#pc-app-content{
+    background-color:#ECECEC;
+}
+
+
+.pc-capitalize{
+    text-transform:capitalize;
+}
