@@ -25,7 +25,7 @@
                      ng-class="{setColor: convo.hasNewMsg === true}" 
                      ng-click="msg.viewConvoMessages(convo)" 
                      class="md-3-line" 
-                     ng-repeat="convo in msg.conversationsList | orderBy:'-lastReceivedMsg'" 
+                     ng-repeat="convo in msg.conversationsList | orderBy:'-lastMsg'"
                      ng-click="null">
                      
                       <div class="md-list-item-text" layout="column">
@@ -34,7 +34,7 @@
                     </md-list-item>
                   </md-list>
 
-                <md-button class="md-raised md-primary" ng-click="msg.op()">Create Conversation</md-button>   
+                <md-button class="md-raised md-primary" ng-click="msg.openConvoDialog()">Create Conversation</md-button>   
             </md-content>
         </md-sidebar>
 
@@ -47,12 +47,11 @@
                     <span>{{msg.convoInfo.users.name}}</span>
                 </div>
             </md-toolbar>
-            <md-content ng-show="msg.convoInfo != undefined">
+            <md-content >
                 <md-list>
                     <md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages">
                         <div class="md-list-item-text">
                             <h3>{{cv.body}}</h3>
-<!--                            <h4>{{cv.body}}</h3>-->
                         </div>
                         <md-divider inset></md-divider>
                     </md-list-item>

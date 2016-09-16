@@ -15,21 +15,17 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         controllerAs:"ev",
         controller:function($scope,$firebaseArray,$firebaseObject , calendarService, $mdDialog,commonServices){
             var ev = this;
-            var usersRef = commonServices.getCommonRefs().usersRef;
+            var refs = commonServices.getCommonRefs();
             var userInfo = commonServices.getCookieObj('currentUser');
-            var userEmail = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');                        
-            var userRef = usersRef.child(userEmail);
-            var userCalendarRef = userRef.child("calendar");
-            var userEventsRef = userCalendarRef.child("events");
-            var userCalendarRef = userRef.child("calendar");          
+            var userRef = refs.accounts.child(userInfo.$id);
+            var userCalendarRef = refs.calendars.child(userInfo.$id);
+            var userEventsRef =  userCalendarRef.child("events");
             var approvedAppointmentsRef = userCalendarRef.child("approvedAppointments");
             var calendarSettings= userCalendarRef.child("settings");
-            var appointmentRequestsListRef = userRef.child("appointmentRequests");                 
-            var test=[];  
-            var events = commonServices.createFireArray(userEventsRef);
-            var approvedApointments = commonServices.createFireArray(approvedAppointmentsRef);
+            var appointmentRequestsListRef = userCalendarRef.child("appointmentRequests");                 
             
-            
+            ev.events = commonServices.createFireArray(userEventsRef);
+            ev.approvedApointments = commonServices.createFireArray(approvedAppointmentsRef);        
             ev.requestsList = $firebaseArray(appointmentRequestsListRef);
             ev.calStartTime = 0 ;
             ev.calStartTime = "00:00:00";
@@ -42,10 +38,12 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             ev.numOccur = 0 ;
             ev.monthlyEvent = false ;
             ev.repeatForm={};
+            ev.dow="";
+            ev.daysOfWeek = [{day:'sunday',val:0},{day:'monday',val:1},{day:'tuesday',val:2},{day:'wednesday',val:3},{day:'thursday',val:4},{day:'friday',val:5},{day:'saturday',val:6}]
             
             commonServices.showToastOnEvent(appointmentRequestsListRef,"child_added");
             commonServices.orderArray($scope.requestsList, "-sentAt");
-            ev.name = userInfo.firstName + " " +userInfo.lastName ;
+            ev.name = userInfo.name.first + " " +userInfo.name.last ;
         
             var onSelect = function(){
                 $mdDialog.show({
@@ -70,69 +68,52 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                 })
             };
             
-            var showRequestModal = function(){
-                $mdDialog.show({
-                    scope:$scope.$new(),
-                    templateUrl:'pendingRequestsModal',
-                    clickOutsideToClose:true
-                })
+            var getAppointmentRequest = function(){
+                if(ev.requestsList.length !=0){
+                    $mdDialog.show({
+                        scope:$scope.$new(),
+                        templateUrl:'pendingRequestsModal',
+                        clickOutsideToClose:true
+                    })
+                }else{
+                    alert('You have no appointmentRequests')
+                }
             };
                         
-            var setDaysOfWeek = function(){
-                 var daysOfWeek = $("#dow input:checkbox:checked").map(function(){
-                        return $(this).val();
-                     }).get();
-                     if(daysOfWeek[0] == undefined){
-                         return [ev.eventStartObj.day()];
-                     }
-                    return daysOfWeek ;
-             };
-
-             var setAmtOfMonths = function(){
-                if(ev.repeatForm.length > 4){
-                    var startMonth = ev.eventStartObj.month();
-                    var endMonth = moment(ev.repeatForm, "YYYY-MM-DD", true).month();
-                    if(endMonth < startMonth){
-                        var lastMonth = 11 - startMonth ;
-                        var amtOfMonths = lastMonth + endMonth ;
-                        return amtOfMonths ;
-                    }else{
-                        var amtOfMonths = endMonth-startMonth
-                        return amtOfMonths ;
-                    }
-                 }else{
-                         return ev.repeatForm ;
-                }
-             };
-
-            ev.createEvent = function(){
-                      var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");
-                      var eventId= ev.eventTitle + ev.eventStart;
-                      var eventObj = new calendarService.Event(ev.eventTitle,ev.eventStartObj,{start:today, end:"2020/02/01"},ev.eventEndObj,eventId);
-                      if(ev.dowCheckBox == true){
-                            switch($("#freq").val().toLowerCase()){   
-                                case "daily":       
-                                        calendarService.setEventRange(ev.repeatForm, eventObj, "days");
-                                        calendarService.createDailyEvent(eventObj,userEventsRef);
-                                        break;
-                                case "weekly":
-                                        eventObj.dow = setDaysOfWeek();
-                                        calendarService.setEventRange(ev.repeatForm, eventObj, "week");
-                                        calendarService.createWeeklyEvent(eventObj,userEventsRef);
-                                        break;
-                                case "monthly": 
-                                        console.log(setAmtOfMonths());
-                                        calendarService.createMonthlyEvent(eventObj, userEventsRef, setAmtOfMonths());
-                                        break;
-                            };
-                        }else{
-                            calendarService.createRegularEvent(eventObj, userEventsRef)
-                        }   
-                        ev.dowCheckBox = false;
-            };
+            ev.createEvent =createEvent
+            ev.deleteEvent = deleteEvent;
+            ev.deleteSingleMonthlyEvent = deleteSingleMonthlyEvent;
+            ev.deleteAllMonthlyEvents = deleteAllMonthlyEvents;
+            ev.saveCalSettings = saveCalSettings;
+            ev.approveAppointment = approveAppointment;
             
-            ev.deleteEvent = function(){
-               if(ev.clickedEvent.recur == "monthly"){
+            function createEvent(){
+                  var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");
+                  var eventId= ev.eventTitle + ev.eventStart;
+                  var eventObj = new calendarService.Event(ev.eventTitle,ev.eventStartObj,{start:today, end:"2020/02/01"},ev.eventEndObj,eventId);
+                  if(ev.dowCheckBox == true){
+                        switch(ev.frequency.toLowerCase()){   
+                            case "daily":       
+                                    calendarService.setEventRange(ev.repeatForm, eventObj, "days");
+                                    calendarService.createDailyEvent(eventObj,userEventsRef);
+                                    break;
+                            case "weekly":
+                                    eventObj.dow = calendarService.setDaysOfWeek(ev.daysOfWeek);
+                                    calendarService.setEventRange(ev.repeatForm, eventObj, "week");
+                                    calendarService.createWeeklyEvent(eventObj,userEventsRef);
+                                    break;
+                            case "monthly": 
+                                    calendarService.createMonthlyEvent(eventObj, userEventsRef, calendarService.setAmtOfMonths(ev.repeatForm, ev.eventStartObj));
+                                    break;
+                        };
+                    }else{
+                        calendarService.createRegularEvent(eventObj, userEventsRef)
+                    }   
+                    ev.dowCheckBox = false;
+            }
+            
+            function deleteEvent(){
+                 if(ev.clickedEvent.recur == "monthly"){
                         ev.monthlyEvent = true ;
                     }
                     else{
@@ -140,28 +121,28 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                    
                         $("#eventDetailsModal").removeClass("showing");
                    }
-            };
+            }
             
-            ev.deleteSingleMonthlyEvent = function(){
+           function deleteSingleMonthlyEvent(){
                     userEventsRef.child(ev.clickedEvent.$id).remove();
                     ev.monthlyEvent = false ;
-            };
-            
-            ev.deleteAllMonthlyEvents = function(){
+            }
+                        
+        
+           function deleteAllMonthlyEvents(){
                 calendarService.deleteAllMonthlyEvents($scope.clickedEvent, userEventsRef);
                 ev.monthlyEvent = false ;
             };
             
-            ev.saveCalSettings =function(){
+            function saveCalSettings(){
                 calendarService.saveCalSettings(ev.calStartTime , ev.calEndTime, ev.gcalId, userCalendarRef);
-                
             };
 
-            ev.approveAppointment = function(index) {
+            function approveAppointment(index) {
                 calendarService.approveAppointment(ev.requestsList,index ,userListRef, userEventsRef ,approvedAppointmentsRef,userInfo);
             };
                
-            var setUpCalendar = function (){
+            function setUpCalendar(){
                 calendarSettings.on("value", function(data){
                     ev.uiConfig.calendar.minTime = data.val().minTime ;
                     ev.uiConfig.calendar.maxTime = data.val().maxTime ;
@@ -173,7 +154,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                 ev.uiConfig = {
                     calendar: {
     //                    googleCalendarApiKey: 'AIzaSyA0IwuIvriovVNGQiaN-q2pKYIpkWqSg0c',
-                        events: events,
+                        events: ev.events,
                         slotEventOverlap:false,
                         allDayDefault: false,
                         defaultView:"agendaWeek",
@@ -186,7 +167,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                             pendingRequestsButton: {
                                 text: 'Pending Requests',
                                 click: function (){
-                                    showRequestModal();
+                                    getAppointmentRequest();
                                 }
                             },
                             settingsButton: {
@@ -237,39 +218,27 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                         }
                     }  
                 }
-//                 ev.pendingRequestButtonEvent = function (list){
-//                        list.$loaded().then(function () {
-//                            if (list.length != 0) {
-//                                $("#pendingRequestsModal").addClass("showing");
-//                            } else {
-//                                alert("Sorry you have no requests");
-//                            }
-//                    });
-//                }
             }
         }
 })
+
 .directive('viewingCal',function(){
     return{
         template:'<div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div>',
         controller: ['$scope', '$mdDialog','commonServices', 'calendarService', function ($scope, $mdDialog, commonServices, calendarService){
-            $scope.examinerId = commonServices.getRouteParams().username;
+            var refs = commonServices.getCommonRefs();
+            var examinerInfo = commonServices.getCookieObj("examinerInfo");
             var userInfo = commonServices.getCookieObj("currentUser");
-            var loggedInStudentKey = userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
-            var examinerRef = commonServices.getCommonRefs().usersRef.child($scope.examinerId); 
-            var examinerData = commonServices.createFireObj(examinerRef);            
-            var eventsRef = examinerRef.child("calendar/events");
+            var examinerRef = refs.accounts.child(examinerInfo.$id);
+            var examinerCalRef = refs.calendars.child(examinerInfo.$id);
+
             var settingsRef = examinerRef.child("calendar/settings");
-            var eventsList = commonServices.createFireArray(eventsRef);
-
-            examinerData.$loaded().then(function(){
-                $scope.examinerName = examinerData.userData.firstName + " " + examinerData.userData.lastName ;
-            });
-
+            var eventsList = commonServices.createFireArray(examinerCalRef.child("events"));
+            $scope.examinerName = examinerInfo.data.name.first +" " + examinerInfo.data.name.last ;
             $scope.sendRequest = function(){
-                calendarService.sendAppointmentRequest(examinerRef, userInfo,$scope.eventStart, $scope.eventEnd);
+                var examinerCalRef = refs.calendars.child(examinerInfo.$id);
+                calendarService.sendAppointmentRequest(examinerCalRef, userInfo,$scope.eventStart, $scope.eventEnd);
             }
-
             $scope.eventSources = [];
             $scope.showApptDialog = function(){
                 $mdDialog.show({
@@ -281,7 +250,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     +'<md-button  class="md-raised md-primary" ng-click="sendRequest()">Request Appointment</md-button>'
                 })
             }
-
+            
             $scope.uiConfig = {
                 calendar: {
         //                googleCalendarApiKey: 'AIzaSyA0IwuIvriovVNGQiaN-q2pKYIpkWqSg0c',

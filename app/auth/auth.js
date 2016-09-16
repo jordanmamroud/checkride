@@ -25,14 +25,12 @@ angular.module('crAuth', ['firebase'])
     }
     this.createAccount = function(){
         var user = {
-            firstName: $scope.firstName,
-            lastName: $scope.lastName,
-            password:$scope.password,
+            name:{ first:$scope.firstName,last: $scope.lastName},
             emailAddress:$scope.emailAddress,
             phone:$scope.phone,
             userType: $scope.userType
         }
-        createAccountService.createUser(user);
+        createAccountService.createUser(user, $scope.password);
     }
 }])
 
@@ -42,14 +40,14 @@ angular.module('crAuth', ['firebase'])
       var createUserAccount = function(newUser, userId){ 
           refs.accounts.child(userId).set(newUser);
           console.log(refs.roles.child(newUser.userType.toLowerCase() + "/" + userId))
-          refs.roles.child(newUser.userType.toLowerCase() + "/" + userId).set({name:newUser.firstName +" " + newUser.lastName});
+          refs.roles.child(newUser.userType.toLowerCase() + "/" + userId).set({name:newUser.name.first +" " + newUser.name.last});
       }
       
       return{
-          createUser:function(newUser){
+          createUser:function(newUser, password){
                refs.main.createUser({
                         email: newUser.emailAddress ,
-                        password: newUser.password
+                        password: password
                     }, function(error, userData){
                           if (error) {
                                 console.log("Error creating user:", error);

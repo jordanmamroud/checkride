@@ -60,37 +60,6 @@ angular.module('crDirectives',[])
         }
     })
 
-    .directive("closeModal", function(){
-
-       var linkFunction = function(scope,element, attrs){
-           element.bind('click', function(){
-               $('.modal').removeClass("showing");
-                scope.onClose();
-           })
-       } 
-       return{
-           link: linkFunction,
-           scope:{
-               modalToClose:"@",
-               onClose:"&"
-           }
-       }
-    })
-
-    .directive("myModal", function(){
-       return{
-           transclude: true,
-           templateUrl:"app/layout/modalTemplate.html",
-           controller:function($scope, $transclude){
-      
-           },
-           scope:{
-               myid:"@"
-           }
-       } 
-    })
-
-
     .directive('crNavigation', ['crUserNavData', 'commonServices' ,function(crUserNavData, commonServices){
         return {
             template:   '<md-content>'+
@@ -121,8 +90,8 @@ angular.module('crDirectives',[])
                 controllerAs:'user',
                 controller: function(){
                     var userInfo = commonServices.getCookieObj('currentUser');
-                    this.firstName = userInfo.firstName ;
-                    this.lastName = userInfo.lastName;
+                    this.firstName = userInfo.name.first ;
+                    this.lastName = userInfo.name.last;
                     this.bio = userInfo.bio ;
                     this.oldPassword='';
                     this.newPassword='';
@@ -133,8 +102,7 @@ angular.module('crDirectives',[])
                             profileService.changePassword(userRef, this.oldPassword, this.newPassword, userInfo.emailAddress)
                         }
                         ref.child("userData").update({
-                            firstName: this.firstName,
-                            lastName: this.lastName,
+                            name: {first:this.firstName,last: this.lastName},
                             phoneNumber: this.phoneNumber,
                             emailAddress:this.emailAddress,
                             bio: this.bio

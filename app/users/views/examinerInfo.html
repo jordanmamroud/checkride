@@ -24,16 +24,19 @@
                <md-list>
                  <label>Certifications</label>
                   <md-list-item ng-repeat="cert in vm.certificationsList"> 
-                        <h5>{{cert.title}}</h3>
+                        <h5>{{cert.$id}}</h3>
                    </md-list-item>
                 </md-list>
 
                <md-list>
                  <label>Airports</label>
-                  <md-list-item ng-repeat="apt in vm.airportList"> 
-                        <h5>{{apt.name}}</h3>
+                  <md-list-item ng-repeat="arpt in vm.airportList"> 
+                        <h5>{{arpt.$id}}</h3>
                    </md-list-item>
                 </md-list>   
+                
+                <label>Bio</label>
+                <p ng-model="vm.bio">{{vm.bio}}</p>
         </md-content>
       </md-tab>
       

@@ -13,7 +13,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="appt in approvedApptsList track by $index">
-              <td>{{appt.firstName +" " + appt.lastName}}</td>
+              <td>{{appt.name.first +" " + appt.name.last}}</td>
               <td>{{appt.start}}</td>
               <td>{{appt.end}}</td>
             </tr>

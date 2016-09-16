@@ -1,12 +1,16 @@
 angular.module("crUser",[])
 
-//Examiner Controllers
+
+
+
+//Shared Controllers
 .controller("profileController", ['$scope','profileService', 'commonServices', function($scope, profileService,commonServices){
     var refs = commonServices.getCommonRefs();
     var userInfo = commonServices.getCookieObj("currentUser"); 
     var userRef =   commonServices.getCommonRefs().accounts.child(userInfo.$id);
     console.log(userRef.toString());
     $scope.userType = '';
+    console.log(userInfo);
     switch(userInfo.userType.toLowerCase()){
         case 'examiner' : 
             $scope.userType ='examiner'
@@ -43,51 +47,46 @@ angular.module("crUser",[])
 
 // STUDENT CONTROLLERS
 .controller('examinerAvailabilityController', ['$scope', 'commonServices',function($scope, commonServices){
-    var userInfo = commonServices.getCookie("currentUser");
-    $scope.studentName = userInfo.firstName +" " + userInfo.lastName ;
+    var userInfo = commonServices.getCookieObj("currentUser");
+    console.log(userInfo);
+    $scope.studentName = userInfo.name.first +" " + userInfo.name.last ;
  }])
 
 
-.controller('examinerListController',["$scope",'$location','commonServices',function($scope,$location,commonServices, $firebaseArray){
-    var ref = new Firebase("https://checkride.firebaseio.com/");
-    var examinersRef = new Firebase("https://checkride.firebaseio.com/examiner");
-    var authData = ref.getAuth();
-    var studentRef = ref.child("student/" + authData.password.email.replace( /[\*\^\.\'\!\@\$]/g , ''));
-    $scope.list = commonServices.createFireArray(examinersRef);  
-    $scope.goToProfile = function(index){ 
-            
-            $location.path(commonServices.getRoutePaths().examinerInfo.path).search({
-                username: $scope.list[index].userData.emailAddress.replace(/[\*\^\.\'\!\@\$]/g , '')
-            });
-    }    
+.controller('examinerListController',["$scope",'$location','commonServices',function($scope,$location,commonServices){
+    var vm = this ;
+    var refs= commonServices.getCommonRefs();     
+    vm.viewProfile  = viewProfile ;
+    vm.examiners = commonServices.createFireArray(refs.examiners);
+    function viewProfile(examiner){
+        console.log(examiner);
+        commonServices.removeCookieObj("examinerInfo");
+        var examinerRef = refs.accounts.child(examiner.$id);
+        examinerRef.once("value",function(data){
+            commonServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
+            console.log(commonServices.getCookieObj('examinerInfo'));
+            commonServices.changePath(commonServices.getRoutePaths().examinerInfo.path);
+        });
+      }    
 }])
-
-
 
 .controller('examinerInfoController', ['$scope', 'commonServices',function($scope, commonServices){
     var vm = this ; 
+    var refs = commonServices.getCommonRefs();
     var userInfo = commonServices.getCookieObj('currentUser');
-    vm.examinerId = commonServices.getRouteParams().username;
-    var usersRef = commonServices.getCommonRefs().usersRef;
-    var userRef = usersRef.child(userInfo.emailAddress.replace(/[\*\^\.\'\!\@\$]/g, ''));
-    var examinerRef = usersRef.child(vm.examinerId);
-    var examinerData = commonServices.createFireObj(examinerRef);
-    vm.certificationsList = commonServices.createFireArray(examinerRef.child("userData/certifications"));
-    vm.airportList = commonServices.createFireArray(examinerRef.child("userData/airports"));
-    examinerData.$loaded().then(function(){
-        var data = examinerData.userData;
-        vm.bio = data.bio ;
-        vm.examinerName = data.firstName +" " + data.lastName ;
-    });
-    vm.viewSchedule = function(){
-       commonServices.changePath(commonServices.getRoutePaths().viewExaminerAvailability.path);
-    }    
+    var examinerInfo = commonServices.getCookieObj('examinerInfo');
+    vm.certificationsList = commonServices.createFireArray(refs.accounts.child(examinerInfo.$id +"/certifications"));
+    console.log(examinerInfo);
+    vm.airportList = commonServices.createFireArray(refs.accounts.child(examinerInfo.$id +"/airports"));
+    vm.bio = examinerInfo.data.bio ; 
+    vm.examinerName = examinerInfo.data.name.first + " " +examinerInfo.data.name.last;
 }])
 
 .controller("examinerCalendarController",  ['$window','$scope', '$firebaseArray', '$firebaseObject', '$compile', 'uiCalendarConfig','commonServices',"calendarService",
       function ($window,$scope, $firebaseArray, $firebaseObject, $compile, uiCalendarConfig, commonServices, calendarService){
           var vm = this ;
-          console.log('funions dope fudge');
+          var refs= commonServices.getCommonRefs();
+      
 }])
   
 

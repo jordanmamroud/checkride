@@ -45,25 +45,14 @@
                      </div>
             </md-radio-group>
 
-            <div id="dow" ng-class="{hide: ev.frequency != 'weekly'}">    
-                <form id="dowForm">
-                    <label>Sunday</label>
-                    <input type="checkbox" id="sunday" value="0">
-                    <label>Monday</label>
-                    <input type="checkbox" id="monday" value="1">
-                    <label>Tuesday</label>
-                    <input type="checkbox" id="tuesday" value="2">
-                    <label>Wednesday</label>
-                    <input type="checkbox" id="wednesday" value="3">
-                    <label>Thursday</label>
-                    <input type="checkbox" id="thursday" value="4">
-                    <label>Friday</label>
-                    <input type="checkbox" id="friday" value="5">
-                    <label>Saturday</label>
-                    <input type="checkbox" id="saturday" value="6">
-                </form>
-            </div>
-        </div>
+        <form ng-class="{hide: ev.frequency != 'weekly'}">
+            <label ng-repeat="dow in ev.daysOfWeek track by $index">
+                <md-checkbox type="checkbox"
+                       ng-model="dow.selected"
+                             >{{dow.day}}</md-checkbox>
+            </label>
+        </form>
+
       
         <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</button>
         </md-content>
@@ -97,7 +86,7 @@
     </md-input-container>  
     <md-input-container>
         <label>Gcal id</label>
-        <input ng-model="ev.calEndTime">
+        <input ng-model="ev.gcalId">
     </md-input-container>
      <md-button class="md-primary md-raised" id="saveButton" ng-click="ev.saveCalSettings()">Save</md-button>
      <md-checkbox id="googleSync">select box to sync with google calendar</md-checkbox>
@@ -114,14 +103,14 @@
           </thead>
             
           <tbody>
-            <tr ng-repeat="request in ev.requestsList | orderBy:'-sentAt' track by $index">
-              <td>{{vm.request.firstName + " " + request.lastName}}</td>
-              <td>{{request.requestedStartTime}}</td>
-              <td>{{request.requestedEndTime}}</td>
-              <td>{{request.sentAt}}</td>
-              <td><button ng-click="ev.approveAppointment($index)">Approve</button></td>
-            </tr>
-              </tbody>
+                <tr ng-repeat="request in ev.requestsList | orderBy:'-sentAt' track by $index">
+                  <td>{{request.name}}</td>
+                  <td>{{request.requestedStartTime}}</td>
+                  <td>{{request.requestedEndTime}}</td>
+                  <td>{{request.sentAt}}</td>
+                  <td><button ng-click="ev.approveAppointment($index)">Approve</button></td>
+                </tr>
+          </tbody>
         </table>  
 </script>
 
