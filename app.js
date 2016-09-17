@@ -58,22 +58,24 @@ angular.module('checkrider',[
                 title:'Messages',
                 path: '/user/messages'
             },
-            punani:{
-                title:'Punani',
-                path: '/user/punani'
+            profile:{
+                title:'Profile',
+                path: '/user/profile'
             }
         },
         'student':{
-            examiners:{
+            Examiners:{
                 title: 'Examiners',
                 path: '/user/list-of-examiners'
             },
-            messages:{
+            Messages:{
                 title:'Messages',
                 path: '/user/messages'
             },
-
-        
+            profile:{
+                title:'Profile',
+                path: '/user/profile'
+            }
     }
 })
 

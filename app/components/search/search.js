@@ -13,6 +13,7 @@ angular.module('pcSearch',[])
 	.controller('SearchCtrl', ['$scope', '$log','examiners', 'airports', 'esFactory', 'dataService', 'commonServices', function ($scope, $log, examiners,airports,  esFactory, dataService, commonServices) {
 		var self = this;
 
+
 		self.query = null;
 		self.examiners = examiners;
 		self.airports = "";
@@ -21,7 +22,6 @@ angular.module('pcSearch',[])
 		self.getUsers = getUsers;
 		self.users = "";
 		self.airportArray="";
-
 		self.toArray = commonServices.objToArray; 
 
 		self.log = log;
@@ -70,20 +70,30 @@ angular.module('pcSearch',[])
 			});
 		};
 
+	function getUsers(){
+		userRef.on("value", function(snapshot){
+			self.users = snapshot.val();
+			console.log(self.users);
+		});
+	};
+ 	
+ 	getUsers();
+    
+    //in order for this to work you have to pull from the list of examiners didnt want to fudge with your shiz but it will take you to selected examiners profile with their data.
+    self.viewProfile = viewProfile;
+     function viewProfile(examiner){
+        var refs= commonServices.getCommonRefs();
+        console.log(examiner);
+        commonServices.removeCookieObj("examinerInfo");
+        var examinerRef = refs.accounts.child(examiner.$id);
+        examinerRef.once("value",function(data){
+            commonServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
+            console.log(commonServices.getCookieObj('examinerInfo'));
+        });
+        commonServices.changePath(commonServices.getRoutePaths().examinerInfo.path);
+      } 
+}])
 
-		function getUsers(){
-			userRef.on("value", function(snapshot){
-				self.users = snapshot.val();
-				snapshot.forEach(function(child){
-
-				});
-				
-			});
-		};
-	 	
-	 	getUsers();
-
-	}])
 
 	// function getExaminers(username){
 	// dataService.getExaminers(username);
