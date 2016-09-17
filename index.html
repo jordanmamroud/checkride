@@ -1,99 +1,101 @@
 <!DOCTYPE html>
 
 <html lang="en" ng-app="checkrider">
-    <head>
-       
-        <title>{{title}}</title>
-      
-        <!-- Metadata -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon-96x96.png">
-        <title>{{title}}</title>
-        <base href="/">
-        
-            <!-- Libraries -->
-            <!-- Stylesheets -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-            <!-- Icons: Switch to sass later -->
-            <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
-            <link rel="stylesheet" href="assets/bower_components/fullcalendar/dist/fullcalendar.css"/>
-            <link rel="stylesheet" href="node_modules/angular-material/angular-material.css"/>
-        
-        <!-- NOTE TO JOSH PLEASE DONT DELETE SCRIPTS -->
-            <script type="text/javascript" src="assets/bower_components/jquery/dist/jquery.min.js"></script>
-            <script type="text/javascript" src="assets/bower_components/moment/min/moment.min.js"></script>
-            <script type="text/javascript" src="node_modules/angular/angular.js"></script>
-            <script type="text/javascript" src="node_modules/angular-route/angular-route.js"></script> 
-            <script type="text/javascript" src="node_modules/angular-animate/angular-animate.js"></script>
-            <script type="text/javascript" src="node_modules/angular-aria/angular-aria.js"></script>            
-            <script type="text/javascript" src="node_modules/angular-material/angular-material.js"></script>     
-            <script type="text/javascript" src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
-            <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
-            <script type="text/javascript" src="assets/bower_components/angular-ui-calendar/src/calendar.js"></script>
-            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js"></script>
-            <script type='text/javascript' src="assets/bower_components/fullcalendar/dist/gcal.js"></script>
-            <script type="text/javascript" src="node_modules/angular-cookies/angular-cookies.js"></script>
-            
-            <!--FOR DEV PURPOSES-->
-            <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js"></script>
-        
-        
-            <!-- APPLICATION FILES -->
-            <!-- Stylesheets -->
-            <link rel="stylesheet" href="assets/css/stylesheets/screen.css">
-            
-            <!-- Scripts -->
-            <script type="text/javascript" src="app.js"></script>
-            <script type="text/javascript" src="app/services/commonservices.js"></script>
-            <script type="text/javascript" src="app/controllers.js"></script>
-            <script type="text/javascript" src="app/directives.js"></script>
-            <script type="text/javascript" src="app/routes.js"></script>
-            <script type="text/javascript" src="app/services/data.service.js"></script>
-            <script type="text/javascript" src="app/components/components.js"></script>
-            <script type="text/javascript" src="app/components/search/search.js"></script>
-            <script type="text/javascript" src="app/auth/auth.js"></script>
-            
-            <script type="text/javascript" src="app/users/user.js"></script>
-            <script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
-            <script type="text/javascript" src="app/components/calendar/examinerCalendar.js"></script>
-            <script type="text/javascript" src="app/components/calendar/calDirective.js"></script>
-            <script type="text/javascript" src="app/components/messaging/checkrider-messages.js"></script>
-            <script type="text/javascript" src="node_modules/elasticsearch-browser/elasticsearch.angular.js"></script>
-            <script type="text/ng-template" id="save-dialog.tmpl.html">
-           
+	<head>
+	   
+		<title>{{title}}</title>
+	  
+		<!-- Metadata -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon-96x96.png">
+		<title>{{title}}</title>
+		<base href="/">
+		
+			<!-- Libraries -->
+			<!-- Stylesheets -->
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+			<!-- Icons: Switch to sass later -->
+			<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+			<link rel="stylesheet" href="assets/bower_components/fullcalendar/dist/fullcalendar.css"/>
+			<link rel="stylesheet" href="node_modules/angular-material/angular-material.css"/>
+		
+		<!-- NOTE TO JOSH PLEASE DONT DELETE SCRIPTS -->
+			<script type="text/javascript" src="assets/bower_components/jquery/dist/jquery.min.js"></script>
+			<script type="text/javascript" src="assets/bower_components/moment/min/moment.min.js"></script>
+			<script type="text/javascript" src="node_modules/angular/angular.js"></script>
+			<script type="text/javascript" src="node_modules/angular-route/angular-route.js"></script> 
+			<script type="text/javascript" src="node_modules/angular-animate/angular-animate.js"></script>
+			<script type="text/javascript" src="node_modules/angular-aria/angular-aria.js"></script>            
+			<script type="text/javascript" src="node_modules/angular-material/angular-material.js"></script>     
+			<script type="text/javascript" src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+			<script type="text/javascript" src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+			<script type="text/javascript" src="assets/bower_components/angular-ui-calendar/src/calendar.js"></script>
+			<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js"></script>
+			<script type='text/javascript' src="assets/bower_components/fullcalendar/dist/gcal.js"></script>
+			<script type="text/javascript" src="node_modules/angular-cookies/angular-cookies.js"></script>
+			
+			<!--FOR DEV PURPOSES-->
+			<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js"></script>
+		
+		
+			<!-- APPLICATION FILES -->
+			<!-- Stylesheets -->
+			<link rel="stylesheet" href="assets/css/stylesheets/screen.css">
+			
+			<!-- Scripts -->
+			<script type="text/javascript" src="app.js"></script>
+			<script type="text/javascript" src="app/services/commonservices.js"></script>
+			<script type="text/javascript" src="app/controllers.js"></script>
+			<script type="text/javascript" src="app/directives.js"></script>
+			<script type="text/javascript" src="app/routes.js"></script>
+			<script type="text/javascript" src="app/services/data.service.js"></script>
+			<script type="text/javascript" src="app/components/components.js"></script>
+			<script type="text/javascript" src="app/components/search/search.js"></script>
+			<script type="text/javascript" src="app/auth/auth.js"></script>
+			
+			<script type="text/javascript" src="app/users/user.js"></script>
+			<script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
+			<script type="text/javascript" src="app/components/calendar/examinerCalendar.js"></script>
+			<script type="text/javascript" src="app/components/calendar/calDirective.js"></script>
+			<script type="text/javascript" src="app/components/messaging/checkrider-messages.js"></script>
+			<script type="text/javascript" src="node_modules/elasticsearch-browser/elasticsearch.angular.js"></script>
+			<script type="text/ng-template" id="save-dialog.tmpl.html">
+		   
 
 
-            
-            
-            
-            </script>
-    </head>
+			
+			
+			
+			</script>
+	</head>
 
-    <body ng-controller="crIndexCtrl" >
+<body ng-controller="crIndexCtrl" layout-fill>
 
-        <!-- Main Wrapper -->
-        <div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout'>
+	<!-- Main Wrapper -->
+	<div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout' layout-fill>
 
-            <!-- HEADER -->
-            <md-toolbar id="pc-app-toolbar" layout="column" class="" >
-                <cr-header></cr-header>    
-            </md-toolbar>
+		<!-- HEADER -->
+		<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" >
+			<cr-header></cr-header>    
+		</md-toolbar>
 
-            <div layout="column" id="pc-app-page" >
+		<div layout="row" flex id="pc-app-page" >
 
-               <!-- SIDEBAR -->
-                <cr-sidebar ng-if="showSidebar" layout="column" flex="15"></cr-sidebar>
-                
-                <!-- CONTENT -->
-                <md-content md-scroll-y id="pc-app-content" layout="column" flex>
+			<!-- SIDEBAR -->
+			<md-sidenav ng-if="showSidebar" layout="column" flex="15">
+				<cr-navigation></cr-navigation>
+				<md-divider></md-divider>
+			</md-sidenav>
+			
+			<!-- CONTENT -->
+			<div id="pc-app-content" layout="column" layout-fill layout-align="start center" flex>
+				<md-content ng-view layout-fill flex></md-content>
+			</div>
 
-                    <div ng-view layout-fill></div>
-                </md-content>
+		</div>
 
-            </div>
+	</div>
 
-        </div>
-
-    </body>
+</body>
 </html>

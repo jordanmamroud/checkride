@@ -66,6 +66,23 @@ angular.module('commonServices', [])
         },
         getCommonRefs:function(){
             return firebaseRefs();
-        }    
+        },
+
+        objToArray: function(object, arrayType){
+            var array = [];
+
+            angular.forEach(object, function(value, key){
+                switch(arrayType){
+                    case "key" : this.push(key)
+                        break;
+                    case "value" : this.push(value)
+                        break;
+                    default : this.push(key + ": " + value)
+                        break;
+                }
+                
+            },array);
+            return array;
+        }
     }
 }])

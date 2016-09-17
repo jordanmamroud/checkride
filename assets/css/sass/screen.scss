@@ -95,12 +95,14 @@ img.cr-logo,
 }
 
 .pc-search-box-wrapper{
-    background-color:#555;
-    color:#FFF;
 
     h1,
     h2,
-    h3{color:#FFF;}
+    h3{
+        color:#FFF;
+        font-weight:normal;
+        text-align:center;
+    }
 }
 
 

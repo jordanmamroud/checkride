@@ -1,74 +1,89 @@
 angular.module('pcSearch',[])
+	
+	// ELASTIC SEARCH
 	.service('client', function (esFactory) {
-	  return esFactory({
-		host: 'localhost:9200',
-		apiVersion: '2.3',
-		log: 'trace'
-	  });
+		return esFactory({
+			host: 'localhost:9200',
+			apiVersion: '2.3',
+			log: 'trace'
+		});
 	})
 
+	//SEARCH CONTROLLER
+	.controller('SearchCtrl', ['$scope', '$log','examiners', 'airports', 'esFactory', 'dataService', 'commonServices', function ($scope, $log, examiners,airports,  esFactory, dataService, commonServices) {
+		var self = this;
 
- 
-.controller('SearchCtrl', ['$scope', '$log','examiners', 'airports', 'client', 'esFactory', 'dataService', function ($scope, $log, examiners,airports, client, esFactory, dataService) {
-	var self = this;
+		self.query = null;
+		self.examiners = examiners;
+		self.airports = "";
+		self.searchText = "";
+		self.getAirports = getAirports;
+		self.getUsers = getUsers;
+		self.users = "";
+		self.airportArray="";
 
-	self.query = null;
-	self.examiners = examiners;
-	self.airports = "";
-	self.searchText = "";
-	self.getAirports = getAirports;
-	self.getUsers = getUsers;	
-	self.users ="";
+		self.toArray = commonServices.objToArray; 
 
-	// var examinerRef = new Firebase('https://checkride.firebaseio.com/temp/users/roles/examiner');
-	// 	examinerRef.on("value", function(){
+		self.log = log;
 
-	// 	});
+		function log(i){
+			console.log(i);
+		}
 
-	var ref = new Firebase("https://checkride.firebaseio.com/temp");
- 	var airportRef = ref.child("airports");
- 	var examinerRef = ref.child("users/roles/examiners");
- 	var userRef = ref.child("users/accounts");
+		self.selectedItems="";
+		// var examinerRef = new Firebase('https://checkride.firebaseio.com/temp/users/roles/examiner');
+		// 	examinerRef.on("value", function(){
 
-	function getAirports(query){
-		query = query.toLowerCase();
+		// 	});
 
-		airportRef.orderByChild("IATA").equalTo(query).on("value", function(snapshot){
-			self.airports = snapshot.val();
-			
-			console.log( snapshot.val() ); 
-			if(snapshot.numChildren() > 0){
+		var ref = new Firebase("https://checkride.firebaseio.com/temp");
+	 	var airportRef = ref.child("airports");
+	 	var examinerRef = ref.child("users/roles/examiners");
+	 	var userRef = ref.child("users/accounts");
 
-				snapshot.forEach(function(childSnapshot){
 
-					var airportUsers = childSnapshot.child("users").val();
-					console.log(airportUsers);
+		function getAirports(query){
+			query = query.toLowerCase();
 
-					angular.forEach(airportUsers, function(value,key){
-						console.log("airport > users:" + key);
-						userRef.orderByKey().equalTo(key).on("value",function(grandchildSnapshot){
-							console.log("airport > users > objects:");
-							console.log(grandchildSnapshot.val());
-						});
+			airportRef.orderByChild("IATA").equalTo(query).on("value", function(snapshot){
+				self.airports = snapshot.val();
+				
+				console.log( snapshot.val() ); 
+				if(snapshot.numChildren() > 0){
 
-					})
+					snapshot.forEach(function(childSnapshot){
+
+						var airportUsers = childSnapshot.child("users").val();
+						console.log(airportUsers);
+
+						angular.forEach(airportUsers, function(value,key){
+							console.log("airport > users:" + key);
+							userRef.orderByKey().equalTo(key).on("value",function(grandchildSnapshot){
+								console.log("airport > users > objects:");
+								console.log(grandchildSnapshot.val());
+							});
+
+						})
+					});
+				}
+				
+			});
+		};
+
+
+		function getUsers(){
+			userRef.on("value", function(snapshot){
+				self.users = snapshot.val();
+				snapshot.forEach(function(child){
+
 				});
-			}
-			
-		});
-	};
+				
+			});
+		};
+	 	
+	 	getUsers();
 
-
-	function getUsers(){
-		userRef.on("value", function(snapshot){
-			self.users = snapshot.val();
-			console.log(self.users);
-		});
-	};
- 	
- 	getUsers();
-
-}])
+	}])
 
 	// function getExaminers(username){
 	// dataService.getExaminers(username);

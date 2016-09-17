@@ -23,11 +23,11 @@ angular.module('checkrider',[
     'messages'    
     ])
 
-
-
-.config(['$locationProvider','$logProvider', function($locationProvider,$logProvider){
+.config(['$locationProvider','$logProvider', '$mdThemingProvider', function($locationProvider,$logProvider,$mdThemingProvider){
     $locationProvider.html5Mode(true).hashPrefix('!');
     $logProvider.debugEnabled(true);
+
+    $mdThemingProvider.theme('dark').dark();
 }])
 
 //Global Constants

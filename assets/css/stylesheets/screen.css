@@ -74,19 +74,16 @@ img.cr-logo,
   background-color: #ECECEC;
 }
 
-/* line 97, ../sass/screen.scss */
-.pc-search-box-wrapper {
-  background-color: #555;
-  color: #FFF;
-}
-/* line 101, ../sass/screen.scss */
+/* line 99, ../sass/screen.scss */
 .pc-search-box-wrapper h1,
 .pc-search-box-wrapper h2,
 .pc-search-box-wrapper h3 {
   color: #FFF;
+  font-weight: normal;
+  text-align: center;
 }
 
-/* line 107, ../sass/screen.scss */
+/* line 109, ../sass/screen.scss */
 .pc-capitalize {
   text-transform: capitalize;
 }
