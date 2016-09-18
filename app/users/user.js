@@ -64,6 +64,7 @@
 			var refs= pcServices.getCommonRefs();     
 			vm.viewProfile  = viewProfile ;
 			vm.examiners = pcServices.createFireArray(refs.examiners);
+
 			function viewProfile(examiner){
 				console.log(examiner);
 				pcServices.removeCookieObj("examinerInfo");
@@ -89,9 +90,9 @@
 		}])
 
 		.controller("examinerCalendarController",  ['$window','$scope', '$firebaseArray', '$firebaseObject', '$compile', 'uiCalendarConfig','pcServices',"calendarService",
-			  function ($window,$scope, $firebaseArray, $firebaseObject, $compile, uiCalendarConfig, pcServices, calendarService){
-				  var vm = this ;
-				  var refs= pcServices.getCommonRefs();
+			function ($window,$scope, $firebaseArray, $firebaseObject, $compile, uiCalendarConfig, pcServices, calendarService){
+				var vm = this ;
+				var refs= pcServices.getCommonRefs();
 			  
 		}])
 		  

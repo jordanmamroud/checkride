@@ -76,13 +76,14 @@
 		<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
 
 			<!-- SIDEBAR -->
-			<md-sidenav ng-if="showSidebar" layout="column" flex="15">
+			<md-sidenav ng-show="showSidebar" md-is-locked-open="true" layout="column" flex="15" class="md-sidenav-left" md-component-id="left-sidenav">
 				<cr-navigation></cr-navigation>
 				<md-divider></md-divider>
 			</md-sidenav>
 			
 			<!-- CONTENT -->
 			<div id="pc-app-content" layout="column" layout-fill layout-align="start center" flex>
+				<!-- <md-button ng-click="openLeftMenu()"><md-icon md-font-icon="menu"></md-icon></md-button> -->
 				<md-content ng-view layout-fill flex></md-content>
 			</div>
 

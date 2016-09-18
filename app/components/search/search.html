@@ -10,20 +10,14 @@
 	
 		
 			<form>
+				<div layout layout-padding></div>
 				<md-autocomplete  md-selected-item="search.selectedItem" md-search-text="search.searchText" md-items="item in getAirports(searchText)" md-item-text="item.display" placeholder="Search..." flex="100">
 					<span md-highlight-text="search.searchText">{{item.display}}</span>
 				</md-autocomplete>
-
+				<div layout layout-padding></div>
 				<md-datepicker ng-model="search.startDate" md-placeholder="Enter date"></md-datepicker>
 				<md-datepicker ng-model="search.endDate" md-placeholder="Enter date"></md-datepicker>
-				<md-input-container class="md-block" flex-gt-sm>
-					<label>State</label>
-					<md-select ng-model="user.state">
-						<md-option ng-repeat="state in states" value="{{state.abbrev}}">
-						{{state.abbrev}}
-						</md-option>
-					</md-select>
-				</md-input-container>	
+
 			</form>
 
 
