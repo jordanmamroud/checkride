@@ -1,4 +1,4 @@
-var app = angular.module('studentMod',['firebase', 'studentDirectives', 'commonServices', 'messages']);
+var app = angular.module('studentMod',['firebase', 'studentDirectives', 'pcServices', 'messages']);
 
 app.controller('examinerListController',["$scope","$location","$firebaseArray",function($scope,$location, $firebaseArray){
     var ref = new Firebase("https://checkride.firebaseio.com/");
@@ -13,7 +13,7 @@ app.controller('examinerListController',["$scope","$location","$firebaseArray",f
     
 }]);
 
-app.controller('examinerInfoController', ['$routeParams','$scope', '$firebaseArray','$firebaseObject', 'commonServices',function($routeParams,$scope, $firebaseArray, $firebaseObject){
+app.controller('examinerInfoController', ['$routeParams','$scope', '$firebaseArray','$firebaseObject', 'pcServices',function($routeParams,$scope, $firebaseArray, $firebaseObject){
      $scope.examinerId = $routeParams.username ;
    
     var usersRef = new Firebase("https://checkride.firebaseio.com/users");

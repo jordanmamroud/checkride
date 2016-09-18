@@ -15,6 +15,7 @@
 			<!-- Libraries -->
 			<!-- Stylesheets -->
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 			<!-- Icons: Switch to sass later -->
 			<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
 			<link rel="stylesheet" href="assets/bower_components/fullcalendar/dist/fullcalendar.css"/>
@@ -45,12 +46,11 @@
 			
 			<!-- Scripts -->
 			<script type="text/javascript" src="app.js"></script>
-			<script type="text/javascript" src="app/services/commonservices.js"></script>
+			<script type="text/javascript" src="app/services/common.services.js"></script>
+			<script type="text/javascript" src="app/services/data.service.js"></script>
 			<script type="text/javascript" src="app/controllers.js"></script>
 			<script type="text/javascript" src="app/directives.js"></script>
 			<script type="text/javascript" src="app/routes.js"></script>
-			<script type="text/javascript" src="app/services/data.service.js"></script>
-			<script type="text/javascript" src="app/components/components.js"></script>
 			<script type="text/javascript" src="app/components/search/search.js"></script>
 			<script type="text/javascript" src="app/auth/auth.js"></script>
 			
@@ -60,27 +60,20 @@
 			<script type="text/javascript" src="app/components/calendar/calDirective.js"></script>
 			<script type="text/javascript" src="app/components/messaging/checkrider-messages.js"></script>
 			<script type="text/javascript" src="node_modules/elasticsearch-browser/elasticsearch.angular.js"></script>
-			<script type="text/ng-template" id="save-dialog.tmpl.html">
-		   
-
-
-			
-			
-			
-			</script>
+			<script type="text/ng-template" id="save-dialog.tmpl.html"></script>
 	</head>
 
-<body ng-controller="crIndexCtrl" layout-fill>
+<body ng-controller="AuthCtrl as auth" layout-fill>
 
 	<!-- Main Wrapper -->
 	<div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout' layout-fill>
 
 		<!-- HEADER -->
-		<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" >
+		<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" md-colors="::{backgroundColor: 'default-background-100'}">
 			<cr-header></cr-header>    
 		</md-toolbar>
 
-		<div layout="row" flex id="pc-app-page" >
+		<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
 
 			<!-- SIDEBAR -->
 			<md-sidenav ng-if="showSidebar" layout="column" flex="15">

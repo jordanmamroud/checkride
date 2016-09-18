@@ -1,28 +1,27 @@
-
  <div layout="column" layout-align="center center">
-        <h1 class="text-center">Account Login</h1>
-        <form action="" class="signin">
-           <md-input-container layout>
-                <input placeholder="Email" type="email"ng-model="auth.email">
-            </md-input-container>
-            <md-input-container layout>
-                    <input placeholder="Password" type="password" ng-model="auth.password">
-            </md-input-container>
+	<h1 class="text-center">Account Login</h1>
+	<form action="" class="signin">
+		<md-input-container layout>
+			<input placeholder="Email" type="email" ng-model="auth.email">
+		</md-input-container>
+		<md-input-container layout>
+				<input placeholder="Password" type="password" ng-model="auth.password">
+		</md-input-container>
 
-            <ms-input-container layout>
-                <md-button ng-click="auth.signIn()" class="md-raised md-primary">Login</md-button>
-                <md-button ng-click="auth.createAccountPage()" class="md-raised">Create account</md-button>
-            </ms-input-container>
+		<ms-input-container layout>
+			<md-button ng-click="auth.login()" class="md-raised md-primary">Login</md-button>
+			<md-button ng-click="auth.createAccountPage()" class="md-raised">Create account</md-button>
+		</ms-input-container>
 
-            <ms-input-container layout>
-                <a data-show-modal data-modal-to-open="#resetModal">Forgot password?</a>
-            </ms-input-container>
-        </form>
+		<ms-input-container layout>
+			<a data-show-modal data-modal-to-open="#resetModal">Forgot password?</a>
+		</ms-input-container>
+	</form>
 </div>
 
 <!--
-    <my-modal myid="resetModal">
-                <input type="text" id="email" placeholder="enter email for reset code">
-                <button ng-click='login.sendNewPassword()'>send</button>
-    </my-modal>
+	<my-modal myid="resetModal">
+				<input type="text" id="email" placeholder="enter email for reset code">
+				<button ng-click='login.sendNewPassword()'>send</button>
+	</my-modal>
 -->

@@ -22,11 +22,6 @@ body {
 }
 
 */
-/* line 43, ../sass/screen.scss */
-#pc-app-toolbar {
-  background-color: #FFF;
-}
-
 /*HELPER CLASSES*/
 /*
 .text-white{
@@ -37,11 +32,6 @@ body {
     @include border-radius(0);
 }
 */
-/* line 58, ../sass/screen.scss */
-#pc-main {
-  background-color: #fafafa;
-}
-
 /* line 63, ../sass/screen.scss */
 .vertical-center {
   min-height: 100%;

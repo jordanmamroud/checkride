@@ -1,22 +1,33 @@
- <account-details></account-details>
-    <div ng-show="userType === 'examiner'">
-         <md-input-container class="md-block" flex-gt-sm>
-             <label>Your Certifications</label>
-              <md-chips md-select-on-focus ng-model="certificationsList" readonly="false"
-                        md-on-remove="deleteCertication($chip)" md-transform-chip="saveCertification($chip)" md-max-chips="30">
-                <md-chip-template>
-                  <strong>{{$chip.$id}}</strong>
-                </md-chip-template>
-               </md-chips>
-        </md-input-container>
-        
-        <md-input-container class="md-block" flex-gt-sm>
-            <label>Airports Your Serving</label>
-            <md-chips md-select-on-focus  class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)" md-max-chips="30">
-                <md-chip-template>
-                  <strong>{{$chip.$id}}</strong>
-                    <em></em>
-                </md-chip-template>
-            </md-chips>
-        </md-input-container>
-    </div>
+<div layout="column" flex="50">
+	<account-details></account-details>
+
+	<div ng-show="role === 'examiner'" layout="column">
+
+		<div layout>
+			
+			<label>Certifications</label>
+			<md-chips md-select-on-focus ng-model="certificationsList" readonly="false" md-on-remove="deleteCertication($chip)" md-transform-chip="saveCertification($chip)" md-max-chips="30">
+				<md-chip-template>
+				<strong>{{$chip.$id}}</strong>
+				</md-chip-template>
+				
+			</md-chips>
+				
+		</div>
+
+		<div layout>
+			<label>Airports</label>
+			<md-chips md-select-on-focus  class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)" md-max-chips="30">
+				<md-chip-template>
+					<strong>{{$chip.$id}}</strong>
+					<em></em>
+				</md-chip-template>
+			</md-chips>
+
+		</div>
+	
+	</div>
+
+	<md-button class='md-primary' ng-click="user.updateUser()">Update Account</md-button>
+
+</div>

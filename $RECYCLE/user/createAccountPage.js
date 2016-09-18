@@ -6,13 +6,13 @@ createAccountPage.controller('createAccountController',function($scope, $firebas
         var ref  = new Firebase("https://checkride.firebaseio.com/");
     
       // constructor for creating a new user
-        var user = function(firstName, lastName, password, phone, emailAddress, userType){
+        var user = function(firstName, lastName, password, phone, emailAddress, role){
             this.firstName= firstName ;
             this.lastName = lastName ;
             this.emailAddress = emailAddress
             this.password = password ;
             this.phone = phone ;
-            this.userType = userType ;
+            this.role = role ;
         }
     
     // creates a new user account in firebase
@@ -38,18 +38,18 @@ createAccountPage.controller('createAccountController',function($scope, $firebas
             var password = angular.copy($scope.password);
             var emailAddress = angular.copy($scope.emailAddress);
             var phone = angular.copy($scope.phone);
-            var userType = angular.copy($scope.userType);
+            var role = angular.copy($scope.role);
             
             var userName = emailAddress.replace( /[\*\^\.\'\!\@\$]/g , ''));
-            var newUser = new user(firstName, lastName,password,phone,emailAddress,userType);
+            var newUser = new user(firstName, lastName,password,phone,emailAddress,role);
             ref.child("users/" +userName.set({
-                    userData: new user(firstName, lastName,password,phone,emailAddress,userType) 
+                    userData: new user(firstName, lastName,password,phone,emailAddress,role) 
                 });
-            if(userType.toLowerCase() == "examiner" ){
+            if(role.toLowerCase() == "examiner" ){
                 ref.child("examiner/" + userName.set({userData:newUser}); 
             }
             
-            if(userType.toLowerCase()== "student"){
+            if(role.toLowerCase()== "student"){
                 ref.child("student/" + userName.set({userData: newUser});
             }
         }      

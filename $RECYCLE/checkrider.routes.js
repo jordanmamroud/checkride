@@ -1,4 +1,4 @@
-angular.module('crRoutes',['ngRoute'])
+angular.module('pcRoutes',['ngRoute'])
 .config(['$routeProvider', '$locationProvider', '$logProvider', 'RoutePaths', function($routeProvider, $locationProvider, $logProvider, RoutePaths){
     
     
@@ -13,7 +13,7 @@ angular.module('crRoutes',['ngRoute'])
             controllerAs:"login"
         })
         .when( RoutePaths.signUp.path, {
-                templateUrl: 'app/users/views/create-user.html'
+                templateUrl: 'app/users/views/create-account.html'
                 
         })
         .otherwise({
@@ -26,7 +26,7 @@ angular.module('crRoutes',['ngRoute'])
             controllerAs:"login"
         })
         .when("/createAccount", {
-            templateUrl: 'app/sessions/create-user.html',
+            templateUrl: 'app/sessions/create-account.html',
             controller:'createUser'
         })
         .when("/examiner/calendar",{

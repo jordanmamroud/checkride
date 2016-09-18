@@ -17,11 +17,11 @@ angular.module('crDirectives',['ngCookies'])
 
     //SIDEBAR
     .directive('crSidebar', ['$cookies', function($cookies){    
-        var userType = $cookies.getObject('currentUser').userData.userType;
+        var role = $cookies.getObject('currentUser').userData.role;
         return{
             restrict:'E',
             templateUrl: function(){
-                switch (userType.toLowerCase()){      
+                switch (role.toLowerCase()){      
                     case 'examiner' : 
                         return 'app/layout/sidebar.html';
                         
@@ -37,11 +37,11 @@ angular.module('crDirectives',['ngCookies'])
 //                sb.studentView = false ;
 //                sb.examinerView =false;
 //                
-//                if(userType == 'Examiner'){
+//                if(role == 'Examiner'){
 //                    sb.examinerView = true ;
 //                    sb.studentView = false ;
 //                }
-//                if(userType == 'Student'){
+//                if(role == 'Student'){
 //                    sb.studentView =true ;
 //                    sb.examinerView = false ;
 //                }

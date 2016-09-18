@@ -1,0 +1,39 @@
+<!-- Logged In -->
+<span ng-show="isSession">
+	<md-button  ng-click="auth.logout()" class="md-raised" aria-label="Log In"><a ng-href="/log-in">Log out</a></md-button>
+	<!-- <md-button class="md-fab md-mini " aria-label="{{auth.user.name.first + auth.user.name.last}}">
+		
+	</md-button> -->
+	<md-button class="md-fab md-mini md-avitar" aria-label="{{auth.currentUser.name.first + auth.currentUser.name.last}}" style="background-image:url({{auth.currentUser.photoUrl}}); background-size:cover;" alt="{{item.who}}"></md-button>
+
+	<!-- <md-fab-speed-dial ng-hide="demo.hidden" md-direction="left" md-open="demo.isOpen"
+                       class="md-scale md-fab-top-right" ng-class="{ 'md-hover-full': demo.hover }"
+                       ng-mouseenter="demo.isOpen=true" ng-mouseleave="demo.isOpen=false">
+      <md-fab-trigger>
+        <md-button aria-label="menu" class="md-fab md-warn">
+          <md-tooltip md-direction="top" md-visible="tooltipVisible">Menu</md-tooltip>
+          <md-icon md-svg-src="img/icons/menu.svg" aria-label="menu"></md-icon>
+        </md-button>
+      </md-fab-trigger>
+
+      <md-fab-actions>
+        <div ng-repeat="item in demo.items">
+          <md-button aria-label="{{item.name}}" class="md-fab md-raised md-mini"
+                     ng-click="demo.openDialog($event, item)">
+            <md-tooltip md-direction="{{item.direction}}" md-visible="tooltipVisible"
+                        md-autohide="false">
+              {{item.name}}
+            </md-tooltip>
+
+            <md-icon md-svg-src="{{item.icon}}" aria-label="{{item.name}}"></md-icon>
+          </md-button>
+        </div>
+      </md-fab-actions>
+    </md-fab-speed-dial> -->
+</span>
+
+<!-- Not Logged In -->
+<span ng-show="!isSession">
+	<md-button class="md-primary" aria-label="Sign Up">Sign Up</md-button>
+	<md-button class="md-raised md-primary" aria-label="Log In"><a ng-href="/log-in">log in</a></md-button>
+</span>

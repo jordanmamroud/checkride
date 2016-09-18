@@ -1,33 +1,31 @@
 <div class="pc-search" layout="column" md-colors="::{backgroundColor: 'default-background-200'}">
 	
 	
-	<div layout="row" md-colors="::{backgroundColor: 'default-background-800'}" class="pc-search-box-wrapper md-primary" layout-align="center center" layout-padding>
+	<div layout="row" md-colors="::{backgroundColor: 'default-primary-800'}" class="pc-search-box-wrapper md-primary" layout-align="center center" layout-padding>
 
 		
 		<div layout="column" layout-align="center center" flex>
 		
 			<h1 class="md-display">Find examiners near you</h1>
 	
-			<div layout="row">
+		
+			<form>
+				<md-autocomplete  md-selected-item="search.selectedItem" md-search-text="search.searchText" md-items="item in getAirports(searchText)" md-item-text="item.display" placeholder="Search..." flex="100">
+					<span md-highlight-text="search.searchText">{{item.display}}</span>
+				</md-autocomplete>
 
-				<form>
-					<md-autocomplete  md-selected-item="search.selectedItem" md-search-text="search.searchText" md-items="item in getAirports(searchText)" md-item-text="item.display" placeholder="Search..." flex>
-						<span md-highlight-text="search.searchText">{{item.display}}</span>
-					</md-autocomplete>
+				<md-datepicker ng-model="search.startDate" md-placeholder="Enter date"></md-datepicker>
+				<md-datepicker ng-model="search.endDate" md-placeholder="Enter date"></md-datepicker>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>State</label>
+					<md-select ng-model="user.state">
+						<md-option ng-repeat="state in states" value="{{state.abbrev}}">
+						{{state.abbrev}}
+						</md-option>
+					</md-select>
+				</md-input-container>	
+			</form>
 
-					<md-datepicker ng-model="search.startDate" md-placeholder="Enter date"></md-datepicker>
-					<md-datepicker ng-model="search.endDate" md-placeholder="Enter date"></md-datepicker>
-					<md-input-container class="md-block" flex-gt-sm>
-						<label>State</label>
-						<md-select ng-model="user.state">
-							<md-option ng-repeat="state in states" value="{{state.abbrev}}">
-							{{state.abbrev}}
-							</md-option>
-						</md-select>
-					</md-input-container>	
-				</form>
-
-			</div>
 
 		</div>
 

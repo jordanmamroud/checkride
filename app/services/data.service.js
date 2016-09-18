@@ -50,7 +50,7 @@
             //.limitToFirst(10)
 
             //TESTING
-            getUsers: function(scope,userType){
+            getUsers: function(scope,role){
                 var ref = new Firebase(globalConst.database.usersRef).limitToFirst(10);
                 var data = $firebaseObject(ref);
 

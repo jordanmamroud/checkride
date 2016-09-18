@@ -1,6 +1,6 @@
 <div  class="md-toolbar-tools">
     <header class="nav-header">
-        <a href="/" class="cr-logo"><img src="../assets/img/checkrider-logo-[unofficial].png" alt=""></a>
+        <a href="/" class="cr-logo"><img src="{{logoUrl}}" alt=""></a>
     </header>
 
     <button type="button" class="md-icon-button md-button" ng-click="openMenu()" hide-gt-sm>
@@ -8,8 +8,6 @@
     </button>
     <span flex></span>
 
-    <md-button ng-show="!hd.loggedIn" class="md-primary" aria-label="Sign Up">Sign Up</md-button>
-    <md-button ng-show="!hd.loggedIn" class="md-raised md-primary" aria-label="Log In"><a ng-href="/log-in">log in</a></md-button>
-    <md-button ng-show="hd.loggedIn" ng-click="hd.logout" class="md-raised" aria-label="Log In"><a ng-href="/log-in">Log out</a></md-button>
+    <pc-session-status></pc-session-status>
 
 </div>
