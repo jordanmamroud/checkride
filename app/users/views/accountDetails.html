@@ -4,7 +4,7 @@
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-md>
 					<label>First name</label>
-					<input ng-model="user.currentUser.firstName">
+					<input ng-model="user.currentUser.name.first">
 				</md-input-container>
 
 				<md-input-container class="md-block" flex-gt-md>
@@ -16,7 +16,7 @@
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-md>
 					<label>Email Address</label>
-					<input ng-model="user.currentUser.emailAddress">
+					<input ng-model="user.me.emailAddress">
 				</md-input-container>
 
 				<md-input-container class="md-block" flex-gt-md>
@@ -28,7 +28,7 @@
 			<div layout-gt-sm="row">
 				<div layout="column" flex>
 					<md-input-container class="md-block" flex-gt-md>
-						<input placeholder="Profile Pictrue (url)" type="url" ng-model="user.currentUser.photoUrl">
+						<input placeholder="Profile Picture (url)" type="url" ng-model="user.currentUser.photoUrl">
 					</md-input-container>
 				</div>
 				<div layout="column" flex="20">

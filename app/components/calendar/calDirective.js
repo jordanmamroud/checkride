@@ -24,6 +24,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             var calendarSettings= userCalendarRef.child("settings");
             var appointmentRequestsListRef = userCalendarRef.child("appointmentRequests");                 
             
+            console.log(userInfo);
             ev.events = pcServices.createFireArray(userEventsRef);
             ev.approvedApointments = pcServices.createFireArray(approvedAppointmentsRef);        
             ev.requestsList = $firebaseArray(appointmentRequestsListRef);
@@ -89,7 +90,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             function createEvent(){
                   var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");
                   var eventId= ev.eventTitle + ev.eventStart;
-                  var eventObj = new calendarService.Event(ev.eventTitle,ev.eventStartObj,{start:today, end:"2020/02/01"},ev.eventEndObj,eventId);
+                  var eventObj = new calendarService.Event(ev.eventTitle,ev.eventStartObj,{start:today, end:"2020/02/01"},ev.eventEndObj,'once',eventId,null);
                   if(ev.dowCheckBox == true){
                         switch(ev.frequency.toLowerCase()){   
                             case "daily":       
@@ -97,7 +98,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                                     calendarService.createDailyEvent(eventObj,userEventsRef);
                                     break;
                             case "weekly":
-                                    eventObj.dow = calendarService.setDaysOfWeek(ev.daysOfWeek);
+                                    eventObj.dow = calendarService.setDaysOfWeek(ev.daysOfWeek, ev.eventStartObj);
                                     calendarService.setEventRange(ev.repeatForm, eventObj, "week");
                                     calendarService.createWeeklyEvent(eventObj,userEventsRef);
                                     break;
@@ -271,19 +272,21 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     },
                     unselectAuto: true,
                     select: function (start, end, ev) {
-                        $scope.eventStart = start.toString();
-                        $scope.eventEnd = end.toString();
-                        $scope.showApptDialog();
-                        console.log('vain bane')
+//                        $scope.eventStart = start.toString();
+//                        $scope.eventEnd = end.toString();
+//                        $scope.showApptDialog();
+//                        console.log('vain bane')
                     },
                     editable: false,
-                    eventClick: function (event, element) {
+                    eventClick: function (event, element){
+                        $scope.eventStart = event.start.toString();
+                        $scope.eventEnd = event.end.toString();
+                        $scope.showApptDialog();
                         // stops gcal events from going to google calendar
                           if (event.url) {
-                              alert("sorry this time is not available");
-                                return false;
+                            console.log("event",event);
+                            return false;
                         }
-                        alert("sorry this time is not available");
                     }
                 }
             }; 

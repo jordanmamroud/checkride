@@ -35,10 +35,10 @@
 					
 					<md-input-container>
 						<input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
+							<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>
 					</md-input-container>
 		  
 					<md-checkbox ng-model="ev.dowCheckBox">Repeating Event?</md-checkbox>
-
 
 					<div ng-class="{hide: ev.dowCheckBox == false}">
 						<label>choose frequency</label>
@@ -60,8 +60,8 @@
 							<input type="date" ng-model="ev.endDate">
 						</md-radio-group>
 
-						<form ng-class="{hide: ev.frequency != 'weekly'}">
-							<label ng-repeat="dow in ev.daysOfWeek track by $index">
+						<form ng-class="{hide: ev.frequency != 'Weekly'}">
+							<label ng-repeat="dow in ev.daysOfWeek">
 								<md-checkbox type="checkbox" ng-model="dow.selected">{{dow.day}}</md-checkbox>
 							</label>
 						</form>

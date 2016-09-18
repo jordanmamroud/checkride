@@ -80,18 +80,22 @@
 
 		//AUTH CONTROLLER
 		.controller("AuthCtrl", ["$scope", "$location", "AuthService", "pcLoginService", "createAccountService", "$firebaseObject", "pcServices",
-									function($scope, $location, AuthService, pcLoginService,createAccountService, $firebaseObject, pcServices){
-			
+            function($scope, $location, AuthService, pcLoginService,createAccountService, $firebaseObject, pcServices){
+
 			this.auth = AuthService.auth();
-			this.currentUser = AuthService.getCurrentUser();
+			var obj = AuthService.getCurrentUser();
 			this.login = login;
 			this.logout = logout;
 			this.sendNewPassword = sendNewPassword;
 			this.createAccountPage = createAccountPage;
 			this.createAccount = createAccount;
-
-			console.log("Auth Controller > Current User:", this.currentUser);
-
+            
+            this.currentUser = '';
+			console.log("Auth Controller > Current User:", obj);
+            obj.$loaded().then(function(){
+                $scope.currentUser = obj ;
+            })
+                
 			//Added by Josh
 			function logout(){
 				AuthService.logout(this.auth);

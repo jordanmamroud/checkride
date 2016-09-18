@@ -1,8 +1,11 @@
 (function(){
-
+    
 	angular.module('pcRoutes',['ngRoute'])
+
+
 	.config(['$routeProvider', '$locationProvider', '$logProvider', 'RoutePaths', function($routeProvider, $locationProvider, $logProvider, RoutePaths){
 		
+        
 		$routeProvider
 		.when('/', {
 			templateUrl : 'app/components/search/search.html',
@@ -80,11 +83,6 @@
 		})
 		//End Author
 	}])	
-
-
-
-
-		
 
 	//Move later
 	.constant('RoutePaths', {

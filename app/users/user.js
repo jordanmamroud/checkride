@@ -8,12 +8,7 @@
 			var refs = pcServices.getCommonRefs();
 			var userInfo = pcServices.getCookieObj("currentUser");
 			var userRef = pcServices.getCommonRefs().accounts.child(userInfo.$id);
-			
-			$scope.role = '';
-			
-			console.log("User Ref",userRef.toString());
-			console.log("User Info",userInfo);
-
+            $scope.role = '';
 			switch(userInfo.role.toLowerCase()){
 				case 'examiner' : 
 					$scope.role ='examiner'
@@ -22,8 +17,7 @@
 					$scope.role = 'student' 
 					break ;
 			};
-
-			$scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
+            $scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
 
 			$scope.airportsList = pcServices.createFireArray(userRef.child("airports"));
 
@@ -34,6 +28,7 @@
 					  return null ;
 				}
 			}
+            
 			$scope.saveAirport= function(chip){
 				if(chip.hasOwnProperty("$id") == false){
 					userRef.child("airports/" + chip).set(true);
@@ -41,10 +36,12 @@
 					return null ;
 				}
 			}
+            
 			$scope.deleteAirport = function(chip){
 				userRef.child("airports/" + chip.$id).remove();
 				refs.airports.child(chip.$id+"/users/" +userInfo.$id).remove();
 			}
+            
 			$scope.deleteCertication = function(chip){
 				userRef.child("certifications/" + chip.$id).remove();
 				refs.certifications.child(chip.$id+"/users/" +userInfo.$id).remove();

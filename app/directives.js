@@ -84,7 +84,7 @@
 						console.log('Bam ', pcServices.getCookieObj('currentUser'))
 						var currentUser = pcServices.getCookieObj('currentUser');
 						if(currentUser){
-							switch(currentUser.role.toLowerCase()){
+							switch(currentUser.role){
 								case 'examiner' : return crUserNavData.examiner;
 								case 'student' : return crUserNavData.student;
 								default : return null;
@@ -109,14 +109,19 @@
 		//ACCOUNT
 		.directive('accountDetails', ['pcServices','profileService', "AuthService",function(pcServices,profileService, AuthService){
 			return{
-				templateUrl:"app/users/views/accountDetails.html",
+				templateUrl:function(){
+                    return "app/users/views/accountDetails.html?" + Date.now(); 
+                },
 				scope:false,
 				controllerAs:'user',
-				controller: function(){
+				controller: function($scope){
+                    var refs= pcServices.getCommonRefs();
 					var userInfo = pcServices.getCookieObj('currentUser');
-
-					this.currentUser = AuthService.getCurrentUser();
-
+                    var userRef = refs.accounts.child(userInfo.$id);
+                    this.me = userInfo;
+                    console.log($scope);
+                    console.log($scope.$parent.$parent.currentUser);
+					this.currentUser = $scope.$parent.$parent.currentUser
 					this.updateUser = function(ref){
 						if(this.newPassword.length>0){
 							profileService.changePassword(userRef, this.oldPassword, this.newPassword, userInfo.emailAddress)
