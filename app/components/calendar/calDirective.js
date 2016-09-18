@@ -171,7 +171,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                                 }
                             },
                             settingsButton: {
-                                text: 'settings',
+                                text: 'Settings',
                                 click: function () {
                                     showSettings()
                                 },
@@ -263,7 +263,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     header: {
                         left: 'month agendaWeek  agendaDay ',
                         center: 'title',
-                        right: 'today prev,next settingsButton'
+                        right: 'Today prev,next settingsButton'
                     },
                     selectable: true,
                     selectable: {
@@ -272,10 +272,16 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     },
                     unselectAuto: true,
                     select: function (start, end, ev) {
+<<<<<<< HEAD
 //                        $scope.eventStart = start.toString();
 //                        $scope.eventEnd = end.toString();
 //                        $scope.showApptDialog();
 //                        console.log('vain bane')
+=======
+                        $scope.eventStart = start.toString();
+                        $scope.eventEnd = end.toString();
+                        $scope.showApptDialog();
+>>>>>>> 9ada22fe3b69b4dc9acc78180e02670c79e867c9
                     },
                     editable: false,
                     eventClick: function (event, element){

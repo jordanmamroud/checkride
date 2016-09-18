@@ -2,22 +2,28 @@ angular.module('pcControllers',[])
 
 
 //LAYOUT CONTROLLER
-.controller('crLayoutCtrl', ["$scope", "$location",'$cookies', "AuthService", 'RoutePaths', 'globalConst', 
-	function($scope, $location, $cookies, AuthService, RoutePaths, globalConst){
-		
-    this.user = $cookies.getObject('currentUser');
-	$scope.isSession = null;
-    $scope.showSidebar = null;
-    $scope.logoUrl = globalConst.app.logoPath;
+.controller('crLayoutCtrl', ["$scope", "$location",'$cookies', "$mdSidenav", "AuthService", 'RoutePaths', 'globalConst', 
+	function($scope, $location, $cookies, $mdSidenav, AuthService, RoutePaths, globalConst){
+		var layout = this; 
+        layout.user = $cookies.getObject('currentUser');
+    	$scope.isSession = null;
+        $scope.showSidebar = null;
+        $scope.logoUrl = globalConst.app.logoPath;
 
-    $scope.$on('$routeChangeSuccess', function (){
-    	$scope.isSession = !(AuthService.getAuth() === null);
-        $scope.showSidebar = ($location.path().indexOf('/user/') > -1);
-    });
+        $scope.$on('$routeChangeSuccess', function (){
+        	$scope.isSession = !(AuthService.getAuth() === null);
+            $scope.showSidebar = ($location.path().indexOf('/user/') > -1);
+        });
 
-    $scope.openLeftMenu = function() {
-    	$mdSidenav('left-sidenav').toggle();
-  	};
+
+        layout.toggleSidenavLeft = buildToggler('pc-sidenav-left');
+        layout.toggleSidenavRight = buildToggler('right');
+
+        function buildToggler(componentId) {
+          return function() {
+            $mdSidenav(componentId).toggle();
+          }
+        }
 }])
  
 

@@ -1,4 +1,4 @@
-<md-content class="md-primary" layout-padding>
+<md-content class="md-primary">
 	<div>
 		<form name="userForm" >
 			<div layout-gt-sm="row">
@@ -33,7 +33,11 @@
 				</div>
 				<div layout="column" flex="20">
 					<div layout-padding>
-						<img src="{{user.currentUser.photoUrl}}" width="100%"/>
+						<img 
+						src="{{user.currentUser.photoUrl}}" 
+						width="100%" 
+						class="md-avitar" 
+						style="border-radius:15px;"/>
 					</div>
 				</div>
 			</div>

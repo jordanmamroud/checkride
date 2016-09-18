@@ -63,34 +63,43 @@
 			<script type="text/ng-template" id="save-dialog.tmpl.html"></script>
 	</head>
 
-<body ng-controller="AuthCtrl as auth" layout-fill>
+	<body ng-controller="AuthCtrl as auth" layout-fill>
 
-	<!-- Main Wrapper -->
-	<div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout' layout-fill>
+		<!-- Main Wrapper -->
+		<div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout' layout-fill>
 
-		<!-- HEADER -->
-		<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" md-colors="::{backgroundColor: 'default-background-100'}">
-			<cr-header></cr-header>    
-		</md-toolbar>
+			<!-- HEADER -->
+			<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" md-colors="::{backgroundColor: 'default-background-100'}">
+				<cr-header></cr-header>    
+			</md-toolbar>
 
-		<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
+			<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
 
-			<!-- SIDEBAR -->
-			<md-sidenav ng-show="showSidebar" md-is-locked-open="true" layout-fill layout="column" flex="15" class="md-sidenav-left" md-component-id="left-sidenav" md-colors="::{backgroundColor: 'default-background-500'}">
-				<cr-navigation></cr-navigation>
-			</md-sidenav>
+				<!-- SIDEBAR -->
+				<md-sidenav 
+					ng-show="showSidebar" 
+					md-is-locked-open="true"
+					layout-fill 
+					layout="column" 
+					flex="15" 
+					class="md-sidenav-left" 
+					md-component-id="pc-sidenav-left" 
+					md-colors="::{backgroundColor: 'default-background-500'}">
+					<cr-navigation></cr-navigation>
+				</md-sidenav>
 
-			<md-divider></md-divider>
-			
-			<!-- CONTENT -->
-			<div id="pc-app-content" layout="column" layout-fill layout-align="start center" flex>
-				<!-- <md-button ng-click="openLeftMenu()"><md-icon md-font-icon="menu"></md-icon></md-button> -->
-				<md-content ng-view layout-fill flex></md-content>
+				<md-divider></md-divider>
+				
+				<!-- CONTENT -->
+				<div id="pc-app-content" layout="column" layout-fill layout-align="start center" flex>
+					<!-- <md-button ng-click="layout.toggleSidenavLeft()" class="md-raised">NAV</md-button> -->
+					<md-content ng-view layout-fill flex></md-content>
+				</div>
+
 			</div>
 
 		</div>
 
-	</div>
+	</body>
 
-</body>
 </html>

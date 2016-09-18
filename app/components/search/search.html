@@ -4,83 +4,76 @@
 	<div layout="row" md-colors="::{backgroundColor: 'default-primary-800'}" class="pc-search-box-wrapper md-primary" layout-align="center center" layout-padding>
 
 		
-		<div layout="column" layout-align="center center" flex>
-		
-			<h1 class="md-display">Find examiners near you</h1>
+		<h1 class="md-display" ng-show="false">Find examiners near you</h1>
 	
-		
-			<!-- <form>
-				<div layout layout-padding></div>
-				<md-autocomplete  md-selected-item="search.selectedItem" md-search-text="search.searchText" md-items="item in getAirports(searchText)" md-item-text="item.display" placeholder="Search..." flex="100">
-					<span md-highlight-text="search.searchText">{{item.display}}</span>
-				</md-autocomplete>
-				<div layout layout-padding></div>
-				<md-datepicker ng-model="search.startDate" md-placeholder="Enter date"></md-datepicker>
-				<md-datepicker ng-model="search.endDate" md-placeholder="Enter date"></md-datepicker>
+		<form name="pc-main-search" md-theme="dark" layout="column" flex-gt-sm="40" >
 
-			</form>
- <-->			</--><form>
-				<div layout layout-padding></div>
-				<md-autocomplete  ng-model="search.searchBox" md-selected-item="search.selectedItem" md-search-text="search.searchText" md-items="user in search.users" placeholder="Search..." flex="100">
+			<md-autocomplete  
+				ng-model="search.searchBox" 
+				md-selected-item="search.selectedItem" 
+				md-search-text="search.searchText" 
+				md-items="user in search.users" 
+				placeholder="Search..."
+				ng-diabled="false"
+				md-colors="::{backgroundColor: 'default-grey-100'}">
+
 				<md-item-template>
-				      <span ng-model="search.searchBox" md-highlight-text="searchText">{{search.searchText}}</span>
-				    </md-item-template>
-				</md-autocomplete>
-				<div layout layout-padding></div>
-				<md-datepicker ng-model="search.startDate" md-placeholder="Enter date"></md-datepicker>
-				<md-datepicker ng-model="search.endDate" md-placeholder="Enter date"></md-datepicker>
-				</form>
-			<!-- 	<form name="autocompleteForm">
-				  <md-autocomplete required md-input-name="autocomplete" md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getMatches(searchText)" md-item-text="item.display">
-				    <md-item-template>
-				      <span md-highlight-text="searchText">{{item.display}}</span>
-				    </md-item-template>
-				    <div ng-messages="autocompleteForm.autocomplete.$error">
-				      <div ng-message="required">This field is required</div>
-				    </div>
-				  </md-autocomplete>
-				</form> -->
-			<h1>{{search.searchBox}}
-		</div>
+					<span ng-model="search.searchBox" md-highlight-text="searchText">{{search.searchText}}</span>
+				</md-item-template>
+
+			</md-autocomplete>
+			
+			<div layout-padding></div>
+			
+			<div layout="row" layout-align="center center">
+				<md-datepicker ng-model="search.startDate" md-placeholder="From"></md-datepicker>	
+				<md-datepicker ng-model="search.endDate" md-placeholder="To"></md-datepicker>
+			</div>
+		</form>
+
 
 	</div>
 
+
 	<div layout="row" layout-align="center center">
-
 			
-			<md-list flex-gt-md="40">
+		<md-list flex-gt-md="30">
 
-				<md-card ng-repeat="user in search.users | filter: searchBox: user.userData.airports" layout-padding flex>
+			<md-card ng-repeat="user in search.users | filter: searchBox: user.userData.airports" layout-padding flex>
 
-					<md-card-title>
-					
-						<md-card-title-media>
-							<div class="pc-user-image" layout-align="top right" class="md-media-lg card-media" style="background-image:url(); background-position:center center;">
+				<md-card-title>
+				
+					<md-card-title-media>
 
-								<img src="{{user.photoUrl}}" alt="">
-							</div>
-						</md-card-title-media>
-
-
-						<div layout="column" flex>
-
-							<md-card-title-text layout-padding layout>
-								<h4 class="md-headline pc-capitalize md-block">{{user.name.first}} {{user.name.last}}</h4>
-								<h5 class="md-subhead pc-capitalize md-block">{{user.role}}</h5>
-							</md-card-title-text>
-
-
-							<md-card-actions layout="row" layout-align="end end">
-								<md-button class="md-primary">View Profile</md-button>
-								<md-button class="md-primary md-raised">Schedule</md-button>
-							</md-card-actions>
+						<div class="pc-user-image" layout-align="top right" class="md-media-lg card-media">
+							<img src="{{user.photoUrl}}" alt="" style="max-width:150px; border-radius:2px;">
 						</div>
-					</md-card-title>
-					
 
-				</md-card>
+					</md-card-title-media>
 
-			</md-list>
+
+					<div layout="column" flex>
+
+						<md-card-title-text layout-padding layout layout-align="start start">
+
+							<h4 class="md-headline pc-capitalize md-block">{{user.name.first}} {{user.name.last}}</h4>
+							<br>
+							<h5 class="md-subhead pc-capitalize md-block">{{user.role}}</h5>
+
+						</md-card-title-text>
+
+
+						<md-card-actions layout="row" layout-align="end end">
+							<md-button class="md-primary">View Profile</md-button>
+							<md-button class="md-primary md-raised">Schedule</md-button>
+						</md-card-actions>
+					</div>
+				</md-card-title>
+				
+
+			</md-card>
+
+		</md-list>
 	
 
 	
