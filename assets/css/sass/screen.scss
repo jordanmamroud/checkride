@@ -43,3 +43,7 @@ img.cr-logo,
 .pc-capitalize{
     text-transform:capitalize;
 }
+
+.pc-img-rounded{
+  @include border-radius(3px);
+}

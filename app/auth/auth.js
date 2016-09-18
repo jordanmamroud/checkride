@@ -12,6 +12,7 @@
 				return pcServices.createFireObj(ref.accounts.child(uid));
 			};
 
+
 			return {
 				auth : function(){
 					return authObj;
@@ -120,11 +121,6 @@
 
 				createAccountService.createUser(user, $scope.password);
 			}
-
-
-
-	
-
 
 		}])
 

@@ -72,7 +72,7 @@
 					path: '/user/messages'
 				},
 				profile:{
-					title:'Profile',
+					title:'My Profile',
 					path: '/user/profile'
 				}
 			},

@@ -1,20 +1,18 @@
-	<style>
-	.hide{
-		display: none;
-	}
-	.showing{
-		display: block;
-	}
-	</style>
+<style>
+.hide{
+	display: none;
+}
+.showing{
+	display: block;
+}
+</style>
 
-<div class='toast' style='display:none'>
-	You have a new Appointment Request
-</div>
+<div class='toast' style='display:none'>You have a new Appointment Request</div>
 
 
-<div layout="column" layout-fill>	
+<div layout="column" layout-fill layout-padding>	
 	<h2 class="pc-capitalize">{{ev.name}}</h2>
-	<div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal" layout-fill layout-padding></div>
+	<div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div>
 </div>
 
 	<script id="addEventModal" type="text/ng-template">
@@ -23,8 +21,8 @@
 
 			<md-content flex="100" md-panel>
 
-				<md-toolbar  layout-padding>
-					<h2>Request Checkride</h2><br>
+				<md-toolbar layout-padding>
+					<h2>Request Checkride</h2>
 				</md-toolbar>
 				
 				<div  layout-padding>
@@ -41,12 +39,12 @@
 
 
 					<div ng-class="{hide: ev.dowCheckBox == false}">
-						<label>choose frequency</label>
-						<select ng-model="ev.frequency" id="freq" name="frequency">
-							<option>Daily</option>
-							<option>Weekly</option>
-							<option>Monthly</option>
-						</select><br>
+						<label>Frequency</label>
+						<md-select ng-model="ev.frequency" id="freq" name="frequency">
+							<md-option>Daily</md-option>
+							<md-option>Weekly</md-option>
+							<md-option>Monthly</md-option>
+						</md-select><br>
 
 						<md-radio-group ng-model="ev.repeatForm">
 							<md-radio-button value="2020/02/01" class="md-primary">Never</md-radio-button>
@@ -92,24 +90,29 @@
 		</md-content>
 	</script> 
 
-	<script id="settingsModal" type="text/ng-template">
-		<md-input-container>
-			<label>Calendar Start Time</label>
-			<input ng-model="ev.calStartTime">
-		</md-input-container>
+	<script id="settingsModal" type="text/ng-template"  layout="column" flex="60">
+		<md-subheader>
+			<h3>Settings</h3>
+		</md-subheader>
+		<div layout-padding>
+			<md-input-container>
+				<label>Day Start Time</label>
+				<input ng-model="ev.calStartTime">
+			</md-input-container>
 
-		<md-input-container>
-			<label>Calendar End Time</label>
-			<input ng-model="ev.calEndTime">
-		</md-input-container>
-		
-		<md-input-container>
-			<label>Gcal id</label>
-			<input ng-model="ev.gcalId">
-		</md-input-container>
-		
-		<md-button class="md-primary md-raised" id="saveButton" ng-click="ev.saveCalSettings()">Save</md-button>
-		<md-checkbox id="googleSync">select box to sync with google calendar</md-checkbox>
+			<md-input-container>
+				<label>Day End Time</label>
+				<input ng-model="ev.calEndTime">
+			</md-input-container>
+			
+			<md-input-container>
+				<label>Gcal Id</label>
+				<input ng-model="ev.gcalId">
+			</md-input-container>
+			
+			<md-button class="md-primary md-raised" id="saveButton" ng-click="ev.saveCalSettings()">Save</md-button>
+			<md-checkbox id="googleSync">Sync with Google Calendar</md-checkbox>
+		</div>
 	</script> 
 
 	<script id="pendingRequestsModal" type="text/ng-template">
