@@ -12,19 +12,19 @@ angular.module('pcSearch',[])
 	//SEARCH CONTROLLER
 	.controller('SearchCtrl', ['$scope', '$log','examiners', 'airports', 'esFactory', 'dataService', 'pcServices', function ($scope, $log, examiners,airports,  esFactory, dataService, pcServices) {
 		var self = this;
-
+		var ref = new Firebase("https://checkride.firebaseio.com/temp");
+		var userRef = ref.child("users/accounts");
 
 		self.query = null;
 		self.examiners = examiners;
 		self.airports = "";
 		self.searchText = "";
 		self.getAirports = getAirports;
-		self.getUsers = getUsers;
-		self.users = "";
+		// self.getUsers = getUsers;
 		self.airportArray="";
 		self.toArray = pcServices.objToArray; 
-
 		self.log = log;
+		self.users = pcServices.createFireArray(userRef);
 
 		function log(i){
 			console.log(i);
@@ -36,10 +36,10 @@ angular.module('pcSearch',[])
 
 		// 	});
 
-		var ref = new Firebase("https://checkride.firebaseio.com/temp");
+		// var ref = new Firebase("https://checkride.firebaseio.com/temp");
 	 	var airportRef = ref.child("airports");
 	 	var examinerRef = ref.child("users/roles/examiners");
-	 	var userRef = ref.child("users/accounts");
+	 	// var userRef = ref.child("users/accounts");
 
 
 		function getAirports(query){
@@ -70,25 +70,24 @@ angular.module('pcSearch',[])
 			});
 		};
 
-	function getUsers(){
-		userRef.on("value", function(snapshot){
-			self.users = snapshot.val();
-			console.log(self.users);
-		});
-	};
+	// function getUsers(){
+
+	// 	userRef.on("value", function(snapshot){
+	// 		self.users = snapshot.val();
+	// 		console.log(self.users);
+	// 	});
+	// };
  	
- 	getUsers();
+ // 	getUsers();
     
     //in order for this to work you have to pull from the list of examiners didnt want to fudge with your shiz but it will take you to selected examiners profile with their data.
-    self.viewProfile = viewProfile;
+     self.viewProfile = viewProfile;
      function viewProfile(examiner){
         var refs= pcServices.getCommonRefs();
-        console.log(examiner);
         pcServices.removeCookieObj("examinerInfo");
         var examinerRef = refs.accounts.child(examiner.$id);
         examinerRef.once("value",function(data){
             pcServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
-            console.log(pcServices.getCookieObj('examinerInfo'));
         });
         pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
       } 

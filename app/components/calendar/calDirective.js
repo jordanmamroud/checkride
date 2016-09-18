@@ -40,7 +40,12 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             ev.repeatForm={};
             ev.dow="";
             ev.daysOfWeek = [{day:'sunday',val:0},{day:'monday',val:1},{day:'tuesday',val:2},{day:'wednesday',val:3},{day:'thursday',val:4},{day:'friday',val:5},{day:'saturday',val:6}]
-            
+            ev.createEvent =createEvent
+            ev.deleteEvent = deleteEvent;
+            ev.deleteSingleMonthlyEvent = deleteSingleMonthlyEvent;
+            ev.deleteAllMonthlyEvents = deleteAllMonthlyEvents;
+            ev.saveCalSettings = saveCalSettings;
+            ev.approveAppointment = approveAppointment;
             pcServices.showToastOnEvent(appointmentRequestsListRef,"child_added");
             pcServices.orderArray($scope.requestsList, "-sentAt");
             ev.name = userInfo.name.first + " " +userInfo.name.last ;
@@ -52,6 +57,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     clickOutsideToClose:true
                 });
             }
+
             var eventClick =function(){
                 $mdDialog.show({
                     scope:$scope.$new(),
@@ -79,13 +85,6 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     alert('You have no appointmentRequests')
                 }
             };
-                        
-            ev.createEvent =createEvent
-            ev.deleteEvent = deleteEvent;
-            ev.deleteSingleMonthlyEvent = deleteSingleMonthlyEvent;
-            ev.deleteAllMonthlyEvents = deleteAllMonthlyEvents;
-            ev.saveCalSettings = saveCalSettings;
-            ev.approveAppointment = approveAppointment;
             
             function createEvent(){
                   var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");

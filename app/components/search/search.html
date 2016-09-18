@@ -9,7 +9,7 @@
 			<h1 class="md-display">Find examiners near you</h1>
 	
 		
-			<form>
+			<!-- <form>
 				<div layout layout-padding></div>
 				<md-autocomplete  md-selected-item="search.selectedItem" md-search-text="search.searchText" md-items="item in getAirports(searchText)" md-item-text="item.display" placeholder="Search..." flex="100">
 					<span md-highlight-text="search.searchText">{{item.display}}</span>
@@ -19,8 +19,28 @@
 				<md-datepicker ng-model="search.endDate" md-placeholder="Enter date"></md-datepicker>
 
 			</form>
-
-
+ <-->			</--><form>
+				<div layout layout-padding></div>
+				<md-autocomplete  ng-model="search.searchBox" md-selected-item="search.selectedItem" md-search-text="search.searchText" md-items="user in search.users" placeholder="Search..." flex="100">
+				<md-item-template>
+				      <span ng-model="search.searchBox" md-highlight-text="searchText">{{search.searchText}}</span>
+				    </md-item-template>
+				</md-autocomplete>
+				<div layout layout-padding></div>
+				<md-datepicker ng-model="search.startDate" md-placeholder="Enter date"></md-datepicker>
+				<md-datepicker ng-model="search.endDate" md-placeholder="Enter date"></md-datepicker>
+				</form>
+			<!-- 	<form name="autocompleteForm">
+				  <md-autocomplete required md-input-name="autocomplete" md-selected-item="selectedItem" md-search-text="searchText" md-items="item in getMatches(searchText)" md-item-text="item.display">
+				    <md-item-template>
+				      <span md-highlight-text="searchText">{{item.display}}</span>
+				    </md-item-template>
+				    <div ng-messages="autocompleteForm.autocomplete.$error">
+				      <div ng-message="required">This field is required</div>
+				    </div>
+				  </md-autocomplete>
+				</form> -->
+			<h1>{{search.searchBox}}
 		</div>
 
 	</div>
@@ -30,15 +50,17 @@
 			
 			<md-list flex-gt-md="40">
 
-				<md-card ng-repeat="user in search.users" layout-padding flex>
+				<md-card ng-repeat="user in search.users | filter: searchBox: user.userData.airports" layout-padding flex>
 
 					<md-card-title>
-						
-						<md-card-title-media layout="column">
-							<div layout-align="top right" class="md-media-lg card-media" style="background-image:url(); background-position:center center;">
+					
+						<md-card-title-media>
+							<div class="pc-user-image" layout-align="top right" class="md-media-lg card-media" style="background-image:url(); background-position:center center;">
+
 								<img src="{{user.photoUrl}}" alt="">
 							</div>
 						</md-card-title-media>
+
 
 						<div layout="column" flex>
 
@@ -46,6 +68,7 @@
 								<h4 class="md-headline pc-capitalize md-block">{{user.name.first}} {{user.name.last}}</h4>
 								<h5 class="md-subhead pc-capitalize md-block">{{user.role}}</h5>
 							</md-card-title-text>
+
 
 							<md-card-actions layout="row" layout-align="end end">
 								<md-button class="md-primary">View Profile</md-button>

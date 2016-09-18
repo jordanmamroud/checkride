@@ -81,12 +81,26 @@
 				scope: true,
 				controller: function crNavCtrl($scope){
 					$scope.navItems = function(){
-						var role = pcServices.getCookieObj('currentUser').role.toLowerCase();
-						switch(role){
-							case 'examiner' : return crUserNavData.examiner;
-							case 'student' : return crUserNavData.student;
-							default : return null;
-						};
+						console.log('Bam ', pcServices.getCookieObj('currentUser'))
+						var currentUser = pcServices.getCookieObj('currentUser');
+						if(currentUser){
+							switch(currentUser.role.toLowerCase()){
+								case 'examiner' : return crUserNavData.examiner;
+								case 'student' : return crUserNavData.student;
+								default : return null;
+							};
+						}
+						var currentUser = pcServices.getCookieObj('currentUser');
+						if(currentUser){
+							switch(currentUser.role.toLowerCase()){
+								case 'examiner' : return crUserNavData.examiner;
+								case 'student' : return crUserNavData.student;
+								default : return null;
+							};
+						}	
+
+
+
 					}();
 				}
 			}
