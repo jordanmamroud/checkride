@@ -5,7 +5,7 @@
 		
 	</md-button> -->
 	<a href="../user/profile">
-		<md-button class="md-fab md-mini md-avitar" aria-label="{{auth.currentUser.name.first + auth.currentUser.name.last}}" style="background-image:url({{auth.currentUser.photoUrl}}); background-size:cover;" alt="{{item.who}}"></md-button>
+		<img class="md-avitar" aria-label="{{auth.currentUser.name.first + auth.currentUser.name.last}}" ng-src="{{auth.currentUser.photoUrl}}" width="40px" alt="{{item.who}}"/>
 	</a>
 	<!-- <md-fab-speed-dial ng-hide="demo.hidden" md-direction="left" md-open="demo.isOpen"
                        class="md-scale md-fab-top-right" ng-class="{ 'md-hover-full': demo.hover }"

@@ -43,7 +43,7 @@
         app : {
             name : "Checkrider",
             title : "Checkrider",
-            logoPath: "assets/img/Logomakr_9M3oT4.png"
+            logoPath: "assets/img/Logomakr_2l6boM.png"
         },
         database: {
             ref: 'https://checkride.firebaseio.com/',

@@ -76,10 +76,11 @@
 		<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
 
 			<!-- SIDEBAR -->
-			<md-sidenav ng-show="showSidebar" md-is-locked-open="true" layout="column" flex="15" class="md-sidenav-left" md-component-id="left-sidenav">
+			<md-sidenav ng-show="showSidebar" md-is-locked-open="true" layout-fill layout="column" flex="15" class="md-sidenav-left" md-component-id="left-sidenav" md-colors="::{backgroundColor: 'default-background-500'}">
 				<cr-navigation></cr-navigation>
-				<md-divider></md-divider>
 			</md-sidenav>
+
+			<md-divider></md-divider>
 			
 			<!-- CONTENT -->
 			<div id="pc-app-content" layout="column" layout-fill layout-align="start center" flex>

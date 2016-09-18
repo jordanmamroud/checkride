@@ -1,5 +1,5 @@
 (function(){
-	
+
 	angular.module('pcDirectives',[])
 
 		//HEADER
@@ -66,10 +66,15 @@
 		//NAVIGATION
 		.directive('crNavigation', ['crUserNavData', 'pcServices' ,function(crUserNavData, pcServices){
 			return {
-				template:   '<md-content>'+
+				template:   '<md-content flex layout="column" >'+
 								'<md-list>' +
-									'<md-list-item ng-repeat="item in navItems">'+
-										'<a href="{{item.path}}">{{item.title}}</a>' +
+									'<md-list-item ng-repeat="item in navItems" class="md-3-line">'+
+										'<div class="md-list-item-text">' +
+											'<a href="{{item.path}}">' +
+												'<h3>{{item.title}}</h3>' +
+											'</a>' +
+											
+										'</div>' +
 									'</md-list-item>' +
 								'</md-list>' +
 							'</md-content>',

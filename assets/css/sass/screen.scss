@@ -7,57 +7,6 @@
 //@import "bootstrap";
 @import "compass/css3";
 @import "compass/utilities";
- 
-
-//VARIABLES
-$logo-path: '../../img/checkrider-logo-[unofficial].png';
-
-
-
-
-body{
-    //background-image: url('http://wallpapercave.com/wp/NcdUsHW.jpg');
-    //background-size: cover;
-    background-color:#EEE;
-}
-
-
-/* Front Page */
-/*
-#cr-main-search-box{
-    margin-top:20%;
-    
-    h1{
-        margin-bottom:5%;
-    }
-    
-    input{
-        margin-bottom:5%;
-    }
-}
-
-*/
-
-
-
-// #pc-app-toolbar{
-//     background-color:#FFF;
-// }
-
-
-/*HELPER CLASSES*/
-/*
-.text-white{
-    color:white;
-}
-
-.navbar{
-    @include border-radius(0);
-}
-*/
-// #pc-main{
-//     background-color: rgb(250,250,250);
-// }
 
 
 .vertical-center {
@@ -79,20 +28,6 @@ img.cr-logo,
 }
 
 
-.nav-header{
-    
-    .cr-logo{ }
-} 
-
-.aaa{
-    background-image:url('http://cdn.wonderfulengineering.com/wp-content/uploads/2014/05/airplane-wallpaper-2.jpg'); 
-    background-size:cover; 
-    background-position:center center;
-}
-
-#pc-app-content{
-    background-color:#ECECEC;
-}
 
 .pc-search-box-wrapper{
 

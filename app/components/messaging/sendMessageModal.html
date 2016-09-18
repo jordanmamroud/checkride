@@ -1,21 +1,26 @@
+<div role="dialog" aria-label="Send New Message" layout="column" layout-align="center center">
+	<md-toolbar>
+		<div class="md-toolbar-tools" layout-align="center center">
+			<h2>Send a Message</h2>
+		</div>
+	</md-toolbar>
+	<form action="" layout="column" layout-padding>
+		<!-- <md-input-container layout>
+			<input type="text" placeholder="Subject" ng-model="mg.subject">
+		</md-input-container> -->
+		
+		<md-input-container layout>
+			<md-select ng-model="mg.recipient">
+				<md-option value="{{rec}}" placeholder="Recipient"  class="pc-capitalize" ng-repeat="rec in mg.recipientsList">{{rec.name}}</md-option>
+			</ms-select>       
+		</md-input-container>
 
-<form action="" layout-align="center center">
-    <h2 layout-align="center">Message</h2><br>
-    <ms-input-container layout>
-        <input type="text" placeholder="subject" ng-model="mg.subject">
-    </ms-input-container>
+		<md-input-container layout>
+			<textarea placeholder="Message"cols="60" rows="4" name="body" ng-model="mg.body"></textarea>
+		</md-input-container>
 
-    <ms-input-container layout>
-        <textarea placeholder="enter message"cols="50" rows="4" name="body" ng-model="mg.body"></textarea>
-    </ms-input-container>
-
-    <ms-input-container layout>
-        <select ng-model="mg.recipient">
-            <option value="{{rec}}" ng-repeat="rec in mg.recipientsList">{{rec.name}}</option>
-        </select>       
-    </ms-input-container>
-    
-     <md-input-container layout>
-        <md-button class="md-raised md-primary" ng-click="mg.sendMessage()">funion</md-button> 
-    </md-input-container>
-</form>
+		 <div layout layout-align="center end">
+			<md-button class="md-raised md-primary" ng-click="mg.sendMessage()">Send</md-button> 
+		</div>
+	</form>
+</div>

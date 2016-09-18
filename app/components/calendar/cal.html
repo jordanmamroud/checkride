@@ -1,117 +1,137 @@
-<style>
-    .hide{
-        display: none;
-    }
-    .showing{
-        display: block;
-    }
-</style>
-<div class='toast' style='display:none'>You have a new Appointment Request</div>
-<h2 ng-model="ev.name">{{ev.name}}</h2>
-<div class="calendar" ng-model="ev.eventSources" id="cal" data-ui-calendar="ev.uiConfig.calendar"></div> 
-<script type="text/ng-template" id="addEventModal">
-       <div layout="center">
-          <md-content flex="100" layout="column">
-          <md-toolbar>
-                <h2>Event</h2><br>
-                <h4>When:</h4>
-                <p ng-model="ev.eventStart">{{eventStartObj.toString()}}</p>
-                <p ng-model="ev.eventEnd">{{eventEndObj.toString()}}</p>
-         </md-toolbar>
-        <md-input-container>
-            <input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
-       </md-input-container>
-      
-            <md-checkbox ng-model="ev.dowCheckBox">Repeating Event?</md-checkbox>
 
-   
-        <div ng-class="{hide: ev.dowCheckBox == false}">
-            <label>choose frequency</label>
-                 <select ng-model="ev.frequency" id="freq" name="frequency">
-                        <option>daily</option>
-                        <option>weekly</option>
-                        <option>monthly</option>
-            </select><br>
+	<style>
+	.hide{
+		display: none;
+	}
+	.showing{
+		display: block;
+	}
+	</style>
 
-            <md-radio-group ng-model="ev.repeatForm">
-                  <md-radio-button value="2020/02/01" class="md-primary">Never</md-radio-button>
-                   <div>
-                      <label>Occurences</label>
-                      <md-radio-button value="{{ev.numOccur}}">After</md-radio-button>
-                      <input ng-model="ev.numOccur" type="number">
-                  </div>
-                      <div>
-                           <md-radio-button value="{{ev.endDate}}">End Date</md-radio-button><input type="date" ng-model="ev.endDate">
-                     </div>
-            </md-radio-group>
+<div class='toast' style='display:none'>
+	You have a new Appointment Request
+</div>
 
-        <form ng-class="{hide: ev.frequency != 'weekly'}">
-            <label ng-repeat="dow in ev.daysOfWeek track by $index">
-                <md-checkbox type="checkbox"
-                       ng-model="dow.selected"
-                             >{{dow.day}}</md-checkbox>
-            </label>
-        </form>
+<div layout="column" layout-fill>	
+	<h2 class="pc-capitalize">{{ev.name}}</h2>
+	<div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal" layout-fill layout-padding></div>
+</div>
 
-      
-        <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</button>
-        </md-content>
-        </div>
-</script>
 
-<script type="text/ng-template" id="eventDetailsModal">
-    <md-toolbar>
-         <h1>{{ev.clickedEvent.title}}</h1>
-    </md-toolbar>
-    <md-content>
-                <p>Start: {{ev.clickedEvent.start.toString()}}</p>
-                <p>End: {{ev.clickedEvent.end.toString()}}</p>
-                <md-button ng-class="{hide:ev.clickedEvent.recur =='monthly'}"class="md-raised md-primary" ng-click="ev.deleteEvent()">Delete Event</md-button>
-                <div ng-class="{hide: ev.clickedEvent.recur != 'monthly'}">
-                    <md-button class="md-primary md-raised" ng-click="ev.deleteSingleMonthlyEvent()">remove just this event</md-button>
-                    <md-button class="md-primary md-raised" ng-click="ev.deleteAllMonthlyEvents()">remove all events</md-button>
-                </div>
-    </md-content>
-</script>
+	<script id="addEventModal" type="text/ng-template">
 
-<script type="text/ng-template" id="settingsModal">
-    <md-input-container>
-        <label>Calendar Start Time</label>
-        <input ng-model="ev.calStartTime">
-    </md-input-container>
-    
-    <md-input-container>
-        <label>Calendar End Time</label>
-        <input ng-model="ev.calEndTime">
-    </md-input-container>  
-    <md-input-container>
-        <label>Gcal id</label>
-        <input ng-model="ev.gcalId">
-    </md-input-container>
-     <md-button class="md-primary md-raised" id="saveButton" ng-click="ev.saveCalSettings()">Save</md-button>
-     <md-checkbox id="googleSync">select box to sync with google calendar</md-checkbox>
-</script>
-<script type="text/ng-template" id="pendingRequestsModal">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Sent at</th>
-            </tr>
-          </thead>
-            
-          <tbody>
-                <tr ng-repeat="request in ev.requestsList | orderBy:'-sentAt' track by $index">
-                  <td>{{request.name}}</td>
-                  <td>{{request.requestedStartTime}}</td>
-                  <td>{{request.requestedEndTime}}</td>
-                  <td>{{request.sentAt}}</td>
-                  <td><button ng-click="ev.approveAppointment($index)">Approve</button></td>
-                </tr>
-          </tbody>
-        </table>  
-</script>
+		<div layout-align="center center">
 
-          
+			<md-content flex="100" md-panel>
+
+				<md-toolbar  layout-padding>
+					<h2>Request Checkride</h2><br>
+				</md-toolbar>
+				
+				<div  layout-padding>
+					<h4>When:</h4>
+					<p ng-model="ev.eventStart">{{eventStartObj.toString()}}</p>
+					<p ng-model="ev.eventEnd">{{eventEndObj.toString()}}</p>
+					
+					
+					<md-input-container>
+						<input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
+					</md-input-container>
+		  
+					<md-checkbox ng-model="ev.dowCheckBox">Repeating Event?</md-checkbox>
+
+
+					<div ng-class="{hide: ev.dowCheckBox == false}">
+						<label>choose frequency</label>
+						<select ng-model="ev.frequency" id="freq" name="frequency">
+							<option>Daily</option>
+							<option>Weekly</option>
+							<option>Monthly</option>
+						</select><br>
+
+						<md-radio-group ng-model="ev.repeatForm">
+							<md-radio-button value="2020/02/01" class="md-primary">Never</md-radio-button>
+							<div>
+								<label>Occurences</label>
+								<md-radio-button value="{{ev.numOccur}}">After</md-radio-button>
+								<input ng-model="ev.numOccur" type="number">
+							</div>
+							   
+							<md-radio-button value="{{ev.endDate}}">End Date</md-radio-button>
+							<input type="date" ng-model="ev.endDate">
+						</md-radio-group>
+
+						<form ng-class="{hide: ev.frequency != 'weekly'}">
+							<label ng-repeat="dow in ev.daysOfWeek track by $index">
+								<md-checkbox type="checkbox" ng-model="dow.selected">{{dow.day}}</md-checkbox>
+							</label>
+						</form>
+						
+						<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>
+						
+					</div>
+				</div>
+				
+			</md-content>
+			
+		</div>
+		
+	</script>
+		
+	<script id="eventDetailsModal" type="text/ng-template">
+		<md-toolbar>
+			<h1>{{ev.clickedEvent.title}}</h1>
+		</md-toolbar>
+		<md-content>
+			<p>Start: {{ev.clickedEvent.start.toString()}}</p>
+			<p>End: {{ev.clickedEvent.end.toString()}}</p>
+			<md-button ng-class="{hide:ev.clickedEvent.recur =='monthly'}" class="md-raised md-primary" ng-click="ev.deleteEvent()">Delete Event</md-button>
+			<div ng-class="{hide: ev.clickedEvent.recur != 'monthly'}">
+				<md-button class="md-primary md-raised" ng-click="ev.deleteSingleMonthlyEvent()">remove just this event</md-button>
+				<md-button class="md-primary md-raised" ng-click="ev.deleteAllMonthlyEvents()">remove all events</md-button>
+			</div>
+		</md-content>
+	</script> 
+
+	<script id="settingsModal" type="text/ng-template">
+		<md-input-container>
+			<label>Calendar Start Time</label>
+			<input ng-model="ev.calStartTime">
+		</md-input-container>
+
+		<md-input-container>
+			<label>Calendar End Time</label>
+			<input ng-model="ev.calEndTime">
+		</md-input-container>
+		
+		<md-input-container>
+			<label>Gcal id</label>
+			<input ng-model="ev.gcalId">
+		</md-input-container>
+		
+		<md-button class="md-primary md-raised" id="saveButton" ng-click="ev.saveCalSettings()">Save</md-button>
+		<md-checkbox id="googleSync">select box to sync with google calendar</md-checkbox>
+	</script> 
+
+	<script id="pendingRequestsModal" type="text/ng-template">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Student</th>
+					<th>Start Time</th>
+					<th>End Time</th>
+					<th>Sent at</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr ng-repeat="request in ev.requestsList | orderBy:'-sentAt' track by $index">
+					<td>{{request.name}}</td>
+					<td>{{request.requestedStartTime}}</td>
+					<td>{{request.requestedEndTime}}</td>
+					<td>{{request.sentAt}}</td>
+					<td><button ng-click="ev.approveAppointment($index)">Approve</button></td>
+				</tr>
+			</tbody>
+		</table>  
+	</script>

@@ -2,37 +2,7 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-/* line 18, ../sass/screen.scss */
-body {
-  background-color: #EEE;
-}
-
-/* Front Page */
-/*
-#cr-main-search-box{
-    margin-top:20%;
-    
-    h1{
-        margin-bottom:5%;
-    }
-    
-    input{
-        margin-bottom:5%;
-    }
-}
-
-*/
-/*HELPER CLASSES*/
-/*
-.text-white{
-    color:white;
-}
-
-.navbar{
-    @include border-radius(0);
-}
-*/
-/* line 63, ../sass/screen.scss */
+/* line 12, ../sass/screen.scss */
 .vertical-center {
   min-height: 100%;
   /* Fallback for browsers do NOT support vh unit */
@@ -42,7 +12,7 @@ body {
   align-items: center;
 }
 
-/* line 72, ../sass/screen.scss */
+/* line 21, ../sass/screen.scss */
 img.cr-logo,
 .cr-logo img {
   width: auto;
@@ -52,19 +22,7 @@ img.cr-logo,
   transform: scale(0.4);
 }
 
-/* line 87, ../sass/screen.scss */
-.aaa {
-  background-image: url("http://cdn.wonderfulengineering.com/wp-content/uploads/2014/05/airplane-wallpaper-2.jpg");
-  background-size: cover;
-  background-position: center center;
-}
-
-/* line 93, ../sass/screen.scss */
-#pc-app-content {
-  background-color: #ECECEC;
-}
-
-/* line 99, ../sass/screen.scss */
+/* line 34, ../sass/screen.scss */
 .pc-search-box-wrapper h1,
 .pc-search-box-wrapper h2,
 .pc-search-box-wrapper h3 {
@@ -73,7 +31,7 @@ img.cr-logo,
   text-align: center;
 }
 
-/* line 109, ../sass/screen.scss */
+/* line 44, ../sass/screen.scss */
 .pc-capitalize {
   text-transform: capitalize;
 }
