@@ -1,10 +1,21 @@
 (function(){
     
 	angular.module('pcRoutes',['ngRoute'])
-
+    
 
 	.config(['$routeProvider', '$locationProvider', '$logProvider', 'RoutePaths', function($routeProvider, $locationProvider, $logProvider, RoutePaths){
-		
+        
+        var originalWhen = $routeProvider.when;
+		$routeProvider.when = function(path, route) {
+        route.resolve || (route.resolve = {});
+        angular.extend(route.resolve, {
+            "currentUser" : function(AuthService){
+                var user = AuthService.getCurrentUser();
+                return user.$loaded();
+            }
+        });
+        return originalWhen.call($routeProvider, path, route);
+    }
         
 		$routeProvider
 		.when('/', {

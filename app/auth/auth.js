@@ -84,18 +84,22 @@
             function($scope, $location, AuthService, pcLoginService,createAccountService, $firebaseObject, pcServices){
 
 			this.auth = AuthService.auth();
-			var obj = AuthService.getCurrentUser();
+			var obj= AuthService.getCurrentUser();
 			this.login = login;
 			this.logout = logout;
 			this.sendNewPassword = sendNewPassword;
 			this.createAccountPage = createAccountPage;
 			this.createAccount = createAccount;
             
-            this.currentUser = '';
-			console.log("Auth Controller > Current User:", obj);
-            obj.$loaded().then(function(){
-                $scope.currentUser = obj ;
-            })
+            //this.currentUser = '';
+			//console.log("Auth Controller > Current User:", obj);
+//            obj.$loaded().then(function(){
+//                $scope.currentUser = obj ;
+//            })
+              obj.$loaded().then(function(){
+                  $scope.currentUser = obj ;
+              })  
+            
                 
 			//Added by Josh
 			function logout(){

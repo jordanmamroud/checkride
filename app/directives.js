@@ -5,7 +5,6 @@
 		//HEADER
 		.directive('crHeader', function(){
 			return{
-			
 				templateUrl: 'app/layout/header.html',
 				scope: true,
 				transclude: false,
@@ -112,20 +111,18 @@
 				templateUrl:function(){
                     return "app/users/views/accountDetails.html?" + Date.now(); 
                 },
-				scope:false,
+				scope:true,
 				controllerAs:'user',
 				controller: function($scope){
                     var refs= pcServices.getCommonRefs();
 					var userInfo = pcServices.getCookieObj('currentUser');
                     var userRef = refs.accounts.child(userInfo.$id);
-                    this.me = userInfo;
-                    console.log($scope);
-                    console.log($scope.$parent.$parent.currentUser);
-					this.currentUser = $scope.$parent.$parent.currentUser
-					this.updateUser = function(ref){
+                    this.currentUser = $scope.$resolve.currentUser ;
+                    this.updateUser = function(ref){
 						if(this.newPassword.length>0){
 							profileService.changePassword(userRef, this.oldPassword, this.newPassword, userInfo.emailAddress)
 						};
+                        console.log(this.currentUser);
 						this.currentUser.$save();
 					} 
 				}   

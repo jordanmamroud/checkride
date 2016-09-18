@@ -1,78 +1,31 @@
-<!-- Logged In -->
-<span ng-show="isSession">
-
-
-<md-menu>
-	<!-- Trigger element is a md-button with an icon -->
-	<md-button 
-		ng-click="$mdOpenMenu($event)" 
-		class="md-icon-button" 
-		aria-label="Open sample menu" 
-		style="background-image:url({{auth.currentUser.photoUrl}}); background-size: cover;">
-		<!-- <img 
-			class=" pc-img-rounded" 
-			aria-label="{{auth.currentUser.name.first + auth.currentUser.name.last}}" 
-			ng-src="{{auth.currentUser.photoUrl}}" 
-			width="40px" 
-			alt="{{item.who}}"/> -->
-	</md-button>
-
-	<md-menu-content>
-
-		<md-menu-item>
-			<a href="../user/profile" class="md-button">My Profile</a>
-		</md-menu-item>
-
-		<md-menu-item>	
-			<md-button ng-click="auth.logout()">Log out</md-button>
-		</md-menu-item>
-
-	</md-menu-content>
-</md-menu>
-  
-
-
-
-
-
-</span>
-
 <!-- Not Logged In -->
 <span ng-show="!isSession">
 	<a ng-href="/create-account"><md-button class="md-primary" aria-label="Sign Up">Sign Up</md-button></a>
 	<a ng-href="/log-in"><md-button class="md-raised md-primary" aria-label="Log In">log in</md-button></a>
 </span>
 
-
-
-
-
-
-
-	<!--<md-button  ng-click="auth.logout()" class="md-raised" aria-label="Log In"><a ng-href="/log-in">Log out</a></md-button>
-	<!-- <md-button class="md-fab md-mini " aria-label="{{auth.user.name.first + auth.user.name.last}}">
-		
-	</md-button> 
- 	<a href="../user/profile">
-		
-	</a>
-
-
-
-   <md-fab-speed-dial md-direction="down" class="md-fling md-fab-top-right" md-open="false">
-	<md-fab-trigger>
-		<md-button>
-			<img 
-			class=" pc-img-rounded" 
-			aria-label="{{auth.currentUser.name.first + auth.currentUser.name.last}}" 
-			ng-src="{{auth.currentUser.photoUrl}}" 
-			width="40px" 
-			alt="{{item.who}}"/>
+<!-- Logged In -->
+<span ng-show="isSession">
+	<md-menu>
+		<!-- Trigger element is a md-button with an icon -->
+		<md-button 
+			ng-click="$mdOpenMenu($event)" 
+			class="md-icon-button" 
+			aria-label="Open sample menu" 
+			style="background-image:url({{auth.currentUser.photoUrl}}); background-size: cover;">
 		</md-button>
-	</md-fab-trigger>
-	
-	<md-fab-actions>
-		<md-button aria-label="Add..."><md-icon icon="/img/icons/plus.svg"></md-icon>Log Out</md-button>
-	</md-fab-actions>
 
-  </md-fab-speed-dial> -->
+		<md-menu-content>
+
+			<md-menu-item>
+				<a href="../user/profile" class="md-button">My Profile</a>
+			</md-menu-item>
+
+			<md-menu-item>	
+				<md-button ng-click="auth.logout()">Log out</md-button>
+			</md-menu-item>
+
+		</md-menu-content>
+	</md-menu>
+
+</span>

@@ -3,8 +3,7 @@
 	angular.module("pcUser",[])
 
 		//Shared Controllers
-		.controller("profileController", ['$scope','profileService', 'pcServices', function($scope, profileService,pcServices){
-			
+		.controller("profileController", ['$scope','profileService', 'pcServices', 'currentUser',function($scope, profileService,pcServices,currentUser){
 			var refs = pcServices.getCommonRefs();
 			var userInfo = pcServices.getCookieObj("currentUser");
 			var userRef = pcServices.getCommonRefs().accounts.child(userInfo.$id);

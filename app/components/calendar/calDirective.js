@@ -272,16 +272,11 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     },
                     unselectAuto: true,
                     select: function (start, end, ev) {
-<<<<<<< HEAD
 //                        $scope.eventStart = start.toString();
 //                        $scope.eventEnd = end.toString();
 //                        $scope.showApptDialog();
 //                        console.log('vain bane')
-=======
-                        $scope.eventStart = start.toString();
-                        $scope.eventEnd = end.toString();
-                        $scope.showApptDialog();
->>>>>>> 9ada22fe3b69b4dc9acc78180e02670c79e867c9
+
                     },
                     editable: false,
                     eventClick: function (event, element){

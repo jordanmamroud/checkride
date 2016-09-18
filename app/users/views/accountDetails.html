@@ -9,14 +9,14 @@
 
 				<md-input-container class="md-block" flex-gt-md>
 					<label>Last Name</label>
-					<input ng-model="user.currentUser.lastName">
+					<input ng-model="user.currentUser.name.last">
 				</md-input-container>
 			</div>
 
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-md>
 					<label>Email Address</label>
-					<input ng-model="user.me.emailAddress">
+					<input ng-model="user.currentUser.emailAddress">
 				</md-input-container>
 
 				<md-input-container class="md-block" flex-gt-md>
@@ -28,7 +28,7 @@
 			<div layout-gt-sm="row">
 				<div layout="column" flex>
 					<md-input-container class="md-block" flex-gt-md>
-						<input placeholder="Profile Picture (url)" type="url" ng-model="user.currentUser.photoUrl">
+						<input placeholder="Profile Pictrue (url)" type="url" ng-model="user.currentUser.photoUrl">
 					</md-input-container>
 				</div>
 				<div layout="column" flex="20">
