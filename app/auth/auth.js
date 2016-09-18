@@ -47,7 +47,6 @@
 							//Then return the users object
 							return authData;
 						})
-						
 					})
 
 					//If couldnt authenticate....

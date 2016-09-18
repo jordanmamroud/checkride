@@ -20,9 +20,10 @@
          </md-toolbar>
         <md-input-container>
             <input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
+              <md-button ng-class="{hide:ev.dowCheckBox == true}" class="md-raised md-primary" ng-click="ev.createEvent()">Create</button>
        </md-input-container>
-      
-            <md-checkbox ng-model="ev.dowCheckBox">Repeating Event?</md-checkbox>
+<!--        <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</button>-->
+        <md-checkbox ng-model="ev.dowCheckBox">Repeating Event?</md-checkbox>
 
    
         <div ng-class="{hide: ev.dowCheckBox == false}">
@@ -52,10 +53,8 @@
                              >{{dow.day}}</md-checkbox>
             </label>
         </form>
-
-      
-        <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</button>
         </md-content>
+        <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</button>
         </div>
 </script>
 
