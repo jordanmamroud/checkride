@@ -35,7 +35,7 @@
 
 						//Get the users data object and assign it to the "user" variable
 						user = pcServices.createFireObj(ref.accounts.child(authData.uid));
-
+                        console.log("user",user);
 						//Once its been loaded...
 						user.$loaded().then(function(){
 
@@ -72,7 +72,6 @@
 					if(authObjData){
 						return pcServices.createFireObj(ref.accounts.child(authObjData.uid));
 					}
-
 				}
 			}
 		}])
@@ -80,33 +79,26 @@
 
 
 		//AUTH CONTROLLER
-		.controller("AuthCtrl", ["$scope", "$location", "AuthService", "pcLoginService", "createAccountService", "$firebaseObject", "pcServices",
-            function($scope, $location, AuthService, pcLoginService,createAccountService, $firebaseObject, pcServices){
+		.controller("AuthCtrl", ["$scope", "$location", "AuthService", "pcLoginService", "createAccountService", "$firebaseObject", "pcServices","currentUser",
+            function($scope, $location, AuthService, pcLoginService,createAccountService, $firebaseObject, pcServices,currentUser){
 
 			this.auth = AuthService.auth();
-			var obj= AuthService.getCurrentUser();
-			this.login = login;
+            this.currentUser = currentUser;
+ 			this.login = login;
 			this.logout = logout;
 			this.sendNewPassword = sendNewPassword;
 			this.createAccountPage = createAccountPage;
 			this.createAccount = createAccount;
-            
-            //this.currentUser = '';
-			//console.log("Auth Controller > Current User:", obj);
-//            obj.$loaded().then(function(){
-//                $scope.currentUser = obj ;
-//            })
-              obj.$loaded().then(function(){
-                  $scope.currentUser = obj ;
-              })  
-            
                 
-			//Added by Josh
+            
+            //Added by Josh
 			function logout(){
 				AuthService.logout(this.auth);
 			}
 
 			function login(){
+                pcServices.removeCookieObj("currentUser");
+                pcServices.setCookieObj("currentUser", currentUser);
 				AuthService.login(this.email, this.password);
 			}
 
@@ -129,9 +121,7 @@
 
 				createAccountService.createUser(user, $scope.password);
 			}
-
 		}])
-
 
 
 		//CREATE ACCOUNT

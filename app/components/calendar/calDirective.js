@@ -13,7 +13,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             clickedEvent:"="
         },
         controllerAs:"ev",
-        controller:function($scope,$firebaseArray,$firebaseObject , calendarService, $mdDialog,pcServices){
+        controller:function($scope, calendarService, $mdDialog, pcServices){
             var ev = this;
             var refs = pcServices.getCommonRefs();
             var userInfo = pcServices.getCookieObj('currentUser');
@@ -24,10 +24,9 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             var calendarSettings= userCalendarRef.child("settings");
             var appointmentRequestsListRef = userCalendarRef.child("appointmentRequests");                 
             
-            console.log(userInfo);
             ev.events = pcServices.createFireArray(userEventsRef);
             ev.approvedApointments = pcServices.createFireArray(approvedAppointmentsRef);        
-            ev.requestsList = $firebaseArray(appointmentRequestsListRef);
+            ev.requestsList = pcServices.createFireArray(appointmentRequestsListRef);
             ev.calStartTime = 0 ;
             ev.calStartTime = "00:00:00";
             ev.calEndTime = "24:00:00";
@@ -225,7 +224,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
 .directive('viewingCal',function(){
     return{
         template:'<div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div>',
-        controller: ['$scope', '$mdDialog','pcServices', 'calendarService', function ($scope, $mdDialog, pcServices, calendarService){
+        controller: ['$scope', '$mdDialog','pcServices', 'calendarService',function ($scope, $mdDialog, pcServices, calendarService){
             var refs = pcServices.getCommonRefs();
             var examinerInfo = pcServices.getCookieObj("examinerInfo");
             var userInfo = pcServices.getCookieObj("currentUser");

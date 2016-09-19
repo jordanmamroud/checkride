@@ -3,19 +3,27 @@
 	angular.module('pcRoutes',['ngRoute'])
     
 
-	.config(['$routeProvider', '$locationProvider', '$logProvider', 'RoutePaths', function($routeProvider, $locationProvider, $logProvider, RoutePaths){
+	.config(['$routeProvider', '$locationProvider', '$logProvider', 'RoutePaths', function( $routeProvider, $locationProvider, $logProvider, RoutePaths){
         
         var originalWhen = $routeProvider.when;
-		$routeProvider.when = function(path, route) {
-        route.resolve || (route.resolve = {});
-        angular.extend(route.resolve, {
-            "currentUser" : function(AuthService){
-                var user = AuthService.getCurrentUser();
-                return user.$loaded();
-            }
-        });
-        return originalWhen.call($routeProvider, path, route);
-    }
+            $routeProvider.when = function(path, route) {
+                route.resolve || (route.resolve = {});
+                angular.extend(route.resolve, {
+                    "currentUser" : function(pcServices){
+                        var ref = pcServices.getCommonRefs();
+                        var authObjData = ref.main.getAuth();
+                        if(authObjData){
+                            var user = pcServices.createFireObj(ref.accounts.child(authObjData.uid));
+                            if(user){
+                                return user.$loaded();
+                            }else{
+                                return null ;
+                            }
+                        }
+                }
+            });
+            return originalWhen.call($routeProvider, path, route);
+        }
         
 		$routeProvider
 		.when('/', {
@@ -34,11 +42,14 @@
 		})
 
 		.when(RoutePaths.login.path, {
-			templateUrl:'app/auth/login.html'
+			templateUrl:'app/auth/login.html',
+            controller:"AuthCtrl",
+            controllerAs:"auth"
 		})
 
 		.when(RoutePaths.signUp.path, {
-			templateUrl: 'app/auth/create-account.html'
+			templateUrl: 'app/auth/create-account.html',
+            controller:'AuthCtrl'
 		})
 
 		.when(RoutePaths.examinerCal.path, {
@@ -49,7 +60,8 @@
 
 		.when(RoutePaths.profile.path, {
 			templateUrl: 'app/users/views/profile.html',
-			controller:"profileController"
+			controller:"profileController",
+            controllerAs:'user'
 		})
 
 		.when(RoutePaths.examinerMessages.path,{
