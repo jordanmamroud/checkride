@@ -1,5 +1,5 @@
 {
-  "name": "pilotCheckrides",
+  "name": "PilotCheckrides",
   "version": "1.0.0",
   "description": "Application to connect student pilots with FAA examiners ",
   "main": "checkrider.js",
