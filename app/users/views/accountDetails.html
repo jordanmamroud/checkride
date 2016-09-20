@@ -4,37 +4,37 @@
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-md>
 					<label>First name</label>
-					<input ng-model="user.currentUser.firstName">
+					<input ng-model="auth.currentUser.firstName">
 				</md-input-container>
 
 				<md-input-container class="md-block" flex-gt-md>
 					<label>Last Name</label>
-					<input ng-model="user.currentUser.lastName">
+					<input ng-model="auth.currentUser.lastName">
 				</md-input-container>
 			</div>
 
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-md>
 					<label>Email Address</label>
-					<input ng-model="user.currentUser.emailAddress">
+					<input ng-model="auth.currentUser.emailAddress">
 				</md-input-container>
 
 				<md-input-container class="md-block" flex-gt-md>
 					<label>Phone Number</label>
-					<input type="tel" ng-model="user.currentUser.phoneNumber">
+					<input type="tel" ng-model="auth.currentUser.phoneNumber">
 				</md-input-container>
 			</div>
 			
 			<div layout-gt-sm="row">
 				<div layout="column" flex>
 					<md-input-container class="md-block" flex-gt-md>
-						<input placeholder="Profile Pictrue (url)" type="url" ng-model="user.currentUser.photoUrl">
+						<input placeholder="Profile Pictrue (url)" type="url" ng-model="auth.currentUser.photoUrl">
 					</md-input-container>
 				</div>
 				<div layout="column" flex="20">
 					<div layout-padding>
 						<img 
-						src="{{user.currentUser.photoUrl}}" 
+						src="{{auth.currentUser.photoUrl}}" 
 						width="100%" 
 						class="md-avitar" 
 						style="border-radius:15px;"/>
@@ -46,12 +46,12 @@
 
 				<md-input-container class="md-block" flex-gt-sm>
 					<label>City</label>
-					<input ng-model="user.currentUser.city">
+					<input ng-model="auth.currentUser.city">
 				</md-input-container>
 
 				<md-input-container class="md-block" flex-gt-sm>
 					<label>State</label>
-					<input ng-model="user.currentUser.state">
+					<input ng-model="auth.currentUser.state">
 				</md-input-container>
 
 			</div>
@@ -64,13 +64,13 @@
 
 				<md-input-container class="md-block" flex-gt-sm>
 					<label>New Password</label>
-					<input ng-model="user.newPassword">
+					<input ng-model="auth.newPassword">
 				</md-input-container>
 			</div>
 
 			<md-input-container class="md-block">
 				<label>Biography</label>
-				<textarea ng-model="user.currentUser.bio" md-maxlength="150" rows="3"></textarea>
+				<textarea ng-model="auth.currentUser.bio" md-maxlength="150" rows="3"></textarea>
 			</md-input-container>
 		</form>
 

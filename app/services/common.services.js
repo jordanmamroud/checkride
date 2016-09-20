@@ -1,13 +1,13 @@
 angular.module('pcServices', [])
 
-.service("pcServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray",'$firebaseObject', '$filter', '$cookies','firebaseRefs',
+.service("pcServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray","$firebaseObject", '$filter', '$cookies','firebaseRefs',
 	function(RoutePaths,$location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies,firebaseRefs){
 
 	return{
 		
-		// firebaseRef: function(){
-		//     return new Firebase(globalConst.firebase.ref);
-		// },
+		firebaseRef: function(){
+			return new Firebase(globalConst.firebase.ref);
+		},
 
 		getRoutePaths:function(){
 			return RoutePaths

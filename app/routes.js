@@ -35,7 +35,8 @@
 
 		.when(RoutePaths.profile.path, {
 			templateUrl: 'app/users/views/profile.html',
-			controller:"profileController"
+			controller: "profileController",
+			scope:true
 		})
 
 		.when(RoutePaths.examinerMessages.path,{
@@ -60,9 +61,9 @@
 		})
 
 		.when(RoutePaths.examinerInfo.path,{
-				templateUrl: "app/users/views/examinerInfo.html",
-				controller: "examinerInfoController",
-				controllerAs:'vm'
+			templateUrl: "app/users/views/examinerInfo.html",
+			controller: "examinerInfoController",
+			controllerAs:'vm'
 		})
 
 		.when(RoutePaths.viewExaminerAvailability.path,{

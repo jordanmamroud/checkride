@@ -70,11 +70,16 @@
 
 			<!-- HEADER -->
 			<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" md-colors="::{backgroundColor: 'default-background-100'}">
-				<cr-header></cr-header>    
+				<cr-header></cr-header>
+
 			</md-toolbar>
-
+			
+			<md-progress-linear md-mode="indeterminate" ng-disabled="true" style='height:2px;'></md-progress-linear>
+			
 			<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
-
+				
+				
+				
 				<!-- SIDEBAR -->
 				<md-sidenav 
 					ng-show="showSidebar" 

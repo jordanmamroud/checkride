@@ -1,7 +1,20 @@
 (function(){
 	angular.module('pcAuth', ['firebase'])
 
-		.service("AuthService", ["$firebaseAuth", "$firebaseArray", "pcServices", function($firebaseAuth, $firebaseArray, pcServices){
+		.factory("pcAuth", ["$firebaseAuth", "pcServices", function($firebaseAuth, pcServices){
+			var ref = pcServices.getCommonRefs().main;
+			console.log("pcAuth");
+			return $firebaseAuth(ref);
+		}])
+
+		.service("UserService", ["$firebase", "$q", "pcServices", "pcAuth", function($firebase, $q, pcServices, pcAuth){
+
+			return {
+				
+			}
+		}])
+
+		.service("AuthService", ["$firebaseAuth", "$firebaseArray", "$q", "pcServices", "pcAuth", function($firebaseAuth, $firebaseArray, $q, pcServices, pcAuth){
 			var ref = pcServices.getCommonRefs();
 			var authObj = $firebaseAuth(ref.main);
 			var authObjData = authObj.$getAuth();
@@ -9,70 +22,114 @@
 
 
 			function getUserObject(uid){
+				console.log("getUserObject");
 				return pcServices.createFireObj(ref.accounts.child(uid));
 			};
 
+			//Leave Blank to get current user
+			function getUser(uid){
+				console.log("getUser");
 
-			return {
-				auth : function(){
-					return authObj;
-				},
+				var defer = $q.defer();
 
-				getAuth : function(){
-					return authObj.$getAuth();
-				},
+				//checks if a user id was passed in, else gets the current users id
+				uid = (typeof uid === "undefined") ? uid = null : uid;
+				
+				if(!uid){
+					var authData = pcAuth.$getAuth();
+					if(authData){
+						uid = authData.uid;
+					}
+				}
 
-				login : function(email, password){
+				if(uid){
 
-					//Send email and password to be authenticated
-					authObj.$authWithPassword({
-						email: email,
-						password: password
+					//Get the users data object and assign it to the "user" variable
+					pcServices.createFireObj(ref.accounts.child(uid))
+					.$loaded()
+					.then(function(user){
+						defer.resolve(user);
 					})
+					.catch(function(error) {
+						defer.resolve(error);
+					});
+				}
 
-					//Once its authenticated...
-					.then(function(authData) {
+				return defer.promise;
+			}
 
-						//Get the users data object and assign it to the "user" variable
-						user = pcServices.createFireObj(ref.accounts.child(authData.uid));
 
-						//Once its been loaded...
-						user.$loaded().then(function(){
+			function login(email, password){
+				console.log("login");
+				var defer = $q.defer();
+				
+				//Send email and password to be authenticated
+				pcAuth.$authWithPassword({
+					email: email,
+					password: password
+				})
 
-							//Store the users object as a cookie named "currentUser"
-							pcServices.setCookieObj("currentUser", user);
+				//Once its authenticated...
+				.then(function(authData) {
 
-							//And redirect to the users profile page
-							pcServices.changePath(pcServices.getRoutePaths().profile.path);
+					//Get the users data object and assign it to the "user" variable
+					//pcServices.createFireObj(ref.accounts.child(authData.uid)).$loaded()
+					getUser(authData.uid)
 
-							//Then return the users object
-							return authData;
-						})
+					.then(function(user){
+						//Store the users object as a cookie named "currentUser"
+						pcServices.setCookieObj("currentUser", user);
+						defer.resolve(user);
 					})
 
 					//If couldnt authenticate....
 					.catch(function(error) {
-						return error;
-						console.error("Authentication failed:", error);
-					});
+						defer.resolve(error);
+					})
+				})
 
+				return defer.promise;
+			}
+
+
+			//Accepts auth object as param
+			function logout(authObj){
+				console.log("logout");
+				//Clears current user cookie
+				pcServices.setCookieObj("currentUser", null);
+				//Unauths session				
+				authObj.$unauth();
+				console.log(authObj);
+				//Redirect to the login page
+				pcServices.changePath(pcServices.getRoutePaths().login.path);
+			}
+
+
+
+
+			return {
+				auth: function(){ 
+					return authObj;
 				},
 
-				//Accepts auth object as param
-				logout : function(authObj){
-					//Clears current user cookie
-					pcServices.setCookieObj("currentUser", null);
-					//Unauths session				
-					authObj.$unauth();
-					//Redirect to the login page
-					pcServices.changePath(pcServices.getRoutePaths().login.path);
+				getAuth: function(){
+					return authObj.$getAuth();
 				},
 
-				getCurrentUser : function(){
-					if(authObjData){
-						return pcServices.createFireObj(ref.accounts.child(authObjData.uid));
-					}
+				login: function(email , password){
+					return login(email, password);
+				},
 
+				logout: function(authObj){
+					return logout(authObj);
+				},
+
+				getUser: function(uid){
+					return getUser(uid);
+				},
+
+				getCurrentUser: function(){
+					return getUser();
 				}
 			}
 		}])
@@ -80,30 +137,53 @@
 
 
 		//AUTH CONTROLLER
-		.controller("AuthCtrl", ["$scope", "$location", "AuthService", "pcLoginService", "createAccountService", "$firebaseObject", "pcServices",
-									function($scope, $location, AuthService, pcLoginService,createAccountService, $firebaseObject, pcServices){
-			
-			this.auth = AuthService.auth();
-			this.currentUser = AuthService.getCurrentUser();
-			this.login = login;
-			this.logout = logout;
-			this.sendNewPassword = sendNewPassword;
-			this.createAccountPage = createAccountPage;
-			this.createAccount = createAccount;
+		.controller("AuthCtrl", ["$scope", "$location", "$timeout", "AuthService", "pcAuth", "pcLoginService", "createAccountService", "$firebaseObject", "pcServices",
+									function($scope, $location, $timeout, AuthService, pcAuth, pcLoginService,createAccountService, $firebaseObject, pcServices){
+			var authScope = this;
+			authScope.authObj = pcAuth;
+			authScope.currentUser = setCurrentUser();
+			authScope.login = login;
+			authScope.logout = logout;
+			authScope.sendNewPassword = sendNewPassword;
+			authScope.createAccountPage = createAccountPage;
+			authScope.createAccount = createAccount;
 
-			console.log("Auth Controller > Current User:", this.currentUser);
 
-			//Added by Josh
-			function logout(){
-				AuthService.logout(this.auth);
-			}
+			/*authScope.authObj.$onAuth(function(authData){
+				authScope.authData = authData;
+				console.log("Auth Status Changed",authData, "\nExpires:",new Date(authData.expires * 1000));
+			});*/
+
 
 			function login(){
-				AuthService.login(this.email, this.password);
+				AuthService.login(authScope.email, authScope.password)
+				.then(function(user){
+					authScope.currentUser = user;
+					pcServices.changePath(pcServices.getRoutePaths().profile.path);
+				})
+				.catch(function(error){
+					console.log("Error", error)
+				});
 			}
 
+			function logout(){
+				AuthService.logout(authScope.authObj)
+			}
+			
+			function setCurrentUser(){
+
+				AuthService.getCurrentUser()
+				.then( function(user){
+					authScope.currentUser = user;
+				})
+				.catch(function(reason){
+					console.log("Failed to retrieve current user: ", reason);
+				});
+			}
+
+
 			function sendNewPassword(){
-					pcLoginService.sendNewPassword(this.email);
+					pcLoginService.sendNewPassword(authScope.email);
 			}
 
 			function createAccountPage(){
@@ -113,13 +193,13 @@
 
 			function createAccount(){
 				var user = {
-						name:{ first:$scope.firstName,last: $scope.lastName},
-						emailAddress:$scope.emailAddress,
-						phone:$scope.phone,
-						role: $scope.role
+						name:{ first:authScope.firstName,last: authScope.lastName},
+						emailAddress:authScope.emailAddress,
+						phone:authScope.phone,
+						role: authScope.role
 				}
 
-				createAccountService.createUser(user, $scope.password);
+				createAccountService.createUser(user, authScope.password);
 			}
 
 		}])
