@@ -47,10 +47,8 @@ angular.module('pcSearch',[])
 
 			airportRef.orderByChild("IATA").equalTo(query).on("value", function(snapshot){
 				self.airports = snapshot.val();
-				
 				console.log( snapshot.val() ); 
 				if(snapshot.numChildren() > 0){
-
 					snapshot.forEach(function(childSnapshot){
 
 						var airportUsers = childSnapshot.child("users").val();
@@ -62,11 +60,9 @@ angular.module('pcSearch',[])
 								console.log("airport > users > objects:");
 								console.log(grandchildSnapshot.val());
 							});
-
 						})
 					});
 				}
-				
 			});
 		};
 

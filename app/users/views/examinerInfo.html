@@ -20,7 +20,7 @@
     <md-tabs md-dynamic-height md-border-bottom>
       <md-tab label="Info">
         <md-content class="md-padding">
-            <h1 ng-model="vm.examinerName">{{vm.examinerName}}</h1>
+            <h1>{{vm.examinerInfo.data.name.first +" "+ vm.examinerInfo.data.name.last}}</h1>
                <md-list>
                  <label>Certifications</label>
                   <md-list-item ng-repeat="cert in vm.certificationsList"> 
@@ -36,7 +36,7 @@
                 </md-list>   
                 
                 <label>Bio</label>
-                <p ng-model="vm.bio">{{vm.bio}}</p>
+                <p ng-model="vm.examinerInfo.data.bio">{{vm.bio}}</p>
         </md-content>
       </md-tab>
       

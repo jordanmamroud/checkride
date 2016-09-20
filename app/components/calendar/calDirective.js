@@ -13,7 +13,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             clickedEvent:"="
         },
         controllerAs:"ev",
-        controller:function($scope,$firebaseArray,$firebaseObject , calendarService, $mdDialog,pcServices){
+        controller:function($scope, calendarService, $mdDialog, pcServices){
             var ev = this;
             var refs = pcServices.getCommonRefs();
             var userInfo = pcServices.getCookieObj('currentUser');
@@ -26,7 +26,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             
             ev.events = pcServices.createFireArray(userEventsRef);
             ev.approvedApointments = pcServices.createFireArray(approvedAppointmentsRef);        
-            ev.requestsList = $firebaseArray(appointmentRequestsListRef);
+            ev.requestsList = pcServices.createFireArray(appointmentRequestsListRef);
             ev.calStartTime = 0 ;
             ev.calStartTime = "00:00:00";
             ev.calEndTime = "24:00:00";
@@ -89,7 +89,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             function createEvent(){
                   var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");
                   var eventId= ev.eventTitle + ev.eventStart;
-                  var eventObj = new calendarService.Event(ev.eventTitle,ev.eventStartObj,{start:today, end:"2020/02/01"},ev.eventEndObj,eventId);
+                  var eventObj = new calendarService.Event(ev.eventTitle,ev.eventStartObj,{start:today, end:"2020/02/01"},ev.eventEndObj,'once',eventId,null);
                   if(ev.dowCheckBox == true){
                         switch(ev.frequency.toLowerCase()){   
                             case "daily":       
@@ -97,7 +97,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                                     calendarService.createDailyEvent(eventObj,userEventsRef);
                                     break;
                             case "weekly":
-                                    eventObj.dow = calendarService.setDaysOfWeek(ev.daysOfWeek);
+                                    eventObj.dow = calendarService.setDaysOfWeek(ev.daysOfWeek, ev.eventStartObj);
                                     calendarService.setEventRange(ev.repeatForm, eventObj, "week");
                                     calendarService.createWeeklyEvent(eventObj,userEventsRef);
                                     break;
@@ -224,7 +224,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
 .directive('viewingCal',function(){
     return{
         template:'<div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div>',
-        controller: ['$scope', '$mdDialog','pcServices', 'calendarService', function ($scope, $mdDialog, pcServices, calendarService){
+        controller: ['$scope', '$mdDialog','pcServices', 'calendarService',function ($scope, $mdDialog, pcServices, calendarService){
             var refs = pcServices.getCommonRefs();
             var examinerInfo = pcServices.getCookieObj("examinerInfo");
             var userInfo = pcServices.getCookieObj("currentUser");
@@ -271,18 +271,22 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     },
                     unselectAuto: true,
                     select: function (start, end, ev) {
-                        $scope.eventStart = start.toString();
-                        $scope.eventEnd = end.toString();
-                        $scope.showApptDialog();
+//                        $scope.eventStart = start.toString();
+//                        $scope.eventEnd = end.toString();
+//                        $scope.showApptDialog();
+//                        console.log('vain bane')
+
                     },
                     editable: false,
-                    eventClick: function (event, element) {
+                    eventClick: function (event, element){
+                        $scope.eventStart = event.start.toString();
+                        $scope.eventEnd = event.end.toString();
+                        $scope.showApptDialog();
                         // stops gcal events from going to google calendar
                           if (event.url) {
-                              alert("sorry this time is not available");
-                                return false;
+                            console.log("event",event);
+                            return false;
                         }
-                        alert("sorry this time is not available");
                     }
                 }
             }; 

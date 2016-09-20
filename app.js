@@ -18,7 +18,7 @@
 		'pcAuth',
 		'pcSearch',
 		'pcDataService',
-		
+
 		'pcUser',
 		'crCalendar',
 		'pcServices',
@@ -112,6 +112,6 @@
 //vv - Not Being used - vv
 .value('firebaseRef', function(){
 	var ref = new Firebase('https://checkride.firebaseio.com')
-})
-
+})  
+    
 })();

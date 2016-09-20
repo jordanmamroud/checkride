@@ -3,58 +3,47 @@
 	angular.module("pcUser",[])
 
 		//Shared Controllers
-		.controller("profileController", ['$scope','profileService', 'pcServices', function($scope, profileService,pcServices){
-			
+		.controller("profileController", ['$scope','profileService', 'pcServices', 'currentUser',function($scope, profileService,pcServices, currentUser){
 			var refs = pcServices.getCommonRefs();
-			var userInfo = pcServices.getCookieObj("currentUser");
-			var userRef = pcServices.getCommonRefs().accounts.child(userInfo.$id);
-			
-			$scope.role = '';
-			
-			console.log("User Ref",userRef.toString());
-			console.log("User Info",userInfo);
-
-			switch(userInfo.role.toLowerCase()){
-				case 'examiner' : 
-					$scope.role ='examiner'
-					break;
-				case 'student' : 
-					$scope.role = 'student' 
-					break ;
-			};
-
-			$scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
-
+			var userInfo = currentUser;
+            var userRef = refs.accounts.child(userInfo.$id);
+            console.log("urry",currentUser);
+            $scope.currentUser = currentUser ;
+            $scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
 			$scope.airportsList = pcServices.createFireArray(userRef.child("airports"));
-
-			$scope.saveCertification = function(chip){
-				  if(chip.hasOwnProperty("$id") == false){
-					  userRef.child("certifications/" + chip).set(true);
-					  refs.certifications.child(chip + "/users/" + userInfo.$id).set(true);
+			$scope.saveCertification = saveCertification ;
+			$scope.saveAirport= saveAirport ;
+            $scope.deleteAirport = deleteAirport ;
+            $scope.deleteCertication = deleteCertication ;
+                        
+            function saveCertification(chip){
+               saveChip(chip,"certifications");
+            }
+                        
+            function saveAirport(chip){
+               saveChip(chip, "airports");
+            }
+            
+			function deleteAirport(chip){
+				userRef.child("airports/" + chip.$id).remove();
+			}
+            
+			function deleteCertication(chip){
+				userRef.child("certifications/" + chip.$id).remove();
+			}
+            
+           function saveChip(chip, type){
+                if(chip.hasOwnProperty("$id") == false){
+					  userRef.child( type+ "/" + chip).set(true);
+				      userRef.child(type + "/" + chip).set(true);
 					  return null ;
 				}
-			}
-			$scope.saveAirport= function(chip){
-				if(chip.hasOwnProperty("$id") == false){
-					userRef.child("airports/" + chip).set(true);
-					refs.airports.child(chip + "/users/" + userInfo.$id).set(true);
-					return null ;
-				}
-			}
-			$scope.deleteAirport = function(chip){
-				userRef.child("airports/" + chip.$id).remove();
-				refs.airports.child(chip.$id+"/users/" +userInfo.$id).remove();
-			}
-			$scope.deleteCertication = function(chip){
-				userRef.child("certifications/" + chip.$id).remove();
-				refs.certifications.child(chip.$id+"/users/" +userInfo.$id).remove();
-			}
+            }
 		}])
 
 		// STUDENT CONTROLLERS
-		.controller('examinerAvailabilityController', ['$scope', 'pcServices',function($scope, pcServices){
-			var userInfo = pcServices.getCookieObj("currentUser");
-			console.log(userInfo);
+		.controller('examinerAvailabilityController', ['$scope', 'pcServices', 'currentUser',function($scope, pcServices,currentUser){
+			var userInfo = currentUser ;
 			$scope.studentName = userInfo.name.first +" " + userInfo.name.last ;
 		 }])
 
@@ -66,7 +55,6 @@
 			vm.examiners = pcServices.createFireArray(refs.examiners);
 
 			function viewProfile(examiner){
-				console.log(examiner);
 				pcServices.removeCookieObj("examinerInfo");
 				var examinerRef = refs.accounts.child(examiner.$id);
 				examinerRef.once("value",function(data){
@@ -77,51 +65,35 @@
 			  }    
 		}])
 
-		.controller('examinerInfoController', ['$scope', 'pcServices',function($scope, pcServices){
+		.controller('examinerInfoController', ['$scope', 'pcServices','currentUser',function($scope, pcServices,currentUser){
 			var vm = this ; 
 			var refs = pcServices.getCommonRefs();
-			var userInfo = pcServices.getCookieObj('currentUser');
-			var examinerInfo = pcServices.getCookieObj('examinerInfo');
-			vm.certificationsList = pcServices.createFireArray(refs.accounts.child(examinerInfo.$id +"/certifications"));
-			console.log(examinerInfo);
-			vm.airportList = pcServices.createFireArray(refs.accounts.child(examinerInfo.$id +"/airports"));
-			vm.bio = examinerInfo.data.bio ; 
-			vm.examinerName = examinerInfo.data.name.first + " " +examinerInfo.data.name.last;
+			var userInfo = currentUser ;
+            
+            vm.examinerInfo = pcServices.getCookieObj('examinerInfo');
+			vm.certificationsList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/certifications"));
+			vm.airportList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/airports"));
 		}])
 
 		.controller("examinerCalendarController",  ['$window','$scope', '$firebaseArray', '$firebaseObject', '$compile', 'uiCalendarConfig','pcServices',"calendarService",
 			function ($window,$scope, $firebaseArray, $firebaseObject, $compile, uiCalendarConfig, pcServices, calendarService){
 				var vm = this ;
-				var refs= pcServices.getCommonRefs();
-			  
+				var refs= pcServices.getCommonRefs();  
 		}])
 		  
 
 		.controller("studentHomePageController",  function($scope, $firebaseArray,$firebaseObject){
-			var ref = new Firebase("https://checkride.firebaseio.com/");
-			var authData = ref.getAuth();
-			var studentRef = ref.child("users/" + authData.password.email.replace( /[\*\^\.\'\!\@\$]/g , ''));
-			$scope.appointmentsList = $firebaseArray(studentRef.child("upcomingAppointments"));
+
 		})
-
-
-
-
-		/*
-		////User.Services.js Ported below
-		.factory("Auth", ["$firebaseAuth",
-		  function($firebaseAuth) {
-			var ref = new Firebase("https://checkride.firebaseio.com/users/");
-			return $firebaseAuth(ref);
-		  }
-		])
-		*/
 
 		.service("profileService", ['$firebaseObject','$firebaseAuth', function($firebaseObject, $firebaseAuth){
 				var examinerListRef = new Firebase("https://checkride.firebaseio.com/examiner");
 			
 			return{
-				changePassword: function(ref,oldPassword, newPassword, email){
+				changePassword: changePassword
+            }
+            
+            function changePassword(ref,oldPassword, newPassword, email){
 					if(oldPassword.length > 0 && newPassword.length > 0){
 						ref.changePassword({
 							  email: email,
@@ -145,7 +117,6 @@
 							  }
 						});
 					}
-				}
-			}
+            }
 	}])
 })()

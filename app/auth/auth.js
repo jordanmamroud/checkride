@@ -9,9 +9,7 @@
 
 		.service("UserService", ["$firebase", "$q", "pcServices", "pcAuth", function($firebase, $q, pcServices, pcAuth){
 
-			return {
-				
-			}
+			return {}
 		}])
 
 		.service("AuthService", ["$firebaseAuth", "$firebaseArray", "$q", "pcServices", "pcAuth", function($firebaseAuth, $firebaseArray, $q, pcServices, pcAuth){
@@ -59,6 +57,7 @@
 			}
 
 
+
 			function login(email, password){
 				console.log("login");
 				var defer = $q.defer();
@@ -104,9 +103,6 @@
 				pcServices.changePath(pcServices.getRoutePaths().login.path);
 			}
 
-
-
-
 			return {
 				auth: function(){ 
 					return authObj;
@@ -125,10 +121,12 @@
 				},
 
 				getUser: function(uid){
+					//Returns a promise
 					return getUser(uid);
 				},
 
 				getCurrentUser: function(){
+					//Returns a promise
 					return getUser();
 				}
 			}
@@ -164,6 +162,7 @@
 				.catch(function(error){
 					console.log("Error", error)
 				});
+
 			}
 
 			function logout(){
@@ -201,9 +200,7 @@
 
 				createAccountService.createUser(user, authScope.password);
 			}
-
 		}])
-
 
 
 		//CREATE ACCOUNT
@@ -287,3 +284,42 @@
 			}
 		}])
 })()
+
+
+//Conflicted Lines
+// =======
+// 					//Once its authenticated...
+// 					.then(function(authData) {
+
+// 						//Get the users data object and assign it to the "user" variable
+// 						user = pcServices.createFireObj(ref.accounts.child(authData.uid));
+//                         console.log("user",user);
+// 						//Once its been loaded...
+// 						user.$loaded().then(function(){
+
+// 							//Store the users object as a cookie named "currentUser"
+// 							pcServices.setCookieObj("currentUser", user);
+// >>>>>>> 00ee287fd14e35f04b6a867359f4fb85e881699c
+// =======
+// 	.controller("AuthCtrl", ["$scope", "$location", "AuthService", "pcLoginService", "createAccountService", "$firebaseObject", "pcServices","currentUser",
+// 		function($scope, $location, AuthService, pcLoginService,createAccountService, $firebaseObject, pcServices,currentUser){
+
+// 		this.auth = AuthService.auth();
+// 		this.currentUser = currentUser;
+// 			this.login = login;
+// 		this.logout = logout;
+// 		this.sendNewPassword = sendNewPassword;
+// 		this.createAccountPage = createAccountPage;
+// 		this.createAccount = createAccount;
+            
+        
+//         //Added by Josh
+// 		function logout(){
+// 			AuthService.logout(this.auth);
+// 		}
+
+// 		function login(){
+// 			pcServices.removeCookieObj("currentUser");
+// 			pcServices.setCookieObj("currentUser", currentUser);
+// 			AuthService.login(this.email, this.password);
+// >>>>>>> 00ee287fd14e35f04b6a867359f4fb85e881699c

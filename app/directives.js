@@ -5,19 +5,26 @@
 		//HEADER
 		.directive('crHeader', function(){
 			return{
-			
-				templateUrl: 'app/layout/header.html',
+				templateUrl: function(){
+                    
+                return 'app/layout/header.html?'+Date.now()},
 				scope: true,
 				transclude: false,
-				controllerAs:"header",
-				replace:true
-				//controller:['$scope','pcServices',function($scope,pcServices){
-					 //Moved to auth.js
-					 //this.loggedIn = false;
-					 // $scope.$on('$routeChangeSuccess', function (){
-						//  $scope.hd.loggedIn = (pcServices.getPath().indexOf('/user/') > -1);
-					 // })
-				//}]
+				replace:true,
+				controller:['$scope','pcServices','AuthService',function($scope,pcServices,AuthService){
+                    var auth = pcServices.getCommonRefs().main.getAuth();
+                     $scope.logout = function(){
+                        AuthService.logout(AuthService.auth())
+                    }
+                    $scope.currentUser =  pcServices.getCookieObj("currentUser");  
+                    $scope.$on('$routeChangeSuccess', function (){
+                        var user = pcServices.getCookieObj("currentUser");  
+                        if(user){
+                            $scope.currentUser = user ;
+                        }
+						  $scope.loggedIn = (pcServices.getPath().indexOf('/user/') > -1);
+					  })
+				}]
 			};
 		})
 
@@ -47,22 +54,6 @@
 			}
 		})
 
-
-		//MODAL
-		.directive("showModal", function(){
-			return{
-			   link: function(scope,element,attrs){
-				   $(element).on("click", function(){
-						$(scope.modalToOpen).addClass('showing');
-				   })
-			   }, 
-			   scope:{
-					modalToOpen:"@modalToOpen",
-					openFunc:"&"
-				}
-			}
-		})
-
 		//NAVIGATION
 		.directive('crNavigation', ['crUserNavData', 'pcServices' ,function(crUserNavData, pcServices){
 			return {
@@ -81,10 +72,10 @@
 				scope: true,
 				controller: function crNavCtrl($scope){
 					$scope.navItems = function(){
-						console.log('Bam ', pcServices.getCookieObj('currentUser'))
 						var currentUser = pcServices.getCookieObj('currentUser');
+                        console.log($scope);
 						if(currentUser){
-							switch(currentUser.role.toLowerCase()){
+							switch(currentUser.role){
 								case 'examiner' : return crUserNavData.examiner;
 								case 'student' : return crUserNavData.student;
 								default : return null;
@@ -96,32 +87,30 @@
 								case 'examiner' : return crUserNavData.examiner;
 								case 'student' : return crUserNavData.student;
 								default : return null;
-							};
-						}	
-
-
-
-					}();
-				}
-			}
-		}])
+				        };
+                    }	
+                }();
+            }
+        }
+    }])
 
 		//ACCOUNT
 		.directive('accountDetails', ['pcServices','profileService', "AuthService",function(pcServices,profileService, AuthService){
 			return{
-				templateUrl:"app/users/views/accountDetails.html",
+				templateUrl:function(){
+                    return "app/users/views/accountDetails.html?" + Date.now(); 
+                },
 				scope:false,
 				controllerAs:'user',
-				controller: function(){
-					var userInfo = pcServices.getCookieObj('currentUser');
-
-					this.currentUser = AuthService.getCurrentUser();
-
-					this.updateUser = function(ref){
-						if(this.newPassword.length>0){
-							profileService.changePassword(userRef, this.oldPassword, this.newPassword, userInfo.emailAddress)
+				controller: function($scope){
+                    var refs= pcServices.getCommonRefs();
+                    this.currentUser = $scope.currentUser ;
+                    console.log($scope);
+                    this.updateUser = function(ref){
+						if(this.newPassword){
+							profileService.changePassword(refs.accounts.child(this.currentUser.$id), this.oldPassword, this.newPassword, this.emailAddress)
 						};
-						this.currentUser.$save();
+				    this.currentUser.$save();
 					} 
 				}   
 			}
@@ -130,7 +119,10 @@
 
 		.directive("pcSessionStatus", ['pcServices','profileService', function(pcServices, profileService){
 			return {
-				templateUrl: "app/auth/sessionStatus.html",
+				templateUrl:function(){
+                 return "app/auth/sessionStatus.html?" + Date.now();   
+                },
+                scope:false
 				//controller: "AuthCtrl as auth"
 			}
 		}])

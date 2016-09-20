@@ -6,8 +6,12 @@
 
 <!-- Logged In -->
 <span ng-show="isSession">
+	<!-- Users Name -->
+	<span class="pc-captalize">{{auth.currentUser.name.first}} {{auth.currentUser.name.last}}</span>	
+	
 	<md-menu>
 		<!-- Trigger element is a md-button with an icon -->
+
 		<md-button 
 			ng-click="$mdOpenMenu($event)" 
 			class="md-icon-button" 
@@ -22,10 +26,11 @@
 			</md-menu-item>
 
 			<md-menu-item>	
-				<md-button ng-click="auth.logout()">Log out <span class="pc-captialize">{{auth.currentUser.name.first}}</span></md-button>
+
+				<md-button ng-click="auth.logout()">Log out <span class="pc-captalize">{{auth.currentUser.name.first}}</span></md-button>
+
 			</md-menu-item>
 
 		</md-menu-content>
 	</md-menu>
-
 </span>

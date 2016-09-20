@@ -4,12 +4,12 @@
 
 		<account-details></account-details>
 
-		<div ng-show="role === 'examiner'" layout="column">
+		<div ng-show="user.currentUser.role === 'examiner'" layout="column">
 
 			<div layout>
 				
 				<label>Certifications</label>
-				<md-chips md-select-on-focus ng-model="certificationsList" readonly="false" md-on-remove="deleteCertication($chip)" md-transform-chip="saveCertification($chip)" md-max-chips="30">
+				<md-chips md-select-on-focus ng-model="user.certificationsList" readonly="false" md-on-remove="user.deleteCertication($chip)" md-transform-chip="user.saveCertification($chip)" md-max-chips="30">
 					<md-chip-template>
 					<strong>{{$chip.$id}}</strong>
 					</md-chip-template>

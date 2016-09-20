@@ -28,12 +28,14 @@
 				}
 			return service;
 			
-			function Event(title,start,range,end,id){
+			function Event(title,start,range,end,recur,id,dow){
 				this.title=title
 				this.start= start
 				this.range= range
-				this.end=end
-				this.id= id
+				this.end=end,
+                this.recur = recur;
+				this.id= id;
+                this.dow = dow;
 			 }
 			function setAmtOfMonths(val, startObj){
 				if(val.length > 4){
@@ -51,15 +53,20 @@
 						 return val;
 				}
 			 }
-			function setDaysOfWeek(daysOfWeek){
+			function setDaysOfWeek(daysOfWeek, start){
 				var selectedDays=[];
 				angular.forEach(daysOfWeek, function(day){
 					if(day.selected){
 						selectedDays.push(day.val);
 					}
 				})
+                if(selectedDays.length == 0){
+                    selectedDays.push(start.day());
+                    return selectedDays;
+                }
 				return selectedDays; 
 			}
+            
 			function setEventRange(val, eventObj, occurBy){
 				if(val.length>4){
 					moment(val,'YYYY-MM-DD hh:mm:ss').format("YYYY/MM/DD").replace(/-/g, "/");
@@ -71,23 +78,29 @@
 					moment("2020/02/01",'YYYY-MM-DD hh:mm:ss').format("YYYY/MM/DD").replace(/-/g, "/");
 				}
 			}
+            
 			function onEventChange(event,ref){
 				if(event.recur == 'once'){
+                        console.log('ham');
 						updateEvents(event, ref).updateSingleEvent();   
 				 }
 				if(event.recur =="weekly"){
+                    console.log('bame');
 					updateEvents(event, ref).updateWeeklyEvent();
 				}
 
 				if(event.recur == "monthly"){
+                    console.log('wame');
 					updateEvents(event,ref).updateMonthlyEvent();
 				}
 			}
+            
 			function refreshEvents(calSelector, eventSource){
 					$(calSelector).fullCalendar('removeEventSource', eventSource);
 					$(calSelector).fullCalendar('removeEvents');
 					$(calSelector).fullCalendar('addEventSource', eventSource);
-			  }
+			 }
+            
 			function createRegularEvent(eventObj, ref){         
 				 eventObj.start = eventObj.start.toISOString();
 				 eventObj.end = eventObj.end.toISOString();
@@ -235,6 +248,7 @@
 
 
 				function updateSingleEvent(){
+                    console.log(event);
 					  ref.child(event.$id).update({
 							title: event.title,
 							start: event.start.toISOString(),
