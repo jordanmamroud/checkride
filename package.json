@@ -4,7 +4,7 @@
   "description": "Application to connect student pilots with FAA examiners ",
   "main": "checkrider.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
