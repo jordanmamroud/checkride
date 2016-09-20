@@ -16,7 +16,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         controller:function($scope, calendarService, $mdDialog, pcServices){
             var ev = this;
             var refs = pcServices.getCommonRefs();
-            var userInfo = pcServices.getCookieObj('currentUser');
+            var userInfo = pcServices.getCookieObj('user');
             var userRef = refs.accounts.child(userInfo.$id);
             var userCalendarRef = refs.calendars.child(userInfo.$id);
             var userEventsRef =  userCalendarRef.child("events");
@@ -227,7 +227,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         controller: ['$scope', '$mdDialog','pcServices', 'calendarService',function ($scope, $mdDialog, pcServices, calendarService){
             var refs = pcServices.getCommonRefs();
             var examinerInfo = pcServices.getCookieObj("examinerInfo");
-            var userInfo = pcServices.getCookieObj("currentUser");
+            var userInfo = pcServices.getCookieObj("user");
             var examinerRef = refs.accounts.child(examinerInfo.$id);
             var examinerCalRef = refs.calendars.child(examinerInfo.$id);
 

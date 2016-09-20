@@ -6,41 +6,41 @@
 		.directive('crHeader', function(){
 			return{
 				templateUrl: function(){
-                    
-                return 'app/layout/header.html?'+Date.now()},
+					
+				return 'app/layout/header.html?'+Date.now()},
 				scope: true,
 				transclude: false,
 				replace:true,
 				controller:['$scope','pcServices','AuthService',function($scope,pcServices,AuthService){
-                    var auth = pcServices.getCommonRefs().main.getAuth();
-                     $scope.logout = function(){
-                        AuthService.logout(AuthService.auth())
-                    }
-                    $scope.currentUser =  pcServices.getCookieObj("currentUser");  
-                    $scope.$on('$routeChangeSuccess', function (){
-                        var user = pcServices.getCookieObj("currentUser");  
-                        if(user){
-                            $scope.currentUser = user ;
-                        }
+					var auth = pcServices.getCommonRefs().main.getAuth();
+					 $scope.logout = function(){
+						AuthService.logout(AuthService.auth())
+					}
+					$scope.user =  pcServices.getCookieObj("user");  
+					$scope.$on('$routeChangeSuccess', function (){
+						var user = pcServices.getCookieObj("user");  
+						if(user){
+							$scope.user = user ;
+						}
 						  $scope.loggedIn = (pcServices.getPath().indexOf('/user/') > -1);
 					  })
 				}]
 			};
 		})
 
-		//SIDEBAR
+/*		//SIDEBAR
 		.directive('crSidebar', ['pcServices', function(pcServices){
-			var user = pcServices.getCookieObj('currentUser');
+			var user = pcServices.getCookieObj('user');
 			var role = user ? user.role : null;
 			return{
 				restrict:'E',
 				templateUrl: 'app/layout/sidebar.html',
 				scope: true,
 				transclude: false,
-				controller: 'crSidebarCtrl',
-				controllerAs: 'sidebar'
+				//controller: 'crSidebarCtrl',
+				//controllerAs: 'sidebar'
 			}
-		}])
+		}])*/
 
 
 		//FOOTER
@@ -55,11 +55,12 @@
 		})
 
 		//NAVIGATION
-		.directive('crNavigation', ['crUserNavData', 'pcServices' ,function(crUserNavData, pcServices){
+		.directive('crNavigation', function(){
+
 			return {
 				template:   '<md-content flex layout="column" >'+
 								'<md-list>' +
-									'<md-list-item ng-repeat="item in navItems" class="md-3-line">'+
+									'<md-list-item ng-repeat="item in layout.navItems" class="md-3-line">'+
 										'<div class="md-list-item-text">' +
 											'<a href="{{item.path}}">' +
 												'<h3>{{item.title}}</h3>' +
@@ -70,47 +71,28 @@
 								'</md-list>' +
 							'</md-content>',
 				scope: true,
-				controller: function crNavCtrl($scope){
-					$scope.navItems = function(){
-						var currentUser = pcServices.getCookieObj('currentUser');
-                        console.log($scope);
-						if(currentUser){
-							switch(currentUser.role){
-								case 'examiner' : return crUserNavData.examiner;
-								case 'student' : return crUserNavData.student;
-								default : return null;
-							};
-						}
-						var currentUser = pcServices.getCookieObj('currentUser');
-						if(currentUser){
-							switch(currentUser.role.toLowerCase()){
-								case 'examiner' : return crUserNavData.examiner;
-								case 'student' : return crUserNavData.student;
-								default : return null;
-				        };
-                    }	
-                }();
-            }
-        }
-    }])
+				//controllerAs: 'layout',
+				//controller: layoutCtrl
+			}
+	})
 
 		//ACCOUNT
 		.directive('accountDetails', ['pcServices','profileService', "AuthService",function(pcServices,profileService, AuthService){
 			return{
 				templateUrl:function(){
-                    return "app/users/views/accountDetails.html?" + Date.now(); 
-                },
+					return "app/users/views/accountDetails.html?" + Date.now(); 
+				},
 				scope:false,
 				controllerAs:'user',
 				controller: function($scope){
-                    var refs= pcServices.getCommonRefs();
-                    this.currentUser = $scope.currentUser ;
-                    console.log($scope);
-                    this.updateUser = function(ref){
+					var refs= pcServices.getCommonRefs();
+					this.user = $scope.user ;
+					console.log($scope);
+					this.updateUser = function(ref){
 						if(this.newPassword){
-							profileService.changePassword(refs.accounts.child(this.currentUser.$id), this.oldPassword, this.newPassword, this.emailAddress)
+							profileService.changePassword(refs.accounts.child(this.user.$id), this.oldPassword, this.newPassword, this.emailAddress)
 						};
-				    this.currentUser.$save();
+					this.user.$save();
 					} 
 				}   
 			}
@@ -120,9 +102,9 @@
 		.directive("pcSessionStatus", ['pcServices','profileService', function(pcServices, profileService){
 			return {
 				templateUrl:function(){
-                 return "app/auth/sessionStatus.html?" + Date.now();   
-                },
-                scope:false
+				 return "app/auth/sessionStatus.html?" + Date.now();   
+				},
+				scope:false
 				//controller: "AuthCtrl as auth"
 			}
 		}])

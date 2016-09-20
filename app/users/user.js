@@ -3,12 +3,12 @@
 	angular.module("pcUser",[])
 
 		//Shared Controllers
-		.controller("profileController", ['$scope','profileService', 'pcServices', 'currentUser',function($scope, profileService,pcServices, currentUser){
+		.controller("profileController", ['$scope','profileService', 'pcServices', 'user',function($scope, profileService,pcServices, user){
 			var refs = pcServices.getCommonRefs();
-			var userInfo = currentUser;
+			var userInfo = user;
             var userRef = refs.accounts.child(userInfo.$id);
-            console.log("urry",currentUser);
-            $scope.currentUser = currentUser ;
+            console.log("urry",user);
+            $scope.user = user ;
             $scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
 			$scope.airportsList = pcServices.createFireArray(userRef.child("airports"));
 			$scope.saveCertification = saveCertification ;
@@ -42,8 +42,8 @@
 		}])
 
 		// STUDENT CONTROLLERS
-		.controller('examinerAvailabilityController', ['$scope', 'pcServices', 'currentUser',function($scope, pcServices,currentUser){
-			var userInfo = currentUser ;
+		.controller('examinerAvailabilityController', ['$scope', 'pcServices', 'user',function($scope, pcServices,user){
+			var userInfo = user ;
 			$scope.studentName = userInfo.name.first +" " + userInfo.name.last ;
 		 }])
 
@@ -65,10 +65,10 @@
 			  }    
 		}])
 
-		.controller('examinerInfoController', ['$scope', 'pcServices','currentUser',function($scope, pcServices,currentUser){
+		.controller('examinerInfoController', ['$scope', 'pcServices','user',function($scope, pcServices,user){
 			var vm = this ; 
 			var refs = pcServices.getCommonRefs();
-			var userInfo = currentUser ;
+			var userInfo = user ;
             
             vm.examinerInfo = pcServices.getCookieObj('examinerInfo');
 			vm.certificationsList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/certifications"));
@@ -94,29 +94,29 @@
             }
             
             function changePassword(ref,oldPassword, newPassword, email){
-					if(oldPassword.length > 0 && newPassword.length > 0){
-						ref.changePassword({
-							  email: email,
-							  oldPassword: oldPassword.toString(),
-							  newPassword: newPassword.toString()
-							},
-						   function(error) {
-							  if (error) {
+				if(oldPassword.length > 0 && newPassword.length > 0){
+					ref.changePassword({
+						email: email,
+						oldPassword: oldPassword.toString(),
+						newPassword: newPassword.toString()
+						},
+					   function(error) {
+						  	if (error) {
 								switch (error.code) {
-								  case "INVALID_PASSWORD":
-									console.log("The specified user account password is incorrect.");
-									break;
-								  case "INVALID_USER":
-									console.log("The specified user account does not exist.");
-									break;
-								  default:
-									console.log("Error changing password:", error);
-								}
-							  } else {
+									case "INVALID_PASSWORD":
+										alert("Invalid Password: " + error)
+										break;
+									case "INVALID_USER":
+										alert("The specified user account does not exist.");
+										break;
+									default:
+										alert("Error changing password:", error);
+									}
+								} else {
 								console.log("User password changed successfully!");
-							  }
-						});
-					}
+						  }
+					});
+				}
             }
 	}])
 })()

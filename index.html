@@ -46,13 +46,14 @@
 			
 			<!-- Scripts -->
 			<script type="text/javascript" src="app.js"></script>
-			<script type="text/javascript" src="app/services/common.services.js"></script>
+			<script type="text/javascript" src="app/services.js"></script>
 			<script type="text/javascript" src="app/services/data.service.js"></script>
 			<script type="text/javascript" src="app/controllers.js"></script>
 			<script type="text/javascript" src="app/directives.js"></script>
 			<script type="text/javascript" src="app/routes.js"></script>
 			<script type="text/javascript" src="app/components/search/search.js"></script>
-			<script type="text/javascript" src="app/auth/auth.js"></script>
+			<script type="text/javascript" src="app/auth/auth.service.js"></script>
+			<script type="text/javascript" src="app/auth/auth.controller.js"></script>
 
 			<script type="text/javascript" src="app/users/user.js"></script>
 			<script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
@@ -63,10 +64,10 @@
 			<script type="text/ng-template" id="save-dialog.tmpl.html"></script>
 	</head>
 
-	<body layout-fill>
+	<body layout-fill ng-controller="AuthCtrl as auth">
 
 		<!-- Main Wrapper -->
-		<div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout' layout-fill>
+		<div id="pc-main" layout="column" flex ng-controller='LayoutCtrl as layout' layout-fill>
 
 			<!-- HEADER -->
 			<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" md-colors="::{backgroundColor: 'default-background-100'}">

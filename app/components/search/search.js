@@ -175,7 +175,7 @@ crComponents.controller('crSearchCtrl',["$scope", "$window", "$firebaseArray",'$
 				console.log(snapshot.val().userData);
 			});
 		};
-		var currUsr = $cookies.getObject('currentUser');
+		var currUsr = $cookies.getObject('user');
 		console.log(currUsr);
 	}])
 */

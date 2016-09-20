@@ -15,7 +15,8 @@
 		'pcControllers',
 		'pcDirectives',
 		'pcRoutes',
-		'pcAuth',
+		'pcAuthService',
+        'pcAuthController',
 		'pcSearch',
 		'pcDataService',
 
