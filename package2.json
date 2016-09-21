@@ -1,0 +1,35 @@
+{
+  "name": "PilotCheckrides",
+  "version": "1.0.0",
+  "description": "Application to connect student pilots with FAA examiners ",
+  "main": "checkrider.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jordanmamroud/checkride.git"
+  },
+  "author": "Jordan Mamroud, Josh Mamroud",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jordanmamroud/checkride/issues"
+  },
+  "homepage": "https://github.com/jordanmamroud/checkride#readme",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.5.8",
+    "angular-cookies": "^1.5.8",
+    "angular-material": "^1.1.0",
+    "angular-route": "^1.5.8",
+    "angular-touch": "^1.5.8",
+    "elasticsearch": "^11.0.1",
+    "font-awesome": "^4.6.3"
+  },
+  "engines": {
+  "node": "4.4.7",
+  "npm": "2.15.8"
+  }
+}
