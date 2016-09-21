@@ -1,4 +1,4 @@
-(function(){
+
     
 	angular.module('pcRoutes',['ngRoute'])
     
@@ -46,9 +46,8 @@
 		})
 
 		.when(RoutePaths.signUp.path, {
-			templateUrl: 'app/auth/create-account.html',
-            controller:'AuthCtrl'
-		})
+			templateUrl: 'app/auth/create-account.html'
+        })
 
 		.when(RoutePaths.examinerCal.path, {
 			templateUrl:"app/users/views/examinerCalendar.html",
@@ -59,7 +58,6 @@
 		.when(RoutePaths.profile.path, {
 			templateUrl: 'app/users/views/profile.html',
 			scope:true
-
 		})
 
 		.when(RoutePaths.examinerMessages.path,{
@@ -159,4 +157,4 @@
         
 	})
 
-})();
+

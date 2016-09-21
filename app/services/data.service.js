@@ -12,13 +12,6 @@
 		//New variables
 		var data = this;
 		data.ref = fbRef;
-
-
-
-
-
-
-
 		function getAirports(){
 			var defer = $q.defer();
 			var query = data.ref.child("airports").orderByKey().limitToFirst(3);
@@ -27,21 +20,8 @@
 			});
 			return defer.promise;
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		return {
+        
+return {
 
 			getAirports: getAirports,
 
@@ -88,11 +68,6 @@
 
 			}
 		}
-		
-		
-
-
-		
 		
 	}])
 })();

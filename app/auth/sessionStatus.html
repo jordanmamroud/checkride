@@ -1,13 +1,13 @@
 <!-- Not Logged In -->
-<span ng-show="!isLoggedIn">
+<span ng-show="!auth.isLoggedIn">
 	<a ng-href="/create-account"><md-button class="md-primary" aria-label="Sign Up">Sign Up</md-button></a>
 	<a ng-href="/log-in"><md-button class="md-raised md-primary" aria-label="Log In">log in</md-button></a>
 </span>
 
 <!-- Logged In -->
-<span ng-show="isLoggedIn">
+<span ng-show="auth.isLoggedIn">
 	<!-- Users Name -->
-	<span class="pc-capitalize">{{auths.name.first}} {{users.name.last}}</span>	
+	<span class="pc-capitalize">{{auth.name.first}} {{users.name.last}}</span>	
 	
 	<md-menu>
 		<!-- Trigger element is a md-button with an icon -->
@@ -15,13 +15,8 @@
 		<md-button 
 			ng-click="$mdOpenMenu($event)" 
 			class="md-icon-button" 
-<<<<<<< HEAD
-			aria-label="Open sample menu"
-			style="background-image:url({{currentUser.photoUrl}}); background-size: cover;">
-=======
 			aria-label="Open sample menu" 
 			style="background-image:url({{auth.user.photoUrl}}); background-size: cover;">
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
 		</md-button>
 
 		<md-menu-content>
@@ -39,3 +34,7 @@
 		</md-menu-content>
 	</md-menu>
 </span>
+
+<!--
+			aria-label="Open sample menu"
+			style="background-image:url({{currentUser.photoUrl}}); background-size: cover;">-->

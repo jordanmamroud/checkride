@@ -1,5 +1,5 @@
 
-(function(){
+
 
 	'use strict'
 	angular.module('checkrider',[
@@ -19,11 +19,7 @@
         'pcAuthController',
 		'pcSearch',
 		'pcDataService',
-<<<<<<< HEAD
         'pcNotificationsController',
-=======
-        'pcUserController',
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
 
 		'pcUser',
 		'crCalendar',
@@ -54,8 +50,8 @@
         },
         database: {
             ref: 'https://checkride.firebaseio.com/',
-            airportsRef: 'https://checkride.firebaseio.com/airports',
-            usersRef: 'https://checkride.firebaseio.com/users'
+            airportsRef:'https://checkride.firebaseio.com/airports',
+            usersRef:'https://checkride.firebaseio.com/users'
         },
         firebase:{
             ref:"https://checkride.firebaseio.com"
@@ -64,7 +60,6 @@
             defaultPhotoUrl : "/assets/img/default-avitar.jpg"
         }
     })
-
 
 	.value('crUserNavData',{
 	 
@@ -80,11 +75,12 @@
 				profile:{
 					title:'My Profile',
 					path: '/user/profile'
-				},
-                notifications:{
-                    title:"notifications",
-                    path:"/user/notifications"
                 }
+//				},
+//                notifications:{
+//                    title:"notifications",
+//                    path:"/user/notifications"
+//                }
 			},
 			'student':{
 				Examiners:{
@@ -98,11 +94,11 @@
 				profile:{
 					title:'Profile',
 					path: '/user/profile'
-				},
-                 notifications:{
-                    title:"notifications",
-                    path:"/user/notifications"
-                }
+				}
+//                 notifications:{
+//                    title:"notifications",
+//                    path:"/user/notifications"
+//                }
 		}
 	})
 
@@ -126,7 +122,19 @@
 
 //vv - Not Being used - vv
 .value('firebaseRef', function(){
-	var ref = new Firebase('https://checkride.firebaseio.com')
+		var main = new Firebase("https://checkride.firebaseio.com/temp");
+			return{
+				root: new Firebase("https://checkride.firebaseio.com/"),
+				main: main,
+				airports: main.child('airports'),
+				certifications: main.child('certifications'),
+				conversations: main.child('conversations'),
+				calendars: main.child('calendars'),
+				accounts:main.child('users/accounts'),
+				roles:main.child('users/roles'),
+				examiners:main.child('users/roles/examiner'),
+				students:main.child('users/roles/student'),
+                notifications: main.child("notifications")
+			}
 })  
     
-})();

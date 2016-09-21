@@ -1,27 +1,22 @@
-angular.module('pcSearch',[])
+(function(){angular.module('pcSearch',[])
 
 //SEARCH CONTROLLER
-.controller('SearchCtrl', ['$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices', searchCtrl]);
+.controller('SearchCtrl', ['$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices',  
 
 function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airports, esFactory, DataService, pcServices) {
-
 	var self = this;
 	var ref = pcServices.getCommonRefs().main;
 	var userRef = ref.child("users/accounts");
 
 	self.airports = airports;
 	self.searchText = "";
-
 	self.querySearch = querySearch;
 	self.searchTextChange = searchTextChange;
 	self.selectedItemChange = selectedItemChange;
-
 	self.simulateQuery = true;
 	self.isDisabled    = false;
 	self.searchBoxAlign = "center center";
 	self.isSearchStart = true;
-
-
 
 	function querySearch (query) {
 		var results = query ? self.airports.filter( createFilterFor(query) ) : self.airports, deferred;
@@ -77,7 +72,7 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 		var refs= pcServices.getCommonRefs();
 		var examinerRef = refs.accounts.child(examiner.$id);
 		examinerRef.once("value",function(data){
-			//pcServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
+			pcServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
 		});
 		pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
 	}
@@ -110,20 +105,9 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 
   }
 
- console.log(loadAll());
-
-
-
-
-
-
-
-
-
-
 }
-
-
+]);
+           })()
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

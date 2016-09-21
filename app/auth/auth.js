@@ -51,13 +51,13 @@
 					//Once its authenticated...
 					.then(function(authData) {
 						//Get the users data object and assign it to the "user" variable
-						user = pcServices.createFireObj(ref.accounts.child(authData.uid));
+						var user = pcServices.createFireObj(ref.accounts.child(authData.uid));
 						//Once its been loaded...
 						user.$loaded().then(function(){
 
 							//Store the users object as a cookie named "currentUser"
-							pcServices.setCookieObj("currentUser", user);
-
+							pcServices.setCookieObj("user", user);
+                            
 							//And redirect to the users profile page
 							pcServices.changePath(pcServices.getRoutePaths().profile.path);
 
@@ -116,7 +116,7 @@
 			this.logout = logout;
 			this.sendNewPassword = sendNewPassword;
 			this.createAccountPage = createAccountPage;
-			this.createAccount = createAccount;
+			this.createAccount = createAccountPage;
                 
             
             //Added by Josh

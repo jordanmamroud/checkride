@@ -9,37 +9,37 @@
 		
 		<div layout>
 			<md-input-container layout>
-				<input type="text" required placeholder="First" ng-model="firstName">
+				<input type="text" required placeholder="First" ng-model="auth.firstName">
 			</md-input-container>
 
 			<md-input-container layout>
-				<input type="text" required placeholder="Last" ng-model="lastName" >
+				<input type="text" required placeholder="Last" ng-model="auth.lastName" >
 			</md-input-container>
 		</div>
 
 		<md-input-container layout>
-			<input type="email" required placeholder="Email Address" ng-model="emailAddress">
+			<input type="email" required placeholder="Email Address" ng-model="auth.emailAddress">
 		</md-input-container>
 
 		<md-input-container layout>
-			 <input type="password" required placeholder="Password" ng-model="password">
+			 <input type="password" required placeholder="Password" ng-model="auth.password">
 		 </md-input-container>
 
 		 <md-input-container layout>
-			 <input type="text" required placeholder="phone number" ng-model="phone">
+			 <input type="text" required placeholder="phone number" ng-model="auth.phone">
 		 </md-input-container>
 
 		<md-input-container layout>
 			<label for="">I am a...</label>
-			<md-select ng-model="user.role">
-				<md-option ng-repeat="role in roles" value="{{role}}">{{role}}</md-option>
+			<md-select ng-model="auth.role">
+				<md-option ng-repeat="role in auth.roles" value="{{role}}">{{role}}</md-option>
 			</md-select>
 		</md-input-container>
 		
 		<!-- Photo Url -->
 		<div layout-gt-sm="row">
 			<md-input-container class="md-block" flex-gt-md>
-				<input placeholder="Profile Pictrue (url)" type="url" ng-model="user.photoUrl">
+				<input placeholder="Profile Pictrue (url)" type="url" ng-model="auth.photoUrl">
 			</md-input-container>
 		</div>
 

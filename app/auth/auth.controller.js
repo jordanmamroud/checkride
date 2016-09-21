@@ -9,16 +9,18 @@
 			authScope.authData = AuthService.getAuth;
 			authScope.login = login;
 			authScope.logout = logout;
-
+            authScope.createAccountPage = createAccountPage;
+            authScope.createAccount = createAccount;
+            authScope.roles= ['student', 'instructor','examiner'];
 			authScope.auth.$onAuth(function(authData){
 				if(!authData){
 					//logout();
-					$scope.isLoggedIn=false;
+					authScope.isLoggedIn=false;
 				}else{
 					if(!authScope.user){
 						getUser();
 					}
-					$scope.isLoggedIn=true;
+					authScope.isLoggedIn=true;
 				}
 				authScope.authData = authData;
 			});
@@ -29,7 +31,7 @@
 				.then(function(user){
 					authScope.user = user;
 					pcServices.changePath(pcServices.getRoutePaths().profile.path);
-					$scope.isLoggedIn = true;
+					authScope.isLoggedIn = true;
 				})
 				.catch(function(error){
 					alert(error);
@@ -38,7 +40,7 @@
 
 			//LOGOUT
 			function logout(){
-				$scope.isLoggedIn = false;
+				authScope.isLoggedIn = false;
 				authScope.user = null;
 				AuthService.logout();
 			}
@@ -55,6 +57,21 @@
 
 			function getAirportList(){
 
+			}
+                                        
+            function createAccountPage(){
+					pcServices.changePath(pcServices.getRoutePaths().signUp.path);
+			}
+                                        
+            function createAccount(){
+				var user = {
+						name:{ first:authScope.firstName,last: authScope.lastName},
+						emailAddress:authScope.emailAddress,
+						phone:authScope.phone,
+						role: authScope.role
+				}
+
+				AuthService.createUser(user, authScope.password);
 			}
 			
 		}])

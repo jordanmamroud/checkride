@@ -2,9 +2,6 @@
 
 <html lang="en" ng-app="checkrider">
 	<head>
-	   
-	
-	  
 		<!-- Metadata -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,19 +49,12 @@
 			<script type="text/javascript" src="app/directives.js"></script>
 			<script type="text/javascript" src="app/services/data.service.js"></script>
 			<script type="text/javascript" src="app/components/search/search.js"></script>
-<<<<<<< HEAD
-			<script type="text/javascript" src="app/auth/auth.js"></script>
-<!--
-			<script type="text/javascript" src="app/auth/auth.service.js"></script>
-			<script type="text/javascript" src="app/auth/auth.controller.js"></script>
--->
+<!--			<script type="text/javascript" src="app/auth/auth.js"></script>-->
 
-=======
 			<script type="text/javascript" src="app/auth/auth.service.js"></script>
 			<script type="text/javascript" src="app/auth/auth.controller.js"></script>
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
 			<script type="text/javascript" src="app/users/user.js"></script>
-			<script type="text/javascript" src="app/users/user.controller.js"></script>
+<!--			<script type="text/javascript" src="app/users/user.controller.js"></script>-->
 			<script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
 			<script type="text/javascript" src="app/components/calendar/examinerCalendar.js"></script>
 			<script type="text/javascript" src="app/components/calendar/calDirective.js"></script>
@@ -73,17 +63,18 @@
 			<script type="text/ng-template" id="save-dialog.tmpl.html"></script>
 	</head>
 
-<<<<<<< HEAD
+<!--
+
 	<body layout-fill>
-		<!-- Main Wrapper -->
+		 Main Wrapper 
 		<div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout' layout-fill>
-=======
+-->
+
 	<body layout-fill ng-controller="AuthCtrl as auth">
 
 		<!-- Main Wrapper -->
 		<div id="pc-main" layout="column" flex ng-controller='LayoutCtrl as layout' layout-fill>
 
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
 			<!-- HEADER -->
 			<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" md-colors="::{backgroundColor: 'default-background-100'}">
 				<cr-header></cr-header>
@@ -92,13 +83,23 @@
 			
 			<md-progress-linear md-mode="indeterminate" ng-disabled="true" style='height:2px;'></md-progress-linear>
 			
+<!--
 			<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
-<<<<<<< HEAD
-=======
-				
-				
-				
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
+
+				 SIDEBAR 
+				<md-sidenav 
+					ng-show="auth.isLoggedIn" 
+					md-is-locked-open="true"
+					layout-fill 
+					layout="column" 
+					flex="15" 
+					class="md-sidenav-left" 
+					md-component-id="pc-sidenav-left" 
+					md-colors="::{backgroundColor: 'default-background-500'}"
+					<cr-navigation></cr-navigation>
+				</md-sidenav>
+-->
+            <div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
 				<!-- SIDEBAR -->
 				<md-sidenav 
 					ng-show="auth.isLoggedIn" 

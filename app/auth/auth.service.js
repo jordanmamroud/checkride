@@ -6,15 +6,15 @@
 			function($firebaseAuth, $firebaseArray, $q, pcServices){
 
 			var me = this;
-			var ref = pcServices.getCommonRefs().main;
-			var auth = $firebaseAuth(ref);
+			var ref = pcServices.getCommonRefs();
+			var auth = $firebaseAuth(ref.main);
 			var authObj = auth.$getAuth();
 			var savedUser;
 
 			function getUser(){
 				var defer = $q.defer();
 				if(authObj){
-					pcServices.firebaseObject(ref.child("users/accounts").child(authObj.uid))
+					pcServices.firebaseObject(ref.accounts.child(authObj.uid))
 					.$loaded().then(function(user){
 						savedUser = user;
 						defer.resolve(user);
@@ -38,10 +38,26 @@
 
 				//Once its authenticated...
 				.then(function(authData) {
+                    
 					authObj = auth.$getAuth();
 					//Get the users data object and assign it to the "user" variable
 					getUser().then(function(user){
 						defer.resolve(user);
+
+                        	//Get the users data object and assign it to the "user" variable
+						user = pcServices.createFireObj(ref.accounts.child(authData.uid));
+						//Once its been loaded...
+						user.$loaded().then(function(){
+
+							//Store the users object as a cookie named "currentUser"
+							pcServices.setCookieObj("user", user);
+							//And redirect to the users profile page
+							pcServices.changePath(pcServices.getRoutePaths().profile.path);
+
+							//Then return the users object
+							return authData;
+						})
+                        
 					})
 
 					//If couldnt authenticate....
@@ -67,9 +83,30 @@
 			function getAuth(){
 				return authObj;
 			}
+                
+            function createUserAccount(newUser, userId){
+				ref.accounts.child(userId).set(newUser);
+				ref.roles.child(newUser.role.toLowerCase() + "/" + userId).set({name:newUser.name.first +" " + newUser.name.last});
+			}
+                
+            function createUser(newUser, password){
+					ref.main.createUser({
+							email: newUser.emailAddress ,
+							password: password
+						},
+						
+						function(error, userData){
+							if (error) {
+								console.log("Error creating user:", error);
+							} else {
+								createUserAccount(newUser, userData.uid);
+							}
+					});
+            }
 
 
 			return {
+                createUser:createUser,
 				user:savedUser,
 				auth:auth,
 				getAuth:getAuth(),

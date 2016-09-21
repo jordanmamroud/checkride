@@ -3,21 +3,19 @@
 	angular.module("pcUser",[])
 
 		//Shared Controllers
-<<<<<<< HEAD
-		.controller("profileController", ['$rootScope','$scope','profileService', 'pcServices', 'currentUser',function($rootScope,$scope, profileService,pcServices, currentUser){
-			var refs = pcServices.getCommonRefs();
-			var userInfo = currentUser ;
-            var userRef = refs.accounts.child(userInfo.$id);
-            
-            $scope.currentUser = currentUser ;
-=======
+
+//		.controller("profileController", ['$rootScope','$scope','profileService', 'pcServices', 'currentUser',function($rootScope,$scope, profileService,pcServices, currentUser){
+//			var refs = pcServices.getCommonRefs();
+//			var userInfo = currentUser ;
+//            var userRef = refs.accounts.child(userInfo.$id);
+//            
+//            $scope.currentUser = currentUser ;
 		.controller("profileController", ['$scope','profileService', 'pcServices', 'user',function($scope, profileService,pcServices, user){
 			var refs = pcServices.getCommonRefs();
 			var userInfo = user;
             var userRef = refs.accounts.child(userInfo.$id);
-            console.log("urry",user);
             $scope.user = user ;
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
+
             $scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
 			$scope.airportsList = pcServices.createFireArray(userRef.child("airports"));
 			$scope.saveCertification = saveCertification ;

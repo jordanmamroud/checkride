@@ -15,14 +15,13 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         controllerAs:"ev", 
         controller:function($scope, calendarService, $mdDialog, pcServices){
             var ev = this;
-<<<<<<< HEAD
-            var refs = pcServices.getCommonRefs() ;
-//            var userInfo = $scope.$parent.$resolve.currentUser ;
-            var userInfo = pcServices.getCookieObj("currentUser");
-=======
+//<<<<<<< HEAD
+//            var refs = pcServices.getCommonRefs() ;
+////            var userInfo = $scope.$parent.$resolve.currentUser ;
+//            var userInfo = pcServices.getCookieObj("currentUser");
+//=======
             var refs = pcServices.getCommonRefs();
             var userInfo = pcServices.getCookieObj('user');
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
             var userRef = refs.accounts.child(userInfo.$id);
             var userCalendarRef = refs.calendars.child(userInfo.$id);
             var userEventsRef =  userCalendarRef.child("events");
@@ -242,8 +241,10 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         controller: ['$scope', '$mdDialog','pcServices', 'calendarService',function ($scope, $mdDialog, pcServices, calendarService){
             var refs = pcServices.getCommonRefs();
             var examinerInfo = pcServices.getCookieObj("examinerInfo");
+/*
 <<<<<<< HEAD
-            var userInfo = pcServices.getCookieObj("currentUser");
+*/
+             var userInfo = pcServices.getCookieObj("user");
             
             var examinerRef = refs.accounts.child(examinerInfo.$id) ;
             var examinerCalRef = refs.calendars.child(examinerInfo.$id) ;
@@ -263,7 +264,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
 				var examinerRequestListRef = examinerCalRef.child("appointmentRequests").push(appointment);
                 refs.notifications.child(examinerInfo.$id).push("appointment Request from " + userInfo.name.first + ' ' + userInfo.name.last);
                 $mdDialog.hide();
-=======
+/*=======
             var userInfo = pcServices.getCookieObj("user");
             var examinerRef = refs.accounts.child(examinerInfo.$id);
             var examinerCalRef = refs.calendars.child(examinerInfo.$id);
@@ -274,7 +275,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             $scope.sendRequest = function(){
                 var examinerCalRef = refs.calendars.child(examinerInfo.$id);
                 calendarService.sendAppointmentRequest(examinerCalRef, userInfo,$scope.eventStart, $scope.eventEnd);
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
+>>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33*/
             }
             
             $scope.eventSources = [];
