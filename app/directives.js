@@ -6,55 +6,19 @@
 		.directive('crHeader', function(){
 			return{
 				templateUrl: function(){
-                    
-                return 'app/layout/header.html?'+Date.now()},
-				scope: true,
+                    return 'app/layout/header.html?'+Date.now()
+                },
+				scope: false,
 				transclude: false,
 				replace:true,
-				controller:['$scope','pcServices','AuthService',function($scope,pcServices,AuthService){
-                    var auth = pcServices.getCommonRefs().main.getAuth();
-                     $scope.logout = function(){
-                        AuthService.logout(AuthService.auth())
-                    }
-                    $scope.currentUser =  pcServices.getCookieObj("currentUser");  
-                    $scope.$on('$routeChangeSuccess', function (){
-                        var user = pcServices.getCookieObj("currentUser");  
-                        if(user){
-                            $scope.currentUser = user ;
-                        }
-						  $scope.loggedIn = (pcServices.getPath().indexOf('/user/') > -1);
-					  })
-				}]
+                controller:function($scope){
+                    console.log($scope);
+                }
 			};
 		})
 
-		//SIDEBAR
-		.directive('crSidebar', ['pcServices', function(pcServices){
-			var user = pcServices.getCookieObj('currentUser');
-			var role = user ? user.role : null;
-			return{
-				restrict:'E',
-				templateUrl: 'app/layout/sidebar.html',
-				scope: true,
-				transclude: false,
-				controller: 'crSidebarCtrl',
-				controllerAs: 'sidebar'
-			}
-		}])
 
-
-		//FOOTER
-		.directive("crFooter", function(){
-			return{
-				restrict:'E',
-				templateUrl: 'app/layout/footer.html',
-				scope: true,
-				transclude: false,
-				controller: 'crFooterCtrl'
-			}
-		})
-
-		//NAVIGATION
+		//SIDEBAR NAVIGATION
 		.directive('crNavigation', ['crUserNavData', 'pcServices' ,function(crUserNavData, pcServices){
 			return {
 				template:   '<md-content flex layout="column" >'+
@@ -69,30 +33,9 @@
 									'</md-list-item>' +
 								'</md-list>' +
 							'</md-content>',
-				scope: true,
-				controller: function crNavCtrl($scope){
-					$scope.navItems = function(){
-						var currentUser = pcServices.getCookieObj('currentUser');
-                        console.log($scope);
-						if(currentUser){
-							switch(currentUser.role){
-								case 'examiner' : return crUserNavData.examiner;
-								case 'student' : return crUserNavData.student;
-								default : return null;
-							};
-						}
-						var currentUser = pcServices.getCookieObj('currentUser');
-						if(currentUser){
-							switch(currentUser.role.toLowerCase()){
-								case 'examiner' : return crUserNavData.examiner;
-								case 'student' : return crUserNavData.student;
-								default : return null;
-				        };
-                    }	
-                }();
-            }
+				scope: false
         }
-    }])
+     }])
 
 		//ACCOUNT
 		.directive('accountDetails', ['pcServices','profileService', "AuthService",function(pcServices,profileService, AuthService){
@@ -105,7 +48,6 @@
 				controller: function($scope){
                     var refs= pcServices.getCommonRefs();
                     this.currentUser = $scope.currentUser ;
-                    console.log($scope);
                     this.updateUser = function(ref){
 						if(this.newPassword){
 							profileService.changePassword(refs.accounts.child(this.currentUser.$id), this.oldPassword, this.newPassword, this.emailAddress)
@@ -122,7 +64,11 @@
 				templateUrl:function(){
                  return "app/auth/sessionStatus.html?" + Date.now();   
                 },
-                scope:false
+                scope:false,
+                controller:function($scope){
+                    
+                }
+            
 				//controller: "AuthCtrl as auth"
 			}
 		}])
@@ -132,3 +78,13 @@
 	
 
 
+//		//FOOTER
+//		.directive("crFooter", function(){
+//			return{
+//				restrict:'E',
+//				templateUrl: 'app/layout/footer.html',
+//				scope: true,
+//				transclude: false,
+//				controller: 'crFooterCtrl'
+//			}
+//		})

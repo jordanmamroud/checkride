@@ -77,6 +77,12 @@
 					return pcServices.createFireArray(conversationsRef).$loaded()
 			}
 		}})
+        
+        .when(RoutePaths.notifications.path, {
+            templateUrl:"app/components/notifications/notifications.html",
+            controller:"notificationsController",
+            controllerAs:"notify"
+        })
 
 		//studentPaths
 		.when(RoutePaths.examinerList.path,{
@@ -148,7 +154,11 @@
 		},
 		studentMessages:{
 			path:"/user/student-messages"
-		}
+		},
+        notifications:{
+            path:"/user/notifications"
+        }
+        
 	})
 
 })();

@@ -1,0 +1,22 @@
+<div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div>
+
+
+<script id="requestModal" type="text/ng-template">
+                    <h2>Time</h2><br>
+                    <p>{{eventStart}}</p>
+                    <p>{{eventEnd}}</p>
+                    <md-button  class="md-raised md-primary" ng-click="vc.sendRequest()">Request Appointment</md-button>
+
+                    <md-input-container layout>
+                        <md-select ng-model="vc.aicrCategory">
+                            <md-option ng-value="cat" placeholder="Categores"  class="pc-capitalize" ng-repeat="cat in vc.aicrCats">{{cat.$value}}</md-option>
+                        </ms-select>       
+                    </md-input-container>
+                    
+                     <md-input-container layout>
+                        <md-select ng-model="vc.rating">
+                            <md-option ng-value="{{rate}}" placeholder="Ratings"  class="pc-capitalize" ng-repeat="rate in vc.ratings">{{rate.$value}}</md-option>
+                        </ms-select>       
+                    </md-input-container>
+                    
+</script>

@@ -1,29 +1,47 @@
 (function(){
 	angular.module('pcAuth', ['firebase'])
 
-		.service("AuthService", ["$firebaseAuth", "$firebaseArray", "pcServices", function($firebaseAuth, $firebaseArray, pcServices){
-			var ref = pcServices.getCommonRefs();
+		.service("AuthService", ['$q',"$firebaseAuth", "$firebaseArray", "pcServices", function($q,$firebaseAuth, $firebaseArray, pcServices){
+            var ref = pcServices.getCommonRefs();
 			var authObj = $firebaseAuth(ref.main);
 			var authObjData = authObj.$getAuth();
 			var user = null;
 
 
-			function getUserObject(uid){
-				return pcServices.createFireObj(ref.accounts.child(uid));
-			};
+            var service = {
+                getUser:getUser,
+                auth: $firebaseAuth(ref.main),
+                getAuth: getAuth,
+                login : login,
+                //Accepts auth object as param
+                logout : logout,
+                createUser:createUser                
+            }
 
+			return service ;
+            
 
-			return {
-				auth : function(){
-					return authObj;
-				},
+            function getAuth(){
+                return authObjData;
+            }
+            
+            function getUser(){
+				var defer = $q.defer();
+				if(authObjData){
+                    console.log(authObjData);
+					pcServices.createFireObj(ref.accounts.child(authObjData.uid))
+					.$loaded().then(function(user){
+						savedUser = user;
+						defer.resolve(user);
+					}).catch(function(err){
+						defer.reject(err);
+					})
+				}
+				return defer.promise;
+			}
 
-				getAuth : function(){
-					return authObj.$getAuth();
-				},
-
-				login : function(email, password){
-
+            
+            function login(email, password){
 					//Send email and password to be authenticated
 					authObj.$authWithPassword({
 						email: email,
@@ -32,10 +50,8 @@
 
 					//Once its authenticated...
 					.then(function(authData) {
-
 						//Get the users data object and assign it to the "user" variable
 						user = pcServices.createFireObj(ref.accounts.child(authData.uid));
-                        console.log("user",user);
 						//Once its been loaded...
 						user.$loaded().then(function(){
 
@@ -55,25 +71,37 @@
 						return error;
 						console.error("Authentication failed:", error);
 					});
-
-				},
-
-				//Accepts auth object as param
-				logout : function(authObj){
+            }
+                     
+            function logout(authObj){
 					//Clears current user cookie
 					pcServices.setCookieObj("currentUser", null);
 					//Unauths session				
 					authObj.$unauth();
 					//Redirect to the login page
 					pcServices.changePath(pcServices.getRoutePaths().login.path);
-				},
-
-				getCurrentUser : function(){
-					if(authObjData){
-						return pcServices.createFireObj(ref.accounts.child(authObjData.uid));
-					}
-				}
-			}
+            }
+            
+            function createUser(newUser, password){
+					refs.main.createUser({
+							email: newUser.emailAddress ,
+							password: password
+						},
+						
+						function(error, userData){
+							if (error) {
+								console.log("Error creating user:", error);
+							} else {
+								createUserAccount(newUser, userData.uid);
+							}
+					});
+            }
+            
+            //				getCurrentUser : function(){
+//					if(authObjData){
+//						return pcServices.createFireObj(ref.accounts.child(authObjData.uid));
+//					}
+//				}
 		}])
 
 
@@ -82,7 +110,7 @@
 		.controller("AuthCtrl", ["$scope", "$location", "AuthService", "pcLoginService", "createAccountService", "$firebaseObject", "pcServices","currentUser",
             function($scope, $location, AuthService, pcLoginService,createAccountService, $firebaseObject, pcServices,currentUser){
 
-			this.auth = AuthService.auth();
+			this.auth = AuthService.auth;
             this.currentUser = currentUser;
  			this.login = login;
 			this.logout = logout;
@@ -100,6 +128,7 @@
                 pcServices.removeCookieObj("currentUser");
                 pcServices.setCookieObj("currentUser", currentUser);
 				AuthService.login(this.email, this.password);
+                $scope.$parent.currentUser = currentUser ;
 			}
 
 			function sendNewPassword(){

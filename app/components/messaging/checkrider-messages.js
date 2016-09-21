@@ -15,6 +15,7 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 			this.sender = sender;
 			this.sentAt = sentAt ;
 		}
+    
 		function createConvo(userData, recipientData, msgObj){
 			var userRef = refs.accounts.child(userData.$id);
 			var convoKey = userRef.push().key();
@@ -31,7 +32,10 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 				hasNewMsg: true,
 				users:{name: userData.name.first + " " + userData.name.last, id:userData.$id}
 			})
+            pcServices.getCommonRefs().notifications.child(recipientData.$id).push("New message From " + userData.name.first + 
+            " "+userData.name.last );
 		}
+    
 		function sendReply(user,convoInfo, msgObj){
 			var userConvosRef = refs.conversations.child(user.$id);
 			var recipientRef = refs.conversations.child(convoInfo.users.id);
@@ -41,7 +45,10 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 				lastReceivedMsg:new Date(Date.now()).toString(),
 				hasNewMsg: true
 			});
+            pcServices.getCommonRefs().notifications.child(convoInfo.users.id).push("New message From " + user.name.first + 
+            " "+user.name.last );
 		}
+    
 		function setRecipientsList(userInfo){
 			if(userInfo.role.toLowerCase() == "examiner"){
 				return pcServices.createFireArray(refs.students);
@@ -95,6 +102,9 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 	var userRef = refs.accounts.child(userInfo.$id);
 	var conversationsRef = refs.conversations.child(userInfo.$id);
 	
+    vm.delete = function(mesg){
+       conversationsRef.child(vm.convoInfo.$id+ "/messages").child(mesg.$id).remove();
+    }
 	vm.conversationsList = pcServices.createFireArray(conversationsRef);
 	vm.convoInfo = conversations[conversations.length-1]; 
 	if(vm.convoInfo != undefined){
@@ -104,6 +114,7 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 	vm.convo ='';    
 	
 	pcServices.showToastOnEvent(conversationsRef, "child_added");
+    
 	vm.sendReply = sendReply;
 	vm.openConvoDialog = createSendMsgDialog;
 	vm.viewConvoMessages = viewConvoMessages;
@@ -113,13 +124,14 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 		conversationsRef.child(convo.$id).child("hasNewMsg").set(false);
 		vm.convoInfo = convo ;
 		vm.convoMessages = pcServices.createFireArray(messagesRef);
-		console.log(vm)
 	};
+    
 	function sendReply(){
 		var msgObj = new messagesService.Message(vm.body, userInfo.name.first +" " +userInfo.name.last, new Date());
 		console.log(this.convoInfo);
 		messagesService.sendReply(userInfo,vm.convoInfo, msgObj);
 	};  
+    
 	function createSendMsgDialog(){
 		$mdDialog.show({
 			scope:$scope.$new(),

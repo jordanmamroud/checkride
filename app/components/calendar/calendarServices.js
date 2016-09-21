@@ -2,7 +2,7 @@
 
 	angular.module('crCalendar.service',[])
 
-		.service("calendarService", ['$filter', function($filter){
+		.service("calendarService", ['$filter','pcServices', function($filter,pcServices){
 			 
 				
 			  
@@ -23,12 +23,13 @@
 					checkDateRange: checkDateRange,
 					eventClick:eventClick,
 					removeEvent:removeEvent,
+                    Appointment:Appointment,
 					deleteAllMonthlyEvents:deleteAllMonthlyEvents,
 					sendAppointmentRequest:sendAppointmentRequest
 				}
 			return service;
 			
-			function Event(title,start,range,end,recur,id,dow){
+			function Event(title, start, range, end, recur, id, dow, color,category, rating){
 				this.title=title
 				this.start= start
 				this.range= range
@@ -36,6 +37,9 @@
                 this.recur = recur;
 				this.id= id;
                 this.dow = dow;
+                this.color = color,
+                this.category = category ;
+                this.rating= rating
 			 }
 			function setAmtOfMonths(val, startObj){
 				if(val.length > 4){
@@ -69,13 +73,13 @@
             
 			function setEventRange(val, eventObj, occurBy){
 				if(val.length>4){
-					moment(val,'YYYY-MM-DD hh:mm:ss').format("YYYY/MM/DD").replace(/-/g, "/");
+					  eventObj.range.end = moment(val,'YYYY-MM-DD hh:mm:ss').format("YYYY/MM/DD").replace(/-/g, "/");
 				};
 				if(val.length<4 && val.length != undefined){
-					eventObj.range.end = eventObj.start.add(val, occurBy).format("YYYY/MM/DD").replace(/-/g,'/')
+				    eventObj.range.end = eventObj.start.add(val, occurBy).format("YYYY/MM/DD").replace(/-/g,'/')
 				};
 				if(val.length == undefined){
-					moment("2020/02/01",'YYYY-MM-DD hh:mm:ss').format("YYYY/MM/DD").replace(/-/g, "/");
+					 eventObj.range.end = moment("2020/02/01",'YYYY-MM-DD hh:mm:ss').format("YYYY/MM/DD").replace(/-/g, "/");
 				}
 			}
             
@@ -146,29 +150,21 @@
 				}
 			}
 
-			function approveAppointment(list, index, ref, ref1, ref2, fireObj){
-				var studentEmail = list[index].emailAddress.replace(/[\*\^\.\'\!\@\$]/g, '');
-				var studentRef = ref.child(studentEmail);
-				var studentObj = {
-						start: list[index].requestedStartTime,
-						end:list[index].requestedEndTime,
-						name:{first:fireObj.name.first,last:fireObj.name.last}, 
-						emailAddress: fireObj.userData.emailAddress
-				}
-
-				var examinerObj = {
-					start:list[index].requestedStartTime,
-					end:list[index].requestedEndTime,
-					emailAddress:list[index].emailAddress,
-					name:{first:list[index].name.first,last:list[index].name.last},
-					title: "appointment with " + list[index].name.first +" " +list[index].name.last,
-					color: "red",
-					eventType: "approved appointment"
-				}
-				studentRef.child("upcomingAppointments").push(studentObj);
-				ref1.push(examinerObj);
-				ref2.push(examinerObj);
-				list.$remove(index);
+			function approveAppointment(apt, user){
+                var refs = pcServices.getCommonRefs();
+                var studentRef = refs.accounts.child(apt.id);
+                var userRef = refs.accounts.child(user.$id);
+                var userCalRef = refs.calendars.child(user.$id);
+                
+                var userEvent = new Event(apt.name, apt.requestedStartTime,null, apt.requestedEndTime,"once",apt.id,null,'red',apt.category, apt.rating);
+                
+                var studentEvent = new Event(user.name.first+" " + user.name.last ,apt.requestedStartTime,null, apt.requestedEndTime,"once",user.$id,null,'red', apt.category, apt.rating);
+                
+                userCalRef.child("events").push(userEvent);
+                userCalRef.child("approvedAppointments").push(userEvent);
+                studentRef.child("appointments/" + apt.$id).set(studentEvent);
+                refs.notifications.child(apt.id).push("New Appointment With " + user.name.first+' ' +user.name.last);
+                userCalRef.child("appointmentRequests" + "/" +apt.$id).remove();
 			}
 
 			function syncGcal(userData, calendarGcalId){
@@ -187,14 +183,13 @@
 					console.log("eventDate:" + eventDate);
 					console.log(event.range.end);
 					if(event.range.start > eventDate || event.range.end < eventDate){
-						console.log("family")
-						return false;
+						return false ;
 					}else{
-						console.log("zanr")
 						return false ;
 					}
 				}
 			}
+            
 			function eventClick(event, ref1, ref2, selector){
 				$("#eventTitle").text("Event: " + event.title);
 				$("#eventDetailsModal #eventStart").text("start: " + event.start.toISOString());
@@ -204,12 +199,13 @@
 				deleteEvents.deleteEvent(event, ref1,selector);
 				deleteEvents.deleteEvent(event, ref2, selector);
 			}
+            
 			function removeEvent(event, ref){
 				var eventToDelete = ref.child(event.$id) ;
 				eventToDelete.remove();
 			}
 
-			function deleteAllMonthlyEvents(){
+			function deleteAllMonthlyEvents(event,ref){
 				ref.once("value", function(datasnapshot){
 					datasnapshot.forEach(function(childsnapshot){
 						if(childsnapshot.val().title == event.title){
@@ -218,16 +214,21 @@
 					});
 				});          
 			}
-			function Appointment(name,requestedStartTime, requestedEndTime, id){
+            
+			function Appointment(name,requestedStartTime, requestedEndTime, id, category, rating){
 				this.name = name;
 				sentAt = new Date();
 				this.requestedStartTime = requestedStartTime;
 				this.requestedEndTime = requestedEndTime;
 				this.id = id ;
+                this.category = category;
+                this.rating = rating;
 			}
+            
 			function sendAppointmentRequest(ref, userInfo, eventStart,eventEnd){
 				var reqKey = ref.push().key();
-				var examinerRequestListRef = ref.child("appointmentRequests").push(new Appointment(userInfo.name.first+" "+userInfo.name.last,eventStart,eventEnd,userInfo.$id));
+                var appointment = new Appointment(userInfo.name.first+" "+ userInfo.name.last,eventStart,eventEnd, userInfo.$id);
+				var examinerRequestListRef = ref.child("appointmentRequests").push(appointment);
 			}
 			
 			function CalSettings(minTime, maxTime, googleCalendarId, synced) {
@@ -236,7 +237,6 @@
 				this.googleCalendarId = googleCalendarId ;
 				this.synced = synced;
 			}
-				
 			
 			function updateEvents(event, ref){
 				var methods = {

@@ -3,11 +3,11 @@
 	angular.module("pcUser",[])
 
 		//Shared Controllers
-		.controller("profileController", ['$scope','profileService', 'pcServices', 'currentUser',function($scope, profileService,pcServices, currentUser){
+		.controller("profileController", ['$rootScope','$scope','profileService', 'pcServices', 'currentUser',function($rootScope,$scope, profileService,pcServices, currentUser){
 			var refs = pcServices.getCommonRefs();
-			var userInfo = currentUser;
+			var userInfo = currentUser ;
             var userRef = refs.accounts.child(userInfo.$id);
-            console.log("urry",currentUser);
+            
             $scope.currentUser = currentUser ;
             $scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
 			$scope.airportsList = pcServices.createFireArray(userRef.child("airports"));

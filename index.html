@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+
 
 <html lang="en" ng-app="checkrider">
 	<head>
 	   
-		<title>{{title}}</title>
+	
 	  
 		<!-- Metadata -->
 		<meta charset="utf-8">
@@ -35,7 +35,7 @@
 			<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js"></script>
 			<script type='text/javascript' src="assets/bower_components/fullcalendar/dist/gcal.js"></script>
 			<script type="text/javascript" src="node_modules/angular-cookies/angular-cookies.js"></script>
-			
+			<script type="text/javascript" src="app/components/notifications/notifications.controller.js"></script>
 			<!--FOR DEV PURPOSES-->
 			<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js"></script>
 		
@@ -53,6 +53,10 @@
 			<script type="text/javascript" src="app/routes.js"></script>
 			<script type="text/javascript" src="app/components/search/search.js"></script>
 			<script type="text/javascript" src="app/auth/auth.js"></script>
+<!--
+			<script type="text/javascript" src="app/auth/auth.service.js"></script>
+			<script type="text/javascript" src="app/auth/auth.controller.js"></script>
+-->
 
 			<script type="text/javascript" src="app/users/user.js"></script>
 			<script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
@@ -64,17 +68,14 @@
 	</head>
 
 	<body layout-fill>
-
 		<!-- Main Wrapper -->
 		<div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout' layout-fill>
-
 			<!-- HEADER -->
 			<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" md-colors="::{backgroundColor: 'default-background-100'}">
 				<cr-header></cr-header>    
 			</md-toolbar>
 
 			<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
-
 				<!-- SIDEBAR -->
 				<md-sidenav 
 					ng-show="showSidebar" 
@@ -97,7 +98,6 @@
 				</div>
 
 			</div>
-
 		</div>
 
 	</body>

@@ -22,25 +22,24 @@
 			<md-content flex="100" md-panel>
 
 				<md-toolbar layout-padding>
-					<h2>Request Checkride</h2>
+					<h2>Create Event</h2>
 				</md-toolbar>
 				
 				<div  layout-padding>
 					<h4>When:</h4>
-					<p ng-model="ev.eventStart">{{eventStartObj.toString()}}</p>
-					<p ng-model="ev.eventEnd">{{eventEndObj.toString()}}</p>
+					<p>{{ev.eventStartObj.toString()}}</p>
+					<p>{{ev.eventEndObj.toString()}}</p>
 					
 					
 					<md-input-container>
 						<input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
 							<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>
 					</md-input-container>
-		  
-					<md-checkbox ng-model="ev.dowCheckBox">Repeating Event?</md-checkbox>
+					<md-checkbox ng-model="ev.repeatingEvent">Repeating Event?</md-checkbox>
 
-					<div ng-class="{hide: ev.dowCheckBox == false}">
+					<div ng-class="{hide: ev.repeatingEvent == false}">
 						<label>Frequency</label>
-						<md-select ng-model="ev.frequency" id="freq" name="frequency">
+						<md-select ng-model="ev.frequency" placeholder="{{ev.frequency}}"name="frequency">
 							<md-option>Daily</md-option>
 							<md-option>Weekly</md-option>
 							<md-option>Monthly</md-option>
@@ -65,10 +64,9 @@
 						</form>
 						
 						<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>
-						
-					</div>
+							
+                    </div>
 				</div>
-				
 			</md-content>
 			
 		</div>
@@ -82,6 +80,8 @@
 		<md-content>
 			<p>Start: {{ev.clickedEvent.start.toString()}}</p>
 			<p>End: {{ev.clickedEvent.end.toString()}}</p>
+			<p ng-show="ev.clickedEvent.category">Category: {{ev.clickedEvent.category}}</p>
+			<p ng-show="ev.clickedEvent.rating">Rating: {{ev.clickedEvent.rating}}</p>
 			<md-button ng-class="{hide:ev.clickedEvent.recur =='monthly'}" class="md-raised md-primary" ng-click="ev.deleteEvent()">Delete Event</md-button>
 			<div ng-class="{hide: ev.clickedEvent.recur != 'monthly'}">
 				<md-button class="md-primary md-raised" ng-click="ev.deleteSingleMonthlyEvent()">remove just this event</md-button>
@@ -90,7 +90,7 @@
 		</md-content>
 	</script> 
 
-	<script id="settingsModal" type="text/ng-template"  layout="column" flex="60">
+	<script id="settingsModal" type="text/ng-template" >
 		<md-subheader>
 			<h3>Settings</h3>
 		</md-subheader>
@@ -132,8 +132,9 @@
 					<td>{{request.requestedStartTime}}</td>
 					<td>{{request.requestedEndTime}}</td>
 					<td>{{request.sentAt}}</td>
-					<td><button ng-click="ev.approveAppointment($index)">Approve</button></td>
+					<td><button ng-click="ev.approveAppointment(request)">Approve</button></td>
 				</tr>
 			</tbody>
 		</table>  
 	</script>
+	

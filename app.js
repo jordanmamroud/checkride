@@ -18,6 +18,7 @@
 		'pcAuth',
 		'pcSearch',
 		'pcDataService',
+        'pcNotificationsController',
 
 		'pcUser',
 		'crCalendar',
@@ -74,7 +75,11 @@
 				profile:{
 					title:'My Profile',
 					path: '/user/profile'
-				}
+				},
+                notifications:{
+                    title:"notifications",
+                    path:"/user/notifications"
+                }
 			},
 			'student':{
 				Examiners:{
@@ -88,7 +93,11 @@
 				profile:{
 					title:'Profile',
 					path: '/user/profile'
-				}
+				},
+                 notifications:{
+                    title:"notifications",
+                    path:"/user/notifications"
+                }
 		}
 	})
 
@@ -105,7 +114,8 @@
 				accounts:main.child('users/accounts'),
 				roles:main.child('users/roles'),
 				examiners:main.child('users/roles/examiner'),
-				students:main.child('users/roles/student')
+				students:main.child('users/roles/student'),
+                notifications: main.child("notifications")
 			}
 	})
 
