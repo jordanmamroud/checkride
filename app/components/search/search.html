@@ -1,45 +1,56 @@
-<div class="pc-search" layout="column" md-colors="::{backgroundColor: 'default-background-200'}">
-	
-	
-	<div layout="row" md-colors="::{backgroundColor: 'default-primary-800'}" class="pc-search-box-wrapper md-primary" layout-align="center center" layout-padding>
+<div layout-fill md-colors="::{backgroundColor: 'default-background-200'}">
 
-		
-		<h1 class="md-display" ng-show="false">Find examiners near you</h1>
-	
-		<form name="pc-main-search" md-theme="dark" layout="column" flex-gt-sm="40" >
+	<div 
+		md-colors="::{backgroundColor: 'default-primary-800'}" 
+		class="pc-search-box-wrapper md-primary"
+		layout-padding
+		layout="row"
+		layout-align="{{search.searchBoxAlign}}"
+		>
 
-			<md-autocomplete  
-				ng-model="search.searchBox" 
-				md-selected-item="search.selectedItem" 
-				md-search-text="search.searchText" 
-				md-items="user in search.users" 
-				placeholder="Search..."
-				ng-diabled="false"
-				md-colors="::{backgroundColor: 'default-grey-100'}">
+		<div layout-stretch layout>			
+			<form name="pc-main-search" md-theme="dark">
+				
+				<h1 class="md-display" ng-show="false">Find examiners near you</h1>
+				
+				<div layout-padding></div>
+				
+				<md-autocomplete  
+					ng-model="search.searchBox" 
+					md-selected-item="search.selectedItem" 
+					md-search-text="search.searchText" 
+					md-items="airport in search.querySearch(search.searchText)"
+					md-selected-item-change="search.selectedItemChange(airport)"
+					md-search-text-change="search.searchTextChange(searchText)"
+					md-item-text="airport.name"
+					placeholder="Search..."
+					ng-diabled="false"
+					md-colors="::{backgroundColor: 'default-grey-100'}">
+					<md-item-template>
+						<span 
+							ng-model="search.searchBox" 
+							md-highlight-text="searchText"
+							style="text-transform:uppercase; font-weight:bold;">{{airport.$id}}</span><i> ({{airport.name}}) </i>
+					</md-item-template>
 
-				<md-item-template>
-					<span ng-model="search.searchBox" md-highlight-text="searchText">{{search.searchText}}</span>
-				</md-item-template>
-
-			</md-autocomplete>
-			
-			<div layout-padding></div>
-			
-			<div layout="row" layout-align="center center">
-				<md-datepicker ng-model="search.startDate" md-placeholder="From"></md-datepicker>	
-				<md-datepicker ng-model="search.endDate" md-placeholder="To"></md-datepicker>
-			</div>
-		</form>
-
-
+				</md-autocomplete>
+				
+				<div layout-padding></div>
+				
+				<div layout="row" layout-align="center center">
+					<md-datepicker ng-model="search.startDate" md-placeholder="From"></md-datepicker>	
+					<md-datepicker ng-model="search.endDate" md-placeholder="To"></md-datepicker>
+				</div>
+			</form>
+		</div>
 	</div>
 
 
 	<div layout="row" layout-align="center center">
 			
-		<md-list flex-gt-md="30">
+		<md-list flex-gt-md="40">
 
-			<md-card ng-repeat="user in search.users | filter: searchBox: user.userData.airports" layout-padding flex>
+			<md-card ng-repeat="user in search.examiners | filter: searchBox: user.userData.airports" layout-padding flex>
 
 				<md-card-title>
 				
@@ -65,7 +76,7 @@
 
 						<md-card-actions layout="row" layout-align="end end">
 							<md-button class="md-primary">View Profile</md-button>
-							<md-button class="md-primary md-raised">Schedule</md-button>
+							<md-button class="md-primary md-raised" ng-click="search.viewProfile(user)">Schedule</md-button>
 						</md-card-actions>
 					</div>
 				</md-card-title>
@@ -74,9 +85,7 @@
 			</md-card>
 
 		</md-list>
-	
 
-	
 	</div>
 
 </div>

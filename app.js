@@ -15,10 +15,15 @@
 		'pcControllers',
 		'pcDirectives',
 		'pcRoutes',
-		'pcAuth',
+		'pcAuthService',
+        'pcAuthController',
 		'pcSearch',
 		'pcDataService',
+<<<<<<< HEAD
         'pcNotificationsController',
+=======
+        'pcUserController',
+>>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
 
 		'pcUser',
 		'crCalendar',

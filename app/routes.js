@@ -9,7 +9,7 @@
             $routeProvider.when = function(path, route) {
                 route.resolve || (route.resolve = {});
                 angular.extend(route.resolve, {
-                    "currentUser" : function(pcServices){
+                    "user" : function(pcServices){
                         var ref = pcServices.getCommonRefs();
                         var authObjData = ref.main.getAuth();
                         if(authObjData){
@@ -31,7 +31,7 @@
 			controller: 'SearchCtrl as search',
 			resolve: {
 				airports: function(firebaseRef, $firebaseArray){
-					var ref = new Firebase('https://checkride.firebaseio.com/temp/airports');
+					var ref = new Firebase('https://checkride.firebaseio.com/temp/airports/detail');
 					return $firebaseArray(ref).$loaded();
 				},
 				examiners: function(firebaseRef, $firebaseArray){
@@ -43,8 +43,6 @@
 
 		.when(RoutePaths.login.path, {
 			templateUrl:'app/auth/login.html',
-            controller:"AuthCtrl",
-            controllerAs:"auth"
 		})
 
 		.when(RoutePaths.signUp.path, {
@@ -60,8 +58,8 @@
 
 		.when(RoutePaths.profile.path, {
 			templateUrl: 'app/users/views/profile.html',
-			controller:"profileController",
-            controllerAs:'user'
+			scope:true
+
 		})
 
 		.when(RoutePaths.examinerMessages.path,{
@@ -70,7 +68,7 @@
 			 controllerAs:"msg",
 			 resolve:{
 				 conversations:function(pcServices){
-					var userInfo = pcServices.getCookieObj('currentUser');
+					var userInfo = pcServices.getCookieObj('user');
 					var refs = pcServices.getCommonRefs();
 					var conversationsRef = refs.conversations.child(userInfo.$id);
 					var messagesRef = conversationsRef.child("/messages");
@@ -92,9 +90,9 @@
 		})
 
 		.when(RoutePaths.examinerInfo.path,{
-				templateUrl: "app/users/views/examinerInfo.html",
-				controller: "examinerInfoController",
-				controllerAs:'vm'
+			templateUrl: "app/users/views/examinerInfo.html",
+			controller: "examinerInfoController",
+			controllerAs:'vm'
 		})
 
 		.when(RoutePaths.viewExaminerAvailability.path,{

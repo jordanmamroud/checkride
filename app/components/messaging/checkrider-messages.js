@@ -73,7 +73,7 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 		},
 		controllerAs:'mg',
 		controller:function(){
-			var userInfo = pcServices.getCookieObj('currentUser');
+			var userInfo = pcServices.getCookieObj('user');
 			this.recipientsList = messagesService.setRecipientsList(userInfo);
 			this.recipient = '';          
 			this.sendMessage = sendMessage ;
@@ -98,7 +98,7 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 .controller('messagesController',['$scope','messagesService','pcServices','conversations','$mdDialog', function($scope,messagesService, pcServices, conversations, $mdDialog){
 	var vm = this;
 	var refs = pcServices.getCommonRefs();
-	var userInfo = pcServices.getCookieObj('currentUser');
+	var userInfo = pcServices.getCookieObj('user');
 	var userRef = refs.accounts.child(userInfo.$id);
 	var conversationsRef = refs.conversations.child(userInfo.$id);
 	

@@ -46,19 +46,25 @@
 			
 			<!-- Scripts -->
 			<script type="text/javascript" src="app.js"></script>
-			<script type="text/javascript" src="app/services/common.services.js"></script>
-			<script type="text/javascript" src="app/services/data.service.js"></script>
 			<script type="text/javascript" src="app/controllers.js"></script>
-			<script type="text/javascript" src="app/directives.js"></script>
+			<script type="text/javascript" src="app/services.js"></script>
 			<script type="text/javascript" src="app/routes.js"></script>
+			<script type="text/javascript" src="app/directives.js"></script>
+			<script type="text/javascript" src="app/services/data.service.js"></script>
 			<script type="text/javascript" src="app/components/search/search.js"></script>
+<<<<<<< HEAD
 			<script type="text/javascript" src="app/auth/auth.js"></script>
 <!--
 			<script type="text/javascript" src="app/auth/auth.service.js"></script>
 			<script type="text/javascript" src="app/auth/auth.controller.js"></script>
 -->
 
+=======
+			<script type="text/javascript" src="app/auth/auth.service.js"></script>
+			<script type="text/javascript" src="app/auth/auth.controller.js"></script>
+>>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
 			<script type="text/javascript" src="app/users/user.js"></script>
+			<script type="text/javascript" src="app/users/user.controller.js"></script>
 			<script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
 			<script type="text/javascript" src="app/components/calendar/examinerCalendar.js"></script>
 			<script type="text/javascript" src="app/components/calendar/calDirective.js"></script>
@@ -67,18 +73,35 @@
 			<script type="text/ng-template" id="save-dialog.tmpl.html"></script>
 	</head>
 
+<<<<<<< HEAD
 	<body layout-fill>
 		<!-- Main Wrapper -->
 		<div id="pc-main" layout="column" flex ng-controller='crLayoutCtrl as layout' layout-fill>
+=======
+	<body layout-fill ng-controller="AuthCtrl as auth">
+
+		<!-- Main Wrapper -->
+		<div id="pc-main" layout="column" flex ng-controller='LayoutCtrl as layout' layout-fill>
+
+>>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
 			<!-- HEADER -->
 			<md-toolbar id="pc-app-toolbar" layout="row" layout-align="start center" md-colors="::{backgroundColor: 'default-background-100'}">
-				<cr-header></cr-header>    
-			</md-toolbar>
+				<cr-header></cr-header>
 
+			</md-toolbar>
+			
+			<md-progress-linear md-mode="indeterminate" ng-disabled="true" style='height:2px;'></md-progress-linear>
+			
 			<div layout="row" flex id="pc-app-page"  md-colors="::{backgroundColor: 'default-background-200'}">
+<<<<<<< HEAD
+=======
+				
+				
+				
+>>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33
 				<!-- SIDEBAR -->
 				<md-sidenav 
-					ng-show="showSidebar" 
+					ng-show="auth.isLoggedIn" 
 					md-is-locked-open="true"
 					layout-fill 
 					layout="column" 
