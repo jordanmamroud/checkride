@@ -71,8 +71,6 @@
 								'</md-list>' +
 							'</md-content>',
 				scope: true,
-				//controllerAs: 'layout',
-				//controller: layoutCtrl
 			}
 	})
 

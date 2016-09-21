@@ -1,97 +1,273 @@
 angular.module('pcSearch',[])
-	
-	// ELASTIC SEARCH
-	.service('client', function (esFactory) {
-		return esFactory({
-			host: 'localhost:9200',
-			apiVersion: '2.3',
-			log: 'trace'
-		});
-	})
 
-	//SEARCH CONTROLLER
-	.controller('SearchCtrl', ['$scope', '$log','examiners', 'airports', 'esFactory', 'dataService', 'pcServices', function ($scope, $log, examiners,airports,  esFactory, dataService, pcServices) {
-		var self = this;
-		var ref = new Firebase("https://checkride.firebaseio.com/temp");
-		var userRef = ref.child("users/accounts");
+//SEARCH CONTROLLER
+.controller('SearchCtrl', ['$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices', searchCtrl]);
 
-		self.query = null;
-		self.examiners = examiners;
-		self.airports = "";
-		self.searchText = "";
-		self.getAirports = getAirports;
-		// self.getUsers = getUsers;
-		self.airportArray="";
-		self.toArray = pcServices.objToArray; 
-		self.log = log;
-		self.users = pcServices.createFireArray(userRef);
+function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airports, esFactory, DataService, pcServices) {
 
-		function log(i){
-			console.log(i);
+	var self = this;
+	var ref = pcServices.getCommonRefs().main;
+	var userRef = ref.child("users/accounts");
+
+	self.airports = airports;
+	self.searchText = "";
+
+	self.querySearch = querySearch;
+	self.searchTextChange = searchTextChange;
+	self.selectedItemChange = selectedItemChange;
+
+	self.simulateQuery = true;
+	self.isDisabled    = false;
+	self.searchBoxAlign = "center center";
+	self.isSearchStart = true;
+
+
+
+	function querySearch (query) {
+		var results = query ? self.airports.filter( createFilterFor(query) ) : self.airports, deferred;
+
+		if (self.simulateQuery) {
+			deferred = $q.defer();
+			$timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+			return deferred.promise;
+		} else {
+			return results;
 		}
+	}
 
-		self.selectedItems="";
-		// var examinerRef = new Firebase('https://checkride.firebaseio.com/temp/users/roles/examiner');
-		// 	examinerRef.on("value", function(){
+    function searchTextChange(text) {
+      if(text != ""){
 
-		// 	});
-
-		// var ref = new Firebase("https://checkride.firebaseio.com/temp");
-	 	var airportRef = ref.child("airports");
-	 	var examinerRef = ref.child("users/roles/examiners");
-	 	// var userRef = ref.child("users/accounts");
+      	self.searchBoxAlign = "start center";
+      }
+    }
 
 
-		function getAirports(query){
-			query = query.toLowerCase();
+    function selectedItemChange(item) {
 
-			airportRef.orderByChild("IATA").equalTo(query).on("value", function(snapshot){
-				self.airports = snapshot.val();
-				console.log( snapshot.val() ); 
-				if(snapshot.numChildren() > 0){
-					snapshot.forEach(function(childSnapshot){
+    	var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.$id).orderByKey();
+		pcServices.createFireArray(ref).$loaded().then(function(val){
+			console.log("Val",val);
+			self.examiners = val;
+		});
 
-						var airportUsers = childSnapshot.child("users").val();
-						console.log(airportUsers);
+    }
 
-						angular.forEach(airportUsers, function(value,key){
-							console.log("airport > users:" + key);
-							userRef.orderByKey().equalTo(key).on("value",function(grandchildSnapshot){
-								console.log("airport > users > objects:");
-								console.log(grandchildSnapshot.val());
-							});
-						})
-					});
-				}
-			});
+
+	
+	function createFilterFor(query) {
+		var lowercaseQuery = angular.lowercase(query);
+
+		return function filterFn(airports) {
+			return (airports.$id.indexOf(lowercaseQuery) === 0);
 		};
 
-	// function getUsers(){
+	}
 
-	// 	userRef.on("value", function(snapshot){
-	// 		self.users = snapshot.val();
-	// 		console.log(self.users);
+
+
+	// DataService.getAirports().then(function(ap){
+	// 	console.log(ap)
+	// });
+	
+
+
+	self.viewProfile = viewProfile;
+	function viewProfile(examiner){
+		var refs= pcServices.getCommonRefs();
+		var examinerRef = refs.accounts.child(examiner.$id);
+		examinerRef.once("value",function(data){
+			//pcServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
+		});
+		pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
+	}
+
+
+
+
+  function loadAll() {
+    var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
+            Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
+            Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
+            Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina,\
+            North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina,\
+            South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
+            Wisconsin, Wyoming';
+
+            console.log(allStates.split(/, +/g).map( function (state) {
+				return {
+					value: state.toLowerCase(),
+					display: state
+				};
+    		}))
+
+    return allStates.split(/, +/g).map( function (state) {
+      return {
+        value: state.toLowerCase(),
+        display: state
+      };
+    })
+
+  }
+
+ console.log(loadAll());
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+  // angular
+  //     .module('autocompleteDemo', ['ngMaterial'])
+  //     .controller('DemoCtrl', DemoCtrl);
+
+  // function DemoCtrl ($timeout, $q, $log) {
+  //   var self = this;
+
+  //   self.simulateQuery = false;
+  //   self.isDisabled    = false;
+
+  //   // list of `state` value/display objects
+  //   self.states        = loadAll();
+  //   self.querySearch   = querySearch;
+  //   self.selectedItemChange = selectedItemChange;
+  //   self.searchTextChange   = searchTextChange;
+
+  //   self.newState = newState;
+
+  //   function newState(state) {
+  //     alert("Sorry! You'll need to create a Constitution for " + state + " first!");
+  //   }
+
+  //   // ******************************
+  //   // Internal methods
+  //   // ******************************
+
+  //   /**
+  //    * Search for states... use $timeout to simulate
+  //    * remote dataservice call.
+  //    */
+  //   function querySearch (query) {
+  //     var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
+  //         deferred;
+  //     if (self.simulateQuery) {
+  //       deferred = $q.defer();
+  //       $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+  //       return deferred.promise;
+  //     } else {
+  //       return results;
+  //     }
+  //   }
+
+  //   function searchTextChange(text) {
+  //     $log.info('Text changed to ' + text);
+  //   }
+
+  //   function selectedItemChange(item) {
+  //     $log.info('Item changed to ' + JSON.stringify(item));
+  //   }
+
+  //   /**
+  //    * Build `states` list of key/value pairs
+  //    */
+  //   function loadAll() {
+  //     var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
+  //             Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
+  //             Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
+  //             Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina,\
+  //             North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina,\
+  //             South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
+  //             Wisconsin, Wyoming';
+
+  //     return allStates.split(/, +/g).map( function (state) {
+  //       return {
+  //         value: state.toLowerCase(),
+  //         display: state
+  //       };
+  //     });
+  //   }
+
+  //   /**
+  //    * Create filter function for a query string
+  //    */
+  //   function createFilterFor(query) {
+  //     var lowercaseQuery = angular.lowercase(query);
+
+  //     return function filterFn(state) {
+  //       return (state.value.indexOf(lowercaseQuery) === 0);
+  //     };
+
+  //   }
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	// ELASTIC SEARCH
+	// .service('client', function (esFactory) {
+	// 	return esFactory({
+	// 		host: 'localhost:9200',
+	// 		apiVersion: '2.3',
+	// 		log: 'trace'
 	// 	});
-	// };
- 	
- // 	getUsers();
-    
-    //in order for this to work you have to pull from the list of examiners didnt want to fudge with your shiz but it will take you to selected examiners profile with their data.
-     self.viewProfile = viewProfile;
-     function viewProfile(examiner){
-        var refs= pcServices.getCommonRefs();
-        pcServices.removeCookieObj("examinerInfo");
-        var examinerRef = refs.accounts.child(examiner.$id);
-        examinerRef.once("value",function(data){
-            pcServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
-        });
-        pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
-      } 
-}])
+	// })
+
+
+
+
+
+
+
+
+	// var ref = new Firebase("https://checkride.firebaseio.com/temp");
+	// var airportRef = ref.child("airports");
+	// var examinerRef = ref.child("users/roles/examiners");
+	// var userRef = ref.child("users/accounts");
+
+
+
+
+
 
 
 	// function getExaminers(username){
-	// dataService.getExaminers(username);
+	// DataService.getExaminers(username);
 	// 	.then(function(data){
 	// 		this.examiners = data;
 	// 		$log.log(this.examiners);
@@ -111,7 +287,7 @@ angular.module('pcSearch',[])
 	
 /*    
 	function getAirports(){
-		dataService.getAirports()
+		DataService.getAirports()
 			.then(function(data){
 				this.airports = data;
 				$log.log(this.airports);
@@ -203,3 +379,40 @@ crComponents.controller('crSearchCtrl',["$scope", "$window", "$firebaseArray",'$
 
 
 //var ref = new Firebase("https://checkride.firebaseio.com/");
+
+
+
+// function getAirports(query){
+
+		// 	pcServices.createFireArray(ref)
+		// }
+
+
+
+
+
+
+
+		// function getAirports(query){
+		// 	query = query.toLowerCase();
+
+		// 	airportRef.orderByChild("IATA").equalTo(query).on("value", function(snapshot){
+		// 		self.airports = snapshot.val();
+		// 		console.log( snapshot.val() ); 
+		// 		if(snapshot.numChildren() > 0){
+		// 			snapshot.forEach(function(childSnapshot){
+
+		// 				var airportUsers = childSnapshot.child("users").val();
+		// 				console.log("Airport Users",airportUsers);
+
+		// 				angular.forEach(airportUsers, function(value,key){
+		// 					console.log("airport > users:" + key);
+		// 					userRef.orderByKey().equalTo(key).on("value",function(grandchildSnapshot){
+		// 						console.log("airport > users > objects:");
+		// 						console.log(grandchildSnapshot.val());
+		// 					});
+		// 				})
+		// 			});
+		// 		}
+		// 	});
+		// };

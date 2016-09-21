@@ -4,6 +4,8 @@ angular.module('pcControllers',[])
 	//LAYOUT CONTROLLER
 	.controller('LayoutCtrl', ["$scope", "$location", "$mdSidenav", 'pcServices',"crUserNavData", "AuthService", 'RoutePaths', 'globalConst', 
 		function($scope, $location, $mdSidenav, pcServices, crUserNavData,AuthService, RoutePaths, globalConst){
+			console.log("Layout Controller");
+			
 			var layout = this;
 			var localUser = null;
 			layout.user = localUser;
@@ -16,7 +18,6 @@ angular.module('pcControllers',[])
 				$scope.showSidebar = ($location.path().indexOf('/user/') > -1);
 			});
 
-			console.log("Layout Controller");
 
 			AuthService.getUser()
 				.then(function(user){

@@ -55,6 +55,7 @@
 			<script type="text/javascript" src="app/auth/auth.service.js"></script>
 			<script type="text/javascript" src="app/auth/auth.controller.js"></script>
 			<script type="text/javascript" src="app/users/user.js"></script>
+			<script type="text/javascript" src="app/users/user.controller.js"></script>
 			<script type="text/javascript" src="app/components/calendar/calendarServices.js"></script>
 			<script type="text/javascript" src="app/components/calendar/examinerCalendar.js"></script>
 			<script type="text/javascript" src="app/components/calendar/calDirective.js"></script>
@@ -82,7 +83,7 @@
 				
 				<!-- SIDEBAR -->
 				<md-sidenav 
-					ng-show="showSidebar" 
+					ng-show="auth.isLoggedIn" 
 					md-is-locked-open="true"
 					layout-fill 
 					layout="column" 

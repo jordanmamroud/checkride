@@ -12,7 +12,8 @@
 
 			authScope.auth.$onAuth(function(authData){
 				if(!authData){
-					logout();
+					//logout();
+					$scope.isLoggedIn=false;
 				}else{
 					if(!authScope.user){
 						getUser();
@@ -50,6 +51,10 @@
 						console.log(err);
 					})
 				}
+			}
+
+			function getAirportList(){
+
 			}
 			
 		}])

@@ -1,52 +1,43 @@
-<!DOCTYPE html>
-<html lang="" ng-app='examinerInfo'>
-<head>
+<div layout="row" layout-align="center center" >
+		<div flex-gt-md="60" >
+			<md-tabs md-dynamic-height md-border-bottom>
+				<md-tab label="Info">
+					<div layout="column" flex="30">
+						<img src="{{vm.examinerInfo.data.imgUrl}}">
+					</div>
+					<div class="md-padding" layout="column">
 
-</head>
-<style>
-    #sidebar{
-        display: inline-block;
-        width: 10%;
-    }
-    .showing{
-        display: block;
-    }
-    </style>
+						<h1>{{vm.examinerInfo.data.name.first +" "+ vm.examinerInfo.data.name.last}}</h1>
 
-<body>
-  
-  <div ng-cloak>
-  <md-content>
-    <md-tabs md-dynamic-height md-border-bottom>
-      <md-tab label="Info">
-        <md-content class="md-padding">
-            <h1>{{vm.examinerInfo.data.name.first +" "+ vm.examinerInfo.data.name.last}}</h1>
-               <md-list>
-                 <label>Certifications</label>
-                  <md-list-item ng-repeat="cert in vm.certificationsList"> 
-                        <h5>{{cert.$id}}</h3>
-                   </md-list-item>
-                </md-list>
+						<md-list>
+							<label>Certifications</label>
+							<md-list-item ng-repeat="cert in vm.certificationsList"> 
+							<h5>{{cert.$id}}</h5>
+							</md-list-item>
+						</md-list>
 
-               <md-list>
-                 <label>Airports</label>
-                  <md-list-item ng-repeat="arpt in vm.airportList"> 
-                        <h5>{{arpt.$id}}</h3>
-                   </md-list-item>
-                </md-list>   
-                
-                <label>Bio</label>
-                <p ng-model="vm.examinerInfo.data.bio">{{vm.bio}}</p>
-        </md-content>
-      </md-tab>
-      
-      <md-tab label="Schedule">
-        <md-content class="md-padding">
-         <viewing-cal></viewing-cal>
-        </md-content>
-      </md-tab>
-    </md-tabs>
-    
-  </md-content>
-</div>
-</html>
+						<md-list>
+							<label>Airports</label>
+							<md-list-item ng-repeat="arpt in vm.airportList"> 
+								<h5>{{arpt.$id}}</h5>
+							</md-list-item>
+						</md-list>   
+						
+						<div>
+							<label>Bio</label>
+							<p ng-model="vm.examinerInfo.data.bio">{{vm.bio}}</p>
+						</div>
+
+					</div>
+
+				</md-tab>
+				
+				<md-tab label="Schedule">
+					<div class="md-padding">
+					 	<viewing-cal></viewing-cal>
+					</div>
+				</md-tab>
+			</md-tabs>
+		</div>
+	</div>
+

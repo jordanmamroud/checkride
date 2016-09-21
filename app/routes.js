@@ -31,7 +31,7 @@
 			controller: 'SearchCtrl as search',
 			resolve: {
 				airports: function(firebaseRef, $firebaseArray){
-					var ref = new Firebase('https://checkride.firebaseio.com/temp/airports');
+					var ref = new Firebase('https://checkride.firebaseio.com/temp/airports/detail');
 					return $firebaseArray(ref).$loaded();
 				},
 				examiners: function(firebaseRef, $firebaseArray){

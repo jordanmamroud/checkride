@@ -19,6 +19,7 @@
         'pcAuthController',
 		'pcSearch',
 		'pcDataService',
+        'pcUserController',
 
 		'pcUser',
 		'crCalendar',
