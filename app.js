@@ -1,3 +1,5 @@
+
+(function(){
 	'use strict'
 	angular.module('checkrider',[
 		'ngCookies',
@@ -136,3 +138,4 @@
 			}
 })  
     
+})()

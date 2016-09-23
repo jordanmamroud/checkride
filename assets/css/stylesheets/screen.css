@@ -42,3 +42,86 @@ img.cr-logo,
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
+
+/* line 55, ../sass/screen.scss */
+.red {
+  background: red;
+}
+
+/* line 56, ../sass/screen.scss */
+.blue {
+  background: blue;
+}
+
+/* line 57, ../sass/screen.scss */
+.green {
+  background: green;
+}
+
+/* line 58, ../sass/screen.scss */
+.orange {
+  background: orange;
+}
+
+/* line 59, ../sass/screen.scss */
+.grey {
+  background: grey;
+}
+
+/* line 60, ../sass/screen.scss */
+.purple {
+  background: purple;
+}
+
+/* line 61, ../sass/screen.scss */
+.yellow {
+  background: yellow;
+}
+
+/* line 64, ../sass/screen.scss */
+.hide {
+  display: none;
+}
+
+/* line 67, ../sass/screen.scss */
+#detailsModal {
+  height: 200px;
+  overflow: scroll;
+}
+
+/* line 71, ../sass/screen.scss */
+.setColor {
+  background-color: #FFF;
+}
+
+/* line 75, ../sass/screen.scss */
+.toolbardemoScrollShrink .face {
+  width: 48px;
+  margin: 16px;
+  border-radius: 48px;
+  border: 1px solid #ddd;
+}
+
+/* line 83, ../sass/screen.scss */
+.pc-message {
+  padding: .5em 1em;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+/* line 89, ../sass/screen.scss */
+.pc-message .pc-msg-sender {
+  font-size: .5em;
+}
+/* line 102, ../sass/screen.scss */
+.pc-message.me {
+  text-align: right;
+  float: right;
+  background: #66BB6A;
+}
+/* line 107, ../sass/screen.scss */
+.pc-message.them {
+  text-align: left;
+  float: left;
+  background: #D0D0D0;
+}

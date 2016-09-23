@@ -1,35 +1,55 @@
-<div layout="row" layout-fill >
+<div layout-align="center start" layout="row" layout-padding>
 
-	<div layout="column" layout-padding layout-align="start center" flex-gt-sm="50">
+	<div layout="column" flex flex-gt-md="60">
 
-		<account-details></account-details>
+		<account-details>
 
-		<div ng-show="user.user.role === 'examiner'" layout="column">
+			<span ng-show="user.user.role === 'examiner'">
 
-			<div layout>
-				
-				<label>Certifications</label>
-				<md-chips md-select-on-focus ng-model="user.certificationsList" readonly="false" md-on-remove="user.deleteCertication($chip)" md-transform-chip="user.saveCertification($chip)" md-max-chips="30">
-					<md-chip-template>
-					<strong>{{$chip.$id}}</strong>
-					</md-chip-template>
+				<div layout>
 					
-				</md-chips>
-					
-			</div>
+					<label>Certifications</label>
+					<md-chips 
+						md-select-on-focus 
+						ng-model="user.certificationsList" 
+						readonly="false" 
+						md-on-remove="user.deleteCertication($chip)" 
+						md-transform-chip="user.saveCertification($chip)" 
+						md-max-chips="30">
 
-			<div layout>
-				<label>Airports</label>
-				<md-chips md-select-on-focus  class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)" md-max-chips="30">
-					<md-chip-template>
-						<strong>{{$chip.$id}}</strong>
-						<em></em>
-					</md-chip-template>
-				</md-chips>
+						<md-chip-template>
+							<strong>{{$chip.$id}}</strong>
+						</md-chip-template>
+						
+					</md-chips>
+						
+				</div>
 
-			</div>
-		
-		</div>
+				<div layout class="blue">
+					<label>Airports</label>
+
+					<md-chips 
+						md-select-on-focus  
+						class="custom-chips" 
+						ng-model="airportsList" 
+						name="airport" 
+						readonly="false" 
+						md-on-remove="deleteAirport($chip)" 
+						md-transform-chip="saveAirport($chip)" 
+						md-max-chips="30">
+
+						<md-chip-template>
+							<strong>{{$chip.$id}}</strong>
+							<em></em>
+						</md-chip-template>
+
+					</md-chips>
+
+				</div>
+			
+			</span>
+
+		</account-details>
 
 		<md-button class='md-primary' ng-click="user.updateUser()">Update Account</md-button>
 

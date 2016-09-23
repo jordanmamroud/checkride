@@ -1,5 +1,4 @@
-
-    
+(function(){    
 	angular.module('pcRoutes',['ngRoute'])
     
 
@@ -160,3 +159,4 @@
 	})
 
 
+})()

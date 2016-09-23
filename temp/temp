@@ -1,1 +1,61 @@
-Allow other people to book time on your calendar using appointment slots. Once you've created some appointment slots you can offer these slots to others by publishing an appointment calendar on the web.
+<div 
+	id="pc-main" 
+	layout="column"
+	layout-fill
+	ng-controller='LayoutCtrl as layout'>
+
+	<!-- HEADER -->
+	<md-toolbar 
+		id="pc-app-toolbar" 
+		layout="row" 
+		layout-align="start center" 
+		md-colors="::{backgroundColor: 'default-background-100'}">
+
+		<cr-header></cr-header>
+
+	</md-toolbar>
+	
+	<!-- <md-progress-linear md-mode="indeterminate" ng-disabled="true" style='height:2px;'></md-progress-linear> -->
+	
+
+    <div 
+    	layout="row" 
+    	flex 
+    	id="pc-app-page"  
+    	md-colors="::{backgroundColor: 'default-background-200'}">
+
+		<!-- SIDEBAR -->
+		<md-sidenav 
+			ng-show="auth.isLoggedIn" 
+			layout-fill 
+			layout="column"
+			flex
+			class="md-sidenav-left" 
+			md-component-id="pc-sidenav-left" 
+			md-colors="">
+
+			<md-content>
+				<cr-navigation></cr-navigation>
+			</md-content>
+
+		</md-sidenav>
+		
+		<!-- CONTENT -->
+		<div 
+			id="pc-app-content" 
+			layout="column"
+			layout-align="start center"
+			flex>
+
+			<md-content 
+				ng-view 
+				layout-fill
+				flex
+				class="viewport-minus-header">
+			</md-content>
+
+		</div>
+
+	</div>
+
+</div>

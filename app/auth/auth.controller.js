@@ -4,34 +4,36 @@
 		//AUTH CONTROLLER
 		.controller("AuthCtrl", ["$scope", "$location", "$timeout", "AuthService",  "$firebaseObject", "pcServices",
 									function($scope, $location, $timeout, AuthService,  $firebaseObject, pcServices){
-			var authScope = this;
-			authScope.auth = AuthService.auth;
-			authScope.authData = AuthService.getAuth;
-			authScope.login = login;
-			authScope.logout = logout;
-            authScope.createAccountPage = createAccountPage;
-            authScope.createAccount = createAccount;
-            authScope.roles= ['student', 'instructor','examiner'];
-			authScope.auth.$onAuth(function(authData){
+			var self = this;
+			self.auth = AuthService.auth;
+			self.authData = AuthService.getAuth;
+			self.login = login;
+			self.user = null;
+			self.logout = logout;
+            self.createAccountPage = createAccountPage;
+            self.createAccount = createAccount;
+            self.roles= ['student', 'instructor','examiner'];
+
+			self.auth.$onAuth(function(authData){
 				if(!authData){
 					//logout();
-					authScope.isLoggedIn=false;
+					self.isLoggedIn=false;
 				}else{
-					if(!authScope.user){
+					if(!self.user){
 						getUser();
 					}
-					authScope.isLoggedIn=true;
+					self.isLoggedIn=true;
 				}
-				authScope.authData = authData;
+				self.authData = authData;
 			});
 
 			//LOGIN
 			function login(){
-				AuthService.login(authScope.email, authScope.password)
+				AuthService.login(self.email, self.password)
 				.then(function(user){
-					authScope.user = user;
+					self.user = user;
 					pcServices.changePath(pcServices.getRoutePaths().profile.path);
-					authScope.isLoggedIn = true;
+					self.isLoggedIn = true;
 				})
 				.catch(function(error){
 					alert(error);
@@ -40,15 +42,15 @@
 
 			//LOGOUT
 			function logout(){
-				authScope.isLoggedIn = false;
-				authScope.user = null;
+				self.isLoggedIn = false;
+				self.user = null;
 				AuthService.logout();
 			}
 
 			function getUser(){
-				if(typeof authScope.user === "undefined" || !authScope.user){
+				if(typeof self.user === "undefined" || !self.user){
 					AuthService.getUser().then(function(user){
-						authScope.user = user;
+						self.user = user;
 					}).catch(function(err){
 						console.log(err);
 					})
@@ -65,13 +67,13 @@
                                         
             function createAccount(){
 				var user = {
-						name:{ first:authScope.firstName,last: authScope.lastName},
-						emailAddress:authScope.emailAddress,
-						phone:authScope.phone,
-						role: authScope.role
+						name:{ first:self.firstName,last: self.lastName},
+						emailAddress:self.emailAddress,
+						phone:self.phone,
+						role: self.role
 				}
 
-				AuthService.createUser(user, authScope.password);
+				AuthService.createUser(user, self.password);
 			}
 			
 		}])
@@ -107,21 +109,21 @@
 
 
 
-			//authScope.sendNewPassword = sendNewPassword;
-			//authScope.createAccountPage = createAccountPage;
-			//authScope.createAccount = createAccount;
+			//self.sendNewPassword = sendNewPassword;
+			//self.createAccountPage = createAccountPage;
+			//self.createAccount = createAccount;
 
 
 
 			// AuthService.getUser(function(user){
-			// 	authScope.user = user;
+			// 	self.user = user;
 			// 	console.log("New User",user)
 			// });
 /*			function setuser(){
 
 				AuthService.getUser()
 				.then( function(user){
-					authScope.user = user;
+					self.user = user;
 				})
 				.catch(function(reason){
 					console.log("Failed to retrieve current user: ", reason);
@@ -130,7 +132,7 @@
 
 
 			function sendNewPassword(){
-					pcLoginService.sendNewPassword(authScope.email);
+					pcLoginService.sendNewPassword(self.email);
 			}
 
 			function createAccountPage(){
@@ -140,13 +142,13 @@
 
 			function createAccount(){
 				var user = {
-						name:{ first:authScope.firstName,last: authScope.lastName},
-						emailAddress:authScope.emailAddress,
-						phone:authScope.phone,
-						role: authScope.role
+						name:{ first:self.firstName,last: self.lastName},
+						emailAddress:self.emailAddress,
+						phone:self.phone,
+						role: self.role
 				}
 
-				createAccountService.createUser(user, authScope.password);
+				createAccountService.createUser(user, self.password);
 			}*/
 
 

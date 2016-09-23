@@ -87,6 +87,7 @@
 				},
 				scope:false,
 				controllerAs:'user',
+				transclude:true,
 				controller: function($scope){
 					var refs= pcServices.getCommonRefs();
 					this.user = $scope.user ;

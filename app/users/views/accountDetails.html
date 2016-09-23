@@ -1,78 +1,74 @@
-<md-content class="md-primary" layout-align="start center">
-	<div>
-		<form name="userForm" >
-			<div layout-gt-sm="row">
-				<md-input-container class="md-block" flex-gt-md>
-					<label>First name</label>
-					<input ng-model="auth.user.name.first">
-				</md-input-container>
+<form name="userForm">
+	<div layout-gt-sm="row">
+		<md-input-container class="md-block" flex-gt-md>
+			<label>First name</label>
+			<input ng-model="auth.user.name.first">
+		</md-input-container>
 
-				<md-input-container class="md-block" flex-gt-md>
-					<label>Last Name</label>
-					<input ng-model="auth.user.name.last">
-				</md-input-container>
-			</div>
-
-			<div layout-gt-sm="row">
-				<md-input-container class="md-block" flex-gt-md>
-					<label>Email Address</label>
-					<input ng-model="auth.user.emailAddress">
-				</md-input-container>
-
-				<md-input-container class="md-block" flex-gt-md>
-					<label>Phone Number</label>
-					<input type="tel" ng-model="auth.user.phoneNumber">
-				</md-input-container>
-			</div>
-			
-			<div layout-gt-sm="row">
-				<div layout="column" flex>
-					<md-input-container class="md-block" flex-gt-md>
-						<input placeholder="Profile Pictrue (url)" type="url" ng-model="auth.user.photoUrl">
-					</md-input-container>
-				</div>
-				<div layout="column" flex="20">
-					<div layout-padding>
-						<img 
-						src="{{auth.user.photoUrl}}" 
-						width="100%" 
-						class="md-avitar" 
-						style="border-radius:15px;"/>
-					</div>
-				</div>
-			</div>
-
-			<div layout-gt-sm="row">
-
-				<md-input-container class="md-block" flex-gt-sm>
-					<label>City</label>
-					<input ng-model="auth.user.city">
-				</md-input-container>
-
-				<md-input-container class="md-block" flex-gt-sm>
-					<label>State</label>
-					<input ng-model="auth.user.state">
-				</md-input-container>
-
-			</div>
-
-			<div layout-gt-sm="row">  
-				<md-input-container  class="md-block" flex-gt-sm>
-					<label>Old Password</label>
-					<input ng-model='user.oldPassword'>
-				</md-input-container>
-
-				<md-input-container class="md-block" flex-gt-sm>
-					<label>New Password</label>
-					<input ng-model="auth.newPassword">
-				</md-input-container>
-			</div>
-
-			<md-input-container class="md-block">
-				<label>Biography</label>
-				<textarea ng-model="auth.user.bio" md-maxlength="150" rows="3"></textarea>
-			</md-input-container>
-		</form>
-<!--		<md-button class='md-primary' ng-click="user.updateUser()">Updates Account</md-button>-->
+		<md-input-container class="md-block" flex-gt-md>
+			<label>Last Name</label>
+			<input ng-model="auth.user.name.last">
+		</md-input-container>
 	</div>
-</md-content>
+
+	<div layout-gt-sm="row">
+		<md-input-container class="md-block" flex-gt-md>
+			<label>Email Address</label>
+			<input ng-model="auth.user.emailAddress"/>
+		</md-input-container>
+
+		<md-input-container class="md-block" flex-gt-md>
+			<label>Phone Number</label>
+			<input type="tel" ng-model="auth.user.phoneNumber">
+		</md-input-container>
+	</div>
+	
+	<div layout-gt-sm="row">
+		<div layout="column" flex>
+			<md-input-container class="md-block" flex-gt-md>
+				<input placeholder="Profile Pictrue (url)" type="url" ng-model="auth.user.photoUrl">
+			</md-input-container>
+		</div>
+		<div layout="column" flex="20">
+			<div layout-padding>
+				<img 
+				src="{{auth.user.photoUrl}}" 
+				width="100%" 
+				class="md-avitar" 
+				style="border-radius:15px;"/>
+			</div>
+		</div>
+	</div>
+
+	<div layout-gt-sm="row">
+
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>City</label>
+			<input ng-model="auth.user.city">
+		</md-input-container>
+
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>State</label>
+			<input ng-model="auth.user.state">
+		</md-input-container>
+
+	</div>
+
+	<div layout-gt-sm="row">  
+		<md-input-container  class="md-block" flex-gt-sm>
+			<label>Old Password</label>
+			<input ng-model='user.oldPassword'>
+		</md-input-container>
+
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>New Password</label>
+			<input ng-model="auth.newPassword">
+		</md-input-container>
+	</div>
+
+	<md-input-container class="md-block">
+		<label>Biography</label>
+		<textarea ng-model="auth.user.bio" md-maxlength="150" rows="3"></textarea>
+	</md-input-container>
+</form>
+<ng-transclude></ng-transclude>

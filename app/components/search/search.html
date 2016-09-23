@@ -1,64 +1,66 @@
-<div layout-fill md-colors="::{backgroundColor: 'default-background-200'}">
-
+<div md-colors="::{backgroundColor: 'default-primary-800'}" ng-class="{'layout-fill' : !search.hasSearch}" layout-padding>
 	<div 
-		md-colors="::{backgroundColor: 'default-primary-800'}" 
-		class="pc-search-box-wrapper md-primary"
-		layout-padding
-		layout="row"
 		layout-align="{{search.searchBoxAlign}}"
+		ng-class="{'layout-fill' : !search.hasSearch}"
+		layout
 		>
-
-		<div layout-stretch layout>			
-			<form name="pc-main-search" md-theme="dark">
-				
-				<h1 class="md-display" ng-show="false">Find examiners near you</h1>
-				
-				<div layout-padding></div>
-				
-				<md-autocomplete  
-					ng-model="search.searchBox" 
-					md-selected-item="search.selectedItem" 
-					md-search-text="search.searchText" 
-					md-items="airport in search.querySearch(search.searchText)"
-					md-selected-item-change="search.selectedItemChange(airport)"
-					md-search-text-change="search.searchTextChange(searchText)"
-					md-item-text="airport.name"
-					placeholder="Search..."
-					ng-diabled="false"
-					md-colors="::{backgroundColor: 'default-grey-100'}">
-					<md-item-template>
-						<span 
-							ng-model="search.searchBox" 
-							md-highlight-text="searchText"
-							style="text-transform:uppercase; font-weight:bold;">{{airport.$id}}</span><i> ({{airport.name}}) </i>
-					</md-item-template>
-
-				</md-autocomplete>
-				
-				<div layout-padding></div>
-				
-				<div layout="row" layout-align="center center">
-					<md-datepicker ng-model="search.startDate" md-placeholder="From"></md-datepicker>	
-					<md-datepicker ng-model="search.endDate" md-placeholder="To"></md-datepicker>
-				</div>
-			</form>
-		</div>
-	</div>
-
-
-	<div layout="row" layout-align="center center">
+		
+		<form name="pc-search" flex="40" layout="column" md-theme="dark" >
 			
-		<md-list flex-gt-md="40">
+			<h1 class="md-display" style="text-align: center; font-weight:normal;" ng-show="!search.hasSearch">Find an examiner near you</h1>
 
-			<md-card ng-repeat="user in search.examiners | filter: searchBox: user.userData.airports" layout-padding flex>
+			<div layout-padding></div>
+			
+			<md-autocomplete  
+				ng-model="search.searchBox" 
+				md-selected-item="search.selectedItem" 
+				md-search-text="search.searchText" 
+				md-items="airport in search.querySearch(search.searchText)"
+				md-selected-item-change="search.selectedItemChange(airport)"
+				md-search-text-change="search.searchTextChange(searchText)"
+				md-item-text="airport.name"
+				placeholder="Search..."
+				ng-diabled="false"
+				md-colors="::{backgroundColor: 'default-grey-100'}">
+				<md-item-template>
+					<span 
+						ng-model="search.searchBox" 
+						md-highlight-text="searchText"
+						style="text-transform:uppercase; font-weight:bold;">
+						{{airport.$id}}
+					</span>
+					<i> ({{airport.name}}) </i>
+				</md-item-template>
+
+			</md-autocomplete>
+			
+			<div layout-padding></div>
+			
+			<div layout="row" layout-align="center center">
+				<md-datepicker ng-model="search.startDate" md-placeholder="From"></md-datepicker>	
+				<md-datepicker ng-model="search.endDate" md-placeholder="To"></md-datepicker>
+			</div>
+		</form>
+
+	</div>
+</div>
+
+<!-- Search Results -->
+<div layout="row" layout-align="center center" flex ng-show="search.hasSearch">
+	
+	<div  layout="column" flex-gt-md="40" flex >
+			
+		<md-list>
+
+			<md-card ng-repeat="user in search.examiners | filter: searchBox: user.userData.airports">
 
 				<md-card-title>
 				
 					<md-card-title-media>
 
-						<div class="pc-user-image" layout-align="top right" class="md-media-lg card-media">
-							<img src="{{user.photoUrl}}" alt="" style="max-width:150px; border-radius:2px;">
-						</div>
+						<!-- <div class="pc-user-image" layout-align="top right" class="md-media-lg card-media"> -->
+							<img src="{{user.photoUrl}}" alt="" style="max-width:150px; border-radius:2px;" />
+						<!-- </div> -->
 
 					</md-card-title-media>
 

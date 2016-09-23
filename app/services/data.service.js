@@ -21,7 +21,7 @@
 			return defer.promise;
 		}
         
-return {
+		return {
 
 			getAirports: getAirports,
 

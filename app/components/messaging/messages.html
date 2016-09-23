@@ -1,56 +1,37 @@
-<style>
-	.hide{
-		display: none;
-	}
-	#detailsModal{
-		height: 200px;
-		overflow: scroll ;
-	}
-	.setColor{
-		background-color: red;
-	}
-	
-	.toolbardemoScrollShrink .face {
-		width: 48px;
-		margin: 16px;
-		border-radius: 48px;
-		border: 1px solid #ddd;
-	}
-</style>
+<div layout="row" layout-align="center start">
 
-<div layout="row">
-			
-	<!-- Conversation List -->
-	<md-content layout="column" flex="25" layout-fill>
-		<md-toolbar class="md-primary" >
-			<div class="md-toolbar-tools">
-				<span class="pc-capitalize">Messages</span>
-			</div>
-		</md-toolbar>
-
-		<md-list>
-			<md-list-item 
-				ng-class="{setColor: convo.hasNewMsg === true}" 
-				ng-click="msg.viewConvoMessages(convo)" 
-				class="md-3-line" 
-				ng-repeat="convo in msg.conversationsList | orderBy:'-lastMsg'"
-				ng-click="null">
-				<div class="md-list-item-text" layout="column">
-					<h3 class="pc-capitalize" >{{convo.users.name}}</h3>
+	<div layout="column" flex="25">
+		<!-- Conversation List -->
+		<md-content>
+			<md-toolbar class="md-primary" >
+				<div class="md-toolbar-tools">
+					<span class="pc-capitalize">Messages</span>
 				</div>
-			</md-list-item>
-		</md-list>
+			</md-toolbar>
 
-		<md-button class="md-raised md-primary" ng-click="msg.openConvoDialog()"> New Message </md-button>
+			<md-list>
+				<md-list-item 
+					ng-class="{setColor: convo.hasNewMsg === true}" 
+					ng-click="msg.viewConvoMessages(convo)" 
+					class="md-3-line" 
+					ng-repeat="convo in msg.conversationsList | orderBy:'-lastMsg'"
+					ng-click="null">
+					<div class="md-list-item-text" layout="column">
+						<h3 class="pc-capitalize" >{{convo.users.name}}</h3>
+					</div>
+				</md-list-item>
+			</md-list>
 
-	</md-content>
+			<md-button class="md-raised md-primary" ng-click="msg.openConvoDialog()" style="text-align:center;"> New Message </md-button>
 
+		</md-content>
+	</div>
 
 	<md-divider></md-divider>
 
 
 
-	<div layout="column" flex="40" layout-fill>
+	<div layout="column" flex>
 
 		<!-- Message List -->
 		<div ng-show="msg.convoInfo != undefined">
@@ -62,15 +43,20 @@
 			</md-toolbar>
 			
 
-			<md-content layout="row" >
-				<md-list>
-					<md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages">
+			<md-content>
+				<md-list flex>
+					<md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages" flex>
 						<div class="md-list-item-text">
-							<h3>{{cv.body}} <i ng-click="msg.delete(cv)"class="material-icons">delete</i></h3>
-							<p class="pc-capitalize">{{cv.sentAt}}<br>{{cv.sentAt}}</p>
+
+							<span class="pc-message" ng-class="(cv.sender === msg.userName) ? 'me' : 'them'">
+								<h3 class="pc-msg-body">{{cv.body}}</h3>
+								<p class="pc-capitalize pc-msg-sender">{{cv.sender === msg.userName ? "Me" : cv.sender}}</p>
+							</span>
+							<span class="pc-msg-time">{{cv.sentAt | date:'short'}}</span>
+							<!--<i ng-click="msg.delete(cv)" ng-class="(cv.sender === msg.userName) ? 'me' : 'them'" class="material-icons">delete</i></h3> -->
+
 
 						</div>
-						<md-divider inset></md-divider>
 					</md-list-item>
 				</md-list>
 			</md-content>
