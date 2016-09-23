@@ -1,0 +1,267 @@
+{
+	  "atl": {
+		 "city": "Atlanta",
+		 "name": "Hartsfield-Jackson Atlanta International",
+		 "state": "Georgia"
+	  },
+	  "anc": {
+		 "city": "Anchorage",
+		 "name": "Ted Stevens Anchorage International Airport",
+		 "state": "Alaska"
+	  },
+	  "aus": {
+		 "city": "Austin",
+		 "name": "Austin-Bergstrom International",
+		 "state": "Texas"
+	  },
+	  "bwi": {
+		 "city": "Baltimore",
+		 "name": "Baltimore/Washington International - BWI Airport",
+		 "state": "Maryland"
+	  },
+	  "bos": {
+		 "city": "Boston",
+		 "name": "Logan International Airport",
+		 "state": "Massachusetts"
+	  },
+	  "clt": {
+		 "city": "Charlotte",
+		 "name": "Charlotte Douglas International",
+		 "state": "North Carolina"
+	  },
+	  "mdw": {
+		 "city": "Chicago",
+		 "name": "Chicago Midway Airport",
+		 "state": "Illinois"
+	  },
+	  "ord": {
+		 "city": "Chicago",
+		 "name": "Chicago O'Hare International",
+		 "state": "Illinois"
+	  },
+	  "cvg": {
+		 "city": "Cincinnati",
+		 "name": "Cincinnati/Northern Kentucky International",
+		 "state": "Ohio"
+	  },
+	  "cle": {
+		 "city": "Cleveland",
+		 "name": "Cleveland Hopkins International",
+		 "state": "Ohio"
+	  },
+	  "cmh": {
+		 "city": "Columbus",
+		 "name": "Port Columbus International",
+		 "state": "Ohio"
+	  },
+	  "dfw": {
+		 "city": "Dallas",
+		 "name": "Dallas/Ft. Worth International - DFW Airport",
+		 "state": "Texas"
+	  },
+	  "den": {
+		 "city": "Denver",
+		 "name": "Denver International Airport",
+		 "state": "Colorado"
+	  },
+	  "dtw": {
+		 "city": "Detroit",
+		 "name": "Detroit Metropolitan Wayne County Airport",
+		 "state": "Michigan"
+	  },
+	  "fll": {
+		 "city": "Fort Lauderdale",
+		 "name": "Fort Lauderdale/Hollywood International",
+		 "state": "Florida"
+	  },
+	  "rsw": {
+		 "city": "Fort Myers",
+		 "name": "Southwest Florida International",
+		 "state": "Florida"
+	  },
+	  "bdl": {
+		 "city": "Hartford",
+		 "name": "Bradley International",
+		 "state": "Connecticut"
+	  },
+	  "hnl": {
+		 "city": "Honolulu",
+		 "name": "Hawaii Honolulu International",
+		 "state": "Hawaii"
+	  },
+	  "iah": {
+		 "city": "Houston",
+		 "name": "George Bush Intercontinental",
+		 "state": "Texas"
+	  },
+	  "hou": {
+		 "city": "Houston",
+		 "name": "William P. Hobby Airport",
+		 "state": "Texas"
+	  },
+	  "ind": {
+		 "city": "Indianapolis",
+		 "name": "Indianapolis International",
+		 "state": "Indiana"
+	  },
+	  "mci": {
+		 "city": "Kansas City",
+		 "name": "Kansas City International",
+		 "state": "Missouri"
+	  },
+	  "las": {
+		 "city": "Las Vegas",
+		 "name": "McCarran International",
+		 "state": "Nevada"
+	  },
+	  "lax": {
+		 "city": "Los Angeles",
+		 "name": "Los Angeles International - LAX Airport",
+		 "state": "California"
+	  },
+	  "mem": {
+		 "city": "Memphis",
+		 "name": "Memphis International",
+		 "state": "Tennessee"
+	  },
+	  "mia": {
+		 "city": "Miami",
+		 "name": "Miami International Airport",
+		 "state": "Florida"
+	  },
+	  "msp": {
+		 "city": "Minneapolis",
+		 "name": "Minneapolis/St. Paul International",
+		 "state": "Minnesota"
+	  },
+	  "bna": {
+		 "city": "Nashville",
+		 "name": "Nashville International",
+		 "state": "Tennessee"
+	  },
+	  "msy": {
+		 "city": "New Orleans",
+		 "name": "Louis Armstrong International",
+		 "state": "Louisiana"
+	  },
+	  "jfk": {
+		 "city": "New York",
+		 "name": "John F. Kennedy International",
+		 "state": "New York"
+	  },
+	  "lga": {
+		 "city": "New York",
+		 "name": "LaGuardia International",
+		 "state": "New York"
+	  },
+	  "ewr": {
+		 "city": "Newark",
+		 "name": "Newark Liberty International",
+		 "state": "New Jersey"
+	  },
+	  "oak": {
+		 "city": "Oakland",
+		 "name": "Metropolitan Oakland International",
+		 "state": "California"
+	  },
+	  "ont": {
+		 "city": "Ontario",
+		 "name": "Ontario International",
+		 "state": "California"
+	  },
+	  "mco": {
+		 "city": "Orlando",
+		 "name": "Orlando International",
+		 "state": "Florida"
+	  },
+	  "phl": {
+		 "city": "Philadelphia",
+		 "name": "Philadelphia International",
+		 "state": "Pennsylvania"
+	  },
+	  "phx": {
+		 "city": "Phoenix",
+		 "name": "Sky Harbor International",
+		 "state": "Arizona"
+	  },
+	  "pit": {
+		 "city": "Pittsburgh",
+		 "name": "Pittsburgh International",
+		 "state": "Pennsylvania"
+	  },
+	  "pdx": {
+		 "city": "Portland",
+		 "name": "Portland International",
+		 "state": "Oregon"
+	  },
+	  "rdu": {
+		 "city": "Raleigh-Durham",
+		 "name": "Raleigh-Durham International",
+		 "state": "North Carolina"
+	  },
+	  "smf": {
+		 "city": "Sacramento",
+		 "name": "Sacramento International",
+		 "state": "California"
+	  },
+	  "slc": {
+		 "city": "Salt Lake City",
+		 "name": "Salt Lake City International",
+		 "state": "Utah"
+	  },
+	  "sat": {
+		 "city": "San Antonio",
+		 "name": "San Antonio International",
+		 "state": "Texas"
+	  },
+	  "san": {
+		 "city": "San Diego",
+		 "name": "Lindbergh Field International",
+		 "state": "California"
+	  },
+	  "sfo": {
+		 "city": "San Francisco",
+		 "name": "San Francisco International",
+		 "state": "California"
+	  },
+	  "sjc": {
+		 "city": "San Jose",
+		 "name": "Mineta San José International",
+		 "state": "California"
+	  },
+	  "sna": {
+		 "city": "Santa Ana",
+		 "name": "John Wayne Airport, Orange County",
+		 "state": "California"
+	  },
+	  "sea": {
+		 "city": "Seattle",
+		 "name": "Seattle-Tacoma International - Seatac Airport",
+		 "state": "Washington"
+	  },
+	  "stl": {
+		 "city": "St. Louis",
+		 "name": "Lambert-St. Louis International",
+		 "state": "Missouri"
+	  },
+	  "tpa": {
+		 "city": "Tampa",
+		 "name": "Tampa International",
+		 "state": "Florida"
+	  },
+	  "iad": {
+		 "city": "Washington D.C.",
+		 "name": "Dulles International Airport",
+		 "state": "Washington D.C."
+	  },
+	  "dca": {
+		 "city": "Washington D.C.",
+		 "name": "Ronald Reagan Washington National",
+		 "state": "Washington D.C."
+	  },
+	  "abe":{
+	  	"city": "Allentown",
+	  	"name": "Lehigh Valley International",
+	  	"state": "Pennsylvania"
+	  }
+   }
