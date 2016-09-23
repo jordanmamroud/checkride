@@ -65,15 +65,19 @@
 			'examiner':{
 				calendar:{
 					title: 'Calendar',
-					path: '/user/calendar'
+					path: '/user/calendar',
+					icon: 'date_range'
 				},
 				messages:{
 					title:'Messages',
-					path: '/user/messages'
+					path: '/user/messages',
+					icon: 'forum'
+
 				},
 				profile:{
 					title:'My Profile',
-					path: '/user/profile'
+					path: '/user/profile',
+					icon: 'person'
                 }
 //				},
 //                notifications:{
@@ -84,15 +88,18 @@
 			'student':{
 				Examiners:{
 					title: 'Examiners',
-					path: '/user/list-of-examiners'
+					path: '/user/list-of-examiners',
+					icon: 'date_range'
 				},
 				Messages:{
 					title:'Messages',
-					path: '/user/messages'
+					path: '/user/messages',
+					icon: 'forum'
 				},
 				profile:{
 					title:'Profile',
-					path: '/user/profile'
+					path: '/user/profile',
+					icon: 'person'
 				}
 //                 notifications:{
 //                    title:"notifications",

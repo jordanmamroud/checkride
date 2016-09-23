@@ -1,12 +1,12 @@
-<md-content flex layout="column" >
-								<md-list>
-									<md-list-item ng-repeat="item in navItems" class="md-3-line">
-										<div class="md-list-item-text">
-											<a href="{{item.path}}">
-												<h3>{{item.title}}</h3>
-											</a> 
-											
-										</div> 
-									</md-list-item
-								</md-list> 
-							</md-content>
+<md-content flex layout="column" layout-padding  md-colors="::{backgroundColor: 'default-primary'}">
+	<md-list>
+		<md-list-item ng-repeat="item in navItems" class="md-3-line">
+			<div class="md-list-item-text">
+				<a href="{{item.path}}">
+					<h3 class="md-primary" styl><i class="material-icons">{{item.icon}}</i>&nbsp;&nbsp;{{item.title}}</h3>
+				</a> 
+				
+			</div> 
+		</md-list-item>
+	</md-list> 
+</md-content>

@@ -101,26 +101,38 @@ img.cr-logo,
     font-size: .5em;
   }
 
-  .pc-msg-body{
-    
-  }
-  
-  .me,
-  .them{
-    padding: .5em 1em;
+  .pc-msg-wrapper .pc-msg-body{
+    padding: .5em 1.5em;
     @include border-radius(5px);
+    margin-bottom: 10px;
   }
 
-  .me{
+  .material-icons{
+    color: #CCC;
+    font-size: 1.5em;
+    margin: 10px
+  }
+
+  .me {
     text-align:right;
     float:right;
-    background: #66BB6A;
+
+    .pc-msg-body{
+      background: #66BB6A;
+      float:left;
+    }
+
+    .material-icon{}
   }
 
-  .them{
+  .them {
     text-align: left;
     float: left;
-    background:#D0D0D0;
+
+    .pc-msg-body{
+      float:right;
+      background:#D0D0D0;
+    }
   }
   
 }

@@ -73,7 +73,7 @@
 
 
 	<!-- HEADER -->
-	<md-toolbar md-colors="::{backgroundColor: 'default-background-100'}" ng-controller='LayoutCtrl as layout'>
+	<md-toolbar md-colors="::{backgroundColor: 'default-background-200'}" ng-controller='LayoutCtrl as layout'>
 		<cr-header></cr-header>
 	</md-toolbar>
 	
@@ -92,7 +92,8 @@
 			ng-show="auth.isLoggedIn" 
 			md-is-locked-open="true"
 			flex="15"
-			class="md-white-frame-z1" 
+			 md-colors="::{backgroundColor: 'default-primary'}"
+			 md-theme="dark"
 			md-component-id="pc-sidenav-left">
 
 			<md-content>
@@ -106,8 +107,8 @@
 			layout="column" 
 			md-scroll-y 
 			flex 
-			md-colors="::{backgroundColor: 'default-background-200'}"
-			style="overflow: auto; height: 100%;">
+			
+			style="overflow: auto; height: 100%; background-color:white;">
 			<div id="pc-app-content" ng-view flex="noshrink"></div>
 		</md-content>
 		
