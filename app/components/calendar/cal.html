@@ -16,6 +16,7 @@
 	<div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div>
 </div>
 -->
+
 <div layout="row" layout-align="center center" >
 		<div layout-fill >
 			<md-tabs md-dynamic-height md-border-bottom>
@@ -40,7 +41,11 @@
 		</div>
 	</div>
 
+<script id='warningModal' type="text/ng-template">
+    <button ng-click="ev.confirm()">Yes</button>
+    <button ng-click="ev.reject()">no</button>
 
+</script>
 
 
     <script id="updateEventsModal" type="text/ng-template">

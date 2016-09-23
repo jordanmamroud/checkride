@@ -123,8 +123,6 @@
                 })
             }
             
-            
-            
 			function refreshEvents(calSelector, eventSource){
 					$(calSelector).fullCalendar('removeEventSource', eventSource);
 					$(calSelector).fullCalendar('removeEvents');
@@ -140,7 +138,6 @@
 
 			function createDailyEvent(eventObj){ 
 				eventObj.recur ="daily";
-			//                eventObj.range = range ;
 				eventObj.dow = [0,1,2,3,4,5,6];
 				eventObj.start = new Date(eventObj.start).toTimeString().substring(0,8);
 				eventObj.end = new Date(eventObj.end).toTimeString().substring(0,8);
@@ -181,23 +178,19 @@
                 var studentRef = refs.accounts.child(apt.senderId);
                 var userRef = refs.accounts.child(userInfo.$id);
                 var userCalRef = refs.calendars.child(userInfo.$id);
-                userCalRef.child("events/"+ apt.$id).update({
-                    appointmentSlot: false,
-                    color:"red",
-                    rating: apt.rating,
-                    category:apt.category
-                })
-                function newApt(user){
-                     var appointment =  new Event(user.name.first+" " + user.name.last ,apt.start,null, apt.end,"once", user.$id, null, 'red', apt.category, apt.rating);
-                    console.log(appointment);
-                    return appointment ;
-                }
-             
-                userCalRef.child("approvedAppointments/").child(apt.$id).set(newApt(apt));
+                var key = userRef.push().key();
+                userCalRef.child("events/").child(key).set(newApt(apt));
+                userCalRef.child("approvedAppointments/").child(key).set(newApt(apt));
                 userCalRef.child("appointmentSlots/" + apt.$id).remove();
+                userCalRef.child("events/"+ apt.$id).remove();
                 studentRef.child("appointments/" + apt.$id).set(newApt(userInfo));
                 refs.notifications.child(apt.senderId).push("New Appointment With " + userInfo.name.first+' ' +userInfo.name.last);
-                userCalRef.child("appointmentRequests" + "/" + apt.$id).remove();
+                userCalRef.child("appointmentRequests/" + apt.$id).remove();
+                
+                function newApt(user){
+                     var appointment =  new Event(user.name.first+" " + user.name.last ,apt.start,null, apt.end,"once", user.$id, null, 'red', apt.category, apt.rating);
+                    return appointment ;
+                }
 			}
 
 			function syncGcal(userData, calendarGcalId){

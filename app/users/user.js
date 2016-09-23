@@ -14,15 +14,15 @@
 			var refs = pcServices.getCommonRefs();
 			var userInfo = user;
             var userRef = refs.accounts.child(userInfo.$id);
+            
             $scope.user = user ;
-
             $scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
 			$scope.airportsList = pcServices.createFireArray(userRef.child("airports"));
 			$scope.saveCertification = saveCertification ;
 			$scope.saveAirport= saveAirport ;
             $scope.deleteAirport = deleteAirport ;
             $scope.deleteCertication = deleteCertication ;
-                        
+            
             function saveCertification(chip){
                saveChip(chip,"certifications");
             }
@@ -65,7 +65,6 @@
 				var examinerRef = refs.accounts.child(examiner.$id);
 				examinerRef.once("value",function(data){
                     $sessionStorage.examiner = {$id:data.key(), data:data.val()}
-					console.log('bang',pcServices.getCookieObj('examinerInfo'));
 					pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
 				});
 			  }    
