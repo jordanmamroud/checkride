@@ -19,7 +19,7 @@ var app = express();
 var port = process.env.PORT || 5000 ;
 
 app.set('port', (process.env.PORT || 5000));
-
+app.set('view engine', 'ejs');
 firebase.initializeApp({
   serviceAccount: "firebaseservice.json",
   databaseURL: "https://checkride.firebaseio.com/"
@@ -264,12 +264,12 @@ app.use(express.static(__dirname + '/'));
 //
 //// views is directory for all template files
 //app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+
 //
-//app.get('/', function(request, response) {
-// response.render('index');
-//});
+app.get('/', function(request, response) {
+response.render('index');
+});
 //
-//app.listen(app.get('port'), function() {
-//  console.log('Node app is running on port', app.get('port'));
-//});
+app.listen(app.get('port'), function() {
+ console.log('Node app is running on port', app.get('port'));
+});
