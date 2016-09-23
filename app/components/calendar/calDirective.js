@@ -16,7 +16,6 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         controller:function($scope, calendarService, $mdDialog, pcServices){
             var ev = this;
             var refs = pcServices.getCommonRefs();
-            console.log($scope.$parent)
             var userInfo = $scope.$parent.$resolve.user ;
             var userRef = refs.accounts.child(userInfo.$id);
             var userCalendarRef = refs.calendars.child(userInfo.$id);
@@ -42,8 +41,8 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             ev.repeatForm={};
             ev.dow="";
             ev.daysOfWeek = [{day:'sunday',val:0},{day:'monday',val:1},{day:'tuesday',val:2},{day:'wednesday',val:3},{day:'thursday',val:4},{day:'friday',val:5},{day:'saturday',val:6}]
-            
             ev.events = pcServices.createFireArray(userEventsRef);
+            console.log(userEventsRef.toString())
             ev.createEvent = checkEventType ;
             ev.deleteEvent = deleteEvent ;
             ev.deleteSingleMonthlyEvent = deleteSingleMonthlyEvent;
@@ -53,7 +52,10 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             pcServices.showToastOnEvent(userCalendarRef.child("appointmentRequests"),"child_added");
             pcServices.orderArray($scope.requestsList, "-sentAt");
             ev.name = userInfo.name.first + " " +userInfo.name.last ;
-        
+            ev.confirm =confirm ;
+            ev.reject = reject;
+            console.log(ev.events);
+            
             function checkEventType (){
                 var eventId= userRef.push().key();
                 if(ev.appointmentSlot && ev.repeatingEvent== false){
@@ -64,6 +66,24 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     createEvent(userEventsRef,eventId);
                 }
                 ev.repeatingEvent = false ;
+                $mdDialog.cancel();
+            }
+            
+            function warningModal(){
+                $mdDialog.show({
+                    scope:$scope.$new(),
+                    templateUrl:'warningModal',
+                    clickOutsideToClose:false 
+                })
+            };
+            
+            function confirm(){
+                userEventsRef.child(ev.event.$id).update({
+                    start: ev.event.start.toString(),
+                    end: ev.event.end.toString()
+                });
+            };
+            function reject(){
                 $mdDialog.cancel();
             }
             
@@ -174,7 +194,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     $mdDialog.cancel();
             };
                         
-        
+            
            function deleteAllMonthlyEvents(){
                 calendarService.deleteAllEvents(ev.clickedEvent, userCalendarRef);
                 ev.monthlyEvent = false ;
@@ -192,8 +212,8 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                
             function setUpCalendar(){
                 calendarSettings.on("value", function(data){
-                    ev.uiConfig.calendar.minTime = data.val().minTime ;
-                    ev.uiConfig.calendar.maxTime = data.val().maxTime ;
+//                    ev.uiConfig.calendar.minTime = data.val().minTime ;
+//                    ev.uiConfig.calendar.maxTime = data.val().maxTime ;
                 });
             }
             setUpCalendar();
@@ -268,17 +288,14 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                         eventDrop: function ( event , element) {
                             calendarService.onEventChange(event, userEventsRef, updateEventsModal);
                         },
-                        eventResize: function (event , element) {
-                            calendarService.onEventChange(event, userEventsRef, updateEventsModal);
-                            
+                        eventResize: function (event , element){
                             ev.event = event ;
-//                            userEventsRef.child(event.$id).update({
-//                                title: event.title,
-//                                start: event.start.toISOString(),
-//                                end: event.end.toISOString(),
-//                                id: event.title + event.start.toISOString() + event.end.toISOString()
-//                            }); 
-//                       
+                            if(event.hasOwnProperty('category')){
+                                warningModal();
+                            }else{
+                                
+                                calendarService.onEventChange(event, userEventsRef, updateEventsModal);
+                           }
                         },
                         eventRender: function(event,element,view){ 
 

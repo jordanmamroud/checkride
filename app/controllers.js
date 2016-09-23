@@ -17,14 +17,12 @@ angular.module('pcControllers',[])
 				layout.isSession = !(AuthService.getAuth === null);
                 AuthService.getUser().then(function(user){
 					layout.user = user;
-                    console.log(layout.user);
 					$scope.navItems = navItems();
 				})
 				.catch(function(err){
 					console.log(err);
 				})
-			     $scope.showSidebar = true; 
-//				$scope.showSidebar = ($location.path().indexOf('/user/') > -1);
+				layout.showSidebar = ($location.path().indexOf('/user/') > -1);
 			});
 
 			function navItems(){

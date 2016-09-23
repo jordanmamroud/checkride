@@ -10,10 +10,11 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 		}
 		return service ;
 	
-		function Message(body,sender, sentAt){
+		function Message(body, sender){
 			this.body = body;
 			this.sender = sender;
-			this.sentAt = sentAt ;
+            this.sentAt = new Date();
+            console.log(new Date());
 		}
     
 		function createConvo(userData, recipientData, msgObj){
@@ -25,7 +26,7 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 			userConvo.update({
 				users:{name:recipientData.name, id:recipientData.$id},
 				lastMsg: new Date()    
-			})
+			});
 			recipientConvo.child("messages").push(msgObj);
 			recipientConvo.update({ 
 				lastMsg:new Date(Date.now()).toString(),
@@ -37,10 +38,10 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 		}
     
 		function sendReply(user,convoInfo, msgObj){
-			var userConvosRef = refs.conversations.child(user.$id);
-			var recipientRef = refs.conversations.child(convoInfo.users.id);
-			recipientRef.child(convoInfo.$id+ "/messages").push(msgObj);
-			userConvosRef.child(convoInfo.$id +"/messages").push(msgObj);
+			var userConvosRef = refs.conversations.child(user.$id) ;
+			var recipientRef = refs.conversations.child(convoInfo.users.id) ;
+			recipientRef.child(convoInfo.$id+ "/messages").push(msgObj) ;
+			userConvosRef.child(convoInfo.$id +"/messages").push(msgObj) ;
 			recipientRef.child(convoInfo.$id).update({
 				lastReceivedMsg:new Date(Date.now()).toString(),
 				hasNewMsg: true
@@ -52,8 +53,8 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 		function setRecipientsList(userInfo){
 			if(userInfo.role.toLowerCase() == "examiner"){
 				return pcServices.createFireArray(refs.students);
-
 			};
+            
 			if(userInfo.role.toLowerCase() == "student"){
 				return pcServices.createFireArray(refs.examiners);
 			};
@@ -73,13 +74,13 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 		},
 		controllerAs:'mg',
 		controller:function(){
-			var userInfo = pcServices.getCookieObj('user');
+            var userInfo = $scope.$parent.$resolve.user ;
 			this.recipientsList = messagesService.setRecipientsList(userInfo);
 			this.recipient = '';          
 			this.sendMessage = sendMessage ;
 			function sendMessage(){
 				var name = userInfo.name.first + " " + userInfo.name.last;
-				var message = new messagesService.Message(this.body, name, new Date());
+				var message = new messagesService.Message(this.body, name, userInfo.$id);
 				messagesService.createConvo(userInfo, JSON.parse(this.recipient) , message);
 			}
 		}
@@ -112,7 +113,6 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 	}
 	vm.view = false ;
 	vm.convo ='';    
-	
 	pcServices.showToastOnEvent(conversationsRef, "child_added");
     
 	vm.sendReply = sendReply;
@@ -126,9 +126,8 @@ angular.module("messages", ['firebase', 'pcServices', 'ngMaterial'])
 		vm.convoMessages = pcServices.createFireArray(messagesRef);
 	};
     
-	function sendReply(){
-		var msgObj = new messagesService.Message(vm.body, userInfo.name.first +" " +userInfo.name.last, new Date());
-		console.log(this.convoInfo);
+	function sendReply(cv){
+		var msgObj = new messagesService.Message(vm.body, userInfo.name.first +" " +userInfo.name.last);
 		messagesService.sendReply(userInfo,vm.convoInfo, msgObj);
 	};  
     
