@@ -59,3 +59,55 @@ img.cr-logo,
 .grey { background: grey; }
 .purple { background: purple; }
 .yellow { background: yellow; }
+
+
+.hide{
+  display: none;
+}
+#detailsModal{
+  height: 200px;
+  overflow: scroll ;
+}
+.setColor{
+  background-color: #FFF;
+}
+
+.toolbardemoScrollShrink .face {
+  width: 48px;
+  margin: 16px;
+  border-radius: 48px;
+  border: 1px solid #ddd;
+}
+
+
+.pc-message{
+  padding: .5em 1em;
+  @include border-radius(5px);
+  
+  
+
+  .pc-msg-sender{
+    font-size: .5em;
+  }
+
+  .pc-msg-body{
+    
+  }
+
+  .me,
+  .them{
+    
+  }
+
+  &.me{
+    text-align:right;
+    float:right;
+    background: #66BB6A;
+  }
+  &.them{
+    text-align: left;
+    float: left;
+    background:#D0D0D0;
+  }
+  
+}

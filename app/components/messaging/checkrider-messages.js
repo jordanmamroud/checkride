@@ -42,9 +42,9 @@ function messageCtrl($scope,messagesService, pcServices, conversations, user,$md
 	};
     
 	function sendReply(){
-		var msgObj = new messagesService.Message(self.body, userInfo.name.first +" " +userInfo.name.last, new Date());
-		console.log(this.convoInfo);
+		var msgObj = new messagesService.Message(self.body, userInfo.name.first +" " + userInfo.name.last);
 		messagesService.sendReply(userInfo,self.convoInfo, msgObj);
+
 	};  
     
 	function createSendMsgDialog(){
@@ -64,12 +64,12 @@ function messageService(pcServices){
 			sendReply:sendReply,
 			setRecipientsList:setRecipientsList
 	}
-	return service ;
 
-	function Message(body,sender, sentAt){
+	function Message(body,sender){
 		this.body = body;
 		this.sender = sender;
-		this.sentAt = sentAt ;
+		this.sentAt = Firebase.ServerValue.TIMESTAMP ;
+
 	}
 
 	function createConvo(userData, recipientData, msgObj){
@@ -103,6 +103,7 @@ function messageService(pcServices){
 		});
         pcServices.getCommonRefs().notifications.child(convoInfo.users.id).push("New message From " + user.name.first + 
         " "+user.name.last );
+        console.log(msgObj)
 	}
 
 	function setRecipientsList(userInfo){
@@ -114,6 +115,8 @@ function messageService(pcServices){
 			return pcServices.createFireArray(refs.examiners);
 		};
 	}
+	
+	return service ;
 }
 
 
@@ -138,7 +141,7 @@ function sendMessageModal(messagesService, pcServices){
 
 			function sendMessage(){
 				var name = userInfo.name.first + " " + userInfo.name.last;
-				var message = new messagesService.Message(this.body, name, new Date());
+				var message = new messagesService.Message(this.body, name);
 				messagesService.createConvo(userInfo, JSON.parse(this.recipient) , message);
 			}
 		}
