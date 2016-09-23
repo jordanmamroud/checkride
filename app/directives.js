@@ -45,7 +45,7 @@
 				controller: function($scope){
 					var refs= pcServices.getCommonRefs();
                     $scope.user= $scope.$resolve.user ;
-                        
+                    
 				}   
 			}
 		}])

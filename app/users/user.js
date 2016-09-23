@@ -1,15 +1,18 @@
 (function(){
 
 	angular.module("pcUser",[])
-
+        
+        .controller('upcomingAppointmentsController', function($scope, pcServices, user){
+            var refs = pcServices.getCommonRefs();
+			var userInfo = user ;
+            var userRef = refs.accounts.child(userInfo.$id);
+            var myAppointmentsRef = userRef.child('appointments');
+        
+            $scope.myAppointments = pcServices.createFireArray(myAppointmentsRef);
+            console.log($scope.myAppointments);        
+        })
+    
 		//Shared Controllers
-
-//		.controller("profileController", ['$rootScope','$scope','profileService', 'pcServices', 'currentUser',function($rootScope,$scope, profileService,pcServices, currentUser){
-//			var refs = pcServices.getCommonRefs();
-//			var userInfo = currentUser ;
-//            var userRef = refs.accounts.child(userInfo.$id);
-//            
-//            $scope.currentUser = currentUser ;
 		.controller("profileController", ['$scope','profileService', 'pcServices', 'user',function($scope, profileService,pcServices, user){
 			var refs = pcServices.getCommonRefs();
 			var userInfo = user ;
@@ -21,7 +24,7 @@
 			$scope.saveAirport= saveAirport ;
             $scope.deleteAirport = deleteAirport ;
             $scope.deleteCertification = deleteCertification ;
-            console.log($scope);
+            $scope.airportOptions = pcServices.createFireArray(refs.airports.child("detail"));
             $scope.updateUser = function(ref){
                     if($scope.user.newPassword){
                         profileService.changePassword(refs.accounts.child($scope.user.$id), $scope.oldPassword, $scope.newPassword, $scope.user.emailAddress)
@@ -35,14 +38,22 @@
                 saveChip(chip,"certifications");
             }
                         
-            function saveAirport(chip){
-               refs.airports.child(chip + "/users/"+ userInfo.$id).set(true);
-               saveChip(chip, "airports");
+            function saveAirport(keycode){
+                console.log('ham');
+                console.log($scope.selectedAirport);
+
+               refs.airports.child("examiners/" + $scope.selectedAirport + "/" + userInfo.$id).set({
+                   name:{first:userInfo.name.first,last:userInfo.name.last},
+                   photoUrl:userInfo.photoUrl 
+               });
+              userRef.child('airports/'+$scope.selectedAirport).set(true);
+//               saveChip(chip, "airports");
+                
             }
             
 			function deleteAirport(chip){
 				userRef.child("airports/" + chip.$id).remove();
-                refs.airports.child(chip.$id + "/users/" + user.$id).remove();
+                refs.airports.child("examiners/"+ chip.$id + "/" + user.$id).remove();
 			}
             
 			function deleteCertification(chip){
@@ -86,7 +97,7 @@
 			var refs = pcServices.getCommonRefs();
 			var userInfo = user ;
             
-            vm.examinerInfo = $sessionStorage.examiner;
+            vm.examinerInfo = $sessionStorage.examinerInfo;
 			vm.certificationsList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/certifications"));
 			vm.airportList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/airports"));
 		}])

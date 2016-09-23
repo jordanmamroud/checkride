@@ -65,8 +65,9 @@
 			 controller:"messagesController",
 			 controllerAs:"msg",
 			 resolve:{
-				 conversations:function(pcServices){
-					var userInfo = pcServices.getCookieObj('user');
+				 conversations:function(pcServices, $sessionStorage){
+                     console.log($sessionStorage.user);
+					var userInfo = $sessionStorage.user ;
 					var refs = pcServices.getCommonRefs();
 					var conversationsRef = refs.conversations.child(userInfo.$id);
 					var messagesRef = conversationsRef.child("/messages");
@@ -102,7 +103,11 @@
 		.when(RoutePaths.studentMessages.path,{
 			templateUrl:"app/users/views/studentMessages.html"
 		})
-
+        
+        .when(RoutePaths.upcomingAppointments.path,{
+            templateUrl:"app/users/views/upcomingAppointments.html",
+            controller: 'upcomingAppointmentsController'
+        })
 
 		.otherwise({
 			redirectTo:'/'
@@ -155,6 +160,9 @@
 		},
         notifications:{
             path:"/user/notifications"
+        },
+        upcomingAppointments:{
+            path:"/user/upcomingAppointments"
         }
         
 	})

@@ -54,7 +54,6 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             ev.name = userInfo.name.first + " " +userInfo.name.last ;
             ev.confirm =confirm ;
             ev.reject = reject;
-            console.log(ev.events);
             
             function checkEventType (){
                 var eventId= userRef.push().key();
@@ -84,6 +83,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                 });
             };
             function reject(){
+
                 $mdDialog.cancel();
             }
             
@@ -164,7 +164,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                       eventObj.recur = getFrequency(ev.frequency.toLowerCase());
                       eventObj.recurrences= setReccurence();
                          $.ajax({
-                            url:"http://blooming-river-27917.herokuapp.com/recurevents",
+                            url:"https://blooming-river-27917.herokuapp.com/recurevents",
                             dataType: "json",
                             data:JSON.stringify(eventObj),
                             type:"POST",
@@ -288,10 +288,14 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                         eventDrop: function ( event , element) {
                             calendarService.onEventChange(event, userEventsRef, updateEventsModal);
                         },
+                        eventResizeStart:function(event){
+                          ev.startOfResize = event ;  
+                        },
                         eventResize: function (event , element){
                             ev.event = event ;
                             if(event.hasOwnProperty('category')){
                                 warningModal();
+                                return false;
                             }else{
                                 calendarService.onEventChange(event, userEventsRef, updateEventsModal);
                            }
@@ -320,8 +324,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             var examinerCalRef = refs.calendars.child(examinerInfo.$id) ;
             var settingsRef = examinerRef.child("calendar/settings") ;
             var eventsList = pcServices.createFireArray(examinerCalRef.child("appointmentSlots"));
-            var examinerAppointmentsRef = refs.calendars.child(examinerInfo.$id+ "/approvedAppointments");
-            
+           
             this.aicrCats = pcServices.createFireArray(refs.root.child("config/aircraft-category"));
             this.ratings = pcServices.createFireArray(refs.root.child("config/ratings"));
             this.aicrCategory='';

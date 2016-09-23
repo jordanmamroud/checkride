@@ -2,8 +2,8 @@
 	angular.module('pcAuthController', ['firebase'])
 
 		//AUTH CONTROLLER
-		.controller("AuthCtrl", ["$scope", "$location", "$timeout", "AuthService",  "$firebaseObject", "pcServices",
-									function($scope, $location, $timeout, AuthService,  $firebaseObject, pcServices){
+		.controller("AuthCtrl", ["$scope", "$location", "$timeout", "AuthService",  "$firebaseObject", "pcServices",'$sessionStorage',
+									function($scope, $location, $timeout, AuthService,  $firebaseObject, pcServices,$sessionStorage){
 			var self = this;
 			self.auth = AuthService.auth;
 			self.authData = AuthService.getAuth;
@@ -70,7 +70,8 @@
 						name:{ first:self.firstName,last: self.lastName},
 						emailAddress:self.emailAddress,
 						phone:self.phone,
-						role: self.role
+						role: self.role,
+                        photoUrl:self.photoUrl
 				}
 
 				AuthService.createUser(user, self.password);

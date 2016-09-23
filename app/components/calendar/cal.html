@@ -32,7 +32,10 @@
                     <md-list>
                         <md-list-item ng-repeat="apt in ev.approvedAppointments">
                             <div class="md-list-item-text" layout="column">
-                                <h3 class="pc-capitalize" >{{apt.title}}</h3>
+                                <h3 class="pc-capitalize" >{{"appointment with " + apt.title}}</h3>
+                                <h3>{{"Appointment Start: " + apt.start}}</h3>
+                                <h3>{{"Appointment End: " +apt.end}}</h3>
+                                <md-divider></md-divider>
                             </div>
                         </md-list-item>
                     </md-list>
@@ -41,16 +44,19 @@
 		</div>
 	</div>
 
-<script id='warningModal' type="text/ng-template">
-    <button ng-click="ev.confirm()">Yes</button>
-    <button ng-click="ev.reject()">no</button>
+    <script id='warningModal' type="text/ng-template">
+       <md-toolbar layout-padding>
+            <h4>Are you sure that you would like to adjust your appointment time</h2>
+        </md-toolbar>
+        <md-button ng-click="ev.confirm()">Request new appointment time</md-button>
+        <md-button ng-click="ev.reject()">Keep the same appointment time</md-button>
 
-</script>
-
-
+    </script>
+   
     <script id="updateEventsModal" type="text/ng-template">
-        <button ng-click="ev.updateSingle()">update Just this event</button>
-        <button ng-click="ev.updateAll()"> update all events</button>
+        <md-button ng-click="ev.updateSingle()">Update Just this event</md-button>
+        <md-divider></md-divider>
+        <md-button ng-click="ev.updateAll()"> Update all events</md-button>
     </script>
 
 	<script id="addEventModal" type="text/ng-template">
@@ -71,7 +77,7 @@
 					
 					<md-input-container>
 						<input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
-							<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>
+<!--							<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>-->
 					</md-input-container>
                     <md-checkbox ng-model="ev.appointmentSlot">Appointment Slot?</md-checkbox>
 					<md-checkbox ng-model="ev.repeatingEvent">Repeating Event?</md-checkbox>
@@ -101,10 +107,8 @@
 								<md-checkbox type="checkbox" ng-model="dow.selected">{{dow.day}}</md-checkbox>
 							</label>
 						</form>
-						
-						<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>
-							
                     </div>
+                    <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>		
 				</div>
 			</md-content>
 			

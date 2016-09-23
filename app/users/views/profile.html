@@ -12,10 +12,15 @@
                     </md-chip-template>
                    </md-chips>
             </md-input-container>
-
+            
+            <md-input-container layout>
+			<md-select ng-click="saveAirport()" ng-model="selectedAirport">
+				<md-option ng-click="saveAirport"value="{{aprt}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in airportOptions">{{aprt.$id}}</md-option>
+			</ms-select>       
+		</md-input-container>
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Airports Your Serving</label>
-                <md-chips md-select-on-focus  md-max-chips="5000" md-on-add="saveAirport($chip)"class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)" >
+                <md-chips md-select-on-focus  md-max-chips="5000" md-on-add="saveAirport($chip)"class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)">
                     <md-chip-template>
                       <strong>{{$chip.$id}}</strong>
                         <em></em>

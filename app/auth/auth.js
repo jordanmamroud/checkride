@@ -1,7 +1,7 @@
 (function(){
 	angular.module('pcAuth', ['firebase'])
 
-		.service("AuthService", ['$q',"$firebaseAuth", "$firebaseArray", "pcServices", function($q,$firebaseAuth, $firebaseArray, pcServices){
+		.service("AuthService", ['$q',"$firebaseAuth", "$firebaseArray", "pcServices",'$sessionStorage', function($q,$firebaseAuth, $firebaseArray, pcServices,$sessionStorage){
             var ref = pcServices.getCommonRefs();
 			var authObj = $firebaseAuth(ref.main);
 			var authObjData = authObj.$getAuth();
@@ -52,12 +52,9 @@
 					.then(function(authData) {
 						//Get the users data object and assign it to the "user" variable
 						var user = pcServices.createFireObj(ref.accounts.child(authData.uid));
-						//Once its been loaded...
 						user.$loaded().then(function(){
-
-							//Store the users object as a cookie named "currentUser"
-							pcServices.setCookieObj("user", user);
-                            
+                            console.log(user);
+                            $sessionStorage.user = {user: user} ; 
 							//And redirect to the users profile page
 							pcServices.changePath(pcServices.getRoutePaths().profile.path);
 

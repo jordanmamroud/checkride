@@ -22,7 +22,7 @@ angular.module('pcControllers',[])
 				.catch(function(err){
 					console.log(err);
 				})
-				layout.showSidebar = ($location.path().indexOf('/user/') > -1);
+//				layout.showSidebar = ($location.path().indexOf('/user/') > -1);
 			});
 
 			function navItems(){

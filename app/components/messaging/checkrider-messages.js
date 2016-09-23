@@ -16,13 +16,19 @@ function messageCtrl($scope,messagesService, pcServices, conversations, user,$md
 	var conversationsRef = refs.conversations.child(userInfo.$id);
 	self.view = false ;
 	self.convo ='';    
+    self.convoMessages = [];
 	self.conversationsList = pcServices.createFireArray(conversationsRef);
 	self.convoInfo = conversations[conversations.length-1]; 
 	self.sendReply = sendReply;
 	self.openConvoDialog = createSendMsgDialog;
 	self.viewConvoMessages = viewConvoMessages;
-
-
+    
+    
+    conversationsRef.on('child_added', function(data){
+        self.convoMessages = pcServices.createFireArray(conversationsRef.child(data.key() + "/messages"));
+        console.log(data.key());
+    })
+    
     self.delete = function(mesg){
        conversationsRef.child(self.convoInfo.$id+ "/messages").child(mesg.$id).remove();
     }
@@ -130,10 +136,8 @@ function sendMessageModal(messagesService, pcServices){
 		},
 		controllerAs:'mg',
 
-		controller:function(){
-
+		controller:function($scope){
             var userInfo = $scope.$parent.$resolve.user ;
-
 			this.recipientsList = messagesService.setRecipientsList(userInfo);
 			this.recipient = '';          
 			this.sendMessage = sendMessage ;
@@ -148,7 +152,7 @@ function sendMessageModal(messagesService, pcServices){
 }
 
 
-function messagesDirective(messagesService, pcServices,$mdDialog){
+function messagesDirective(messagesService, pcServices,user,$mdDialog){
 	return{
 		templateUrl: function(){
 			 return "app/components/messaging/messages.html?" + new Date();
@@ -201,50 +205,51 @@ function messagesDirective(messagesService, pcServices,$mdDialog){
 //		});
 //	};
 //}])
-
-
-function messageCtrl($scope,messagesService, pcServices, conversations, $mdDialog){
-	var vm = this;
-	var refs = pcServices.getCommonRefs();
-	var userInfo = pcServices.getCookieObj('user');
-	var userRef = refs.accounts.child(userInfo.$id);
-	var conversationsRef = refs.conversations.child(userInfo.$id);
-	
-    vm.delete = function(mesg){
-       conversationsRef.child(vm.convoInfo.$id+ "/messages").child(mesg.$id).remove();
-    }
-	vm.conversationsList = pcServices.createFireArray(conversationsRef);
-	vm.convoInfo = conversations[conversations.length-1]; 
-	if(vm.convoInfo != undefined){
-		vm.convoMessages = pcServices.createFireArray(conversationsRef.child(vm.convoInfo.$id+ "/messages")); 
-	}
-	vm.view = false ;
-	vm.convo ='';    
-	pcServices.showToastOnEvent(conversationsRef, "child_added");
-    
-	vm.sendReply = sendReply;
-	vm.openConvoDialog = createSendMsgDialog;
-	vm.viewConvoMessages = viewConvoMessages;
-	
-	function viewConvoMessages(convo){
-		var messagesRef = refs.conversations.child(userInfo.$id +"/" + convo.$id +"/messages")
-		conversationsRef.child(convo.$id).child("hasNewMsg").set(false);
-		vm.convoInfo = convo ;
-		vm.convoMessages = pcServices.createFireArray(messagesRef);
-	};
-    
-	function sendReply(cv){
-		var msgObj = new messagesService.Message(vm.body, userInfo.name.first +" " +userInfo.name.last);
-		messagesService.sendReply(userInfo,vm.convoInfo, msgObj);
-	};  
-    
-	function createSendMsgDialog(){
-		$mdDialog.show({
-			scope:$scope.$new(),
-			template:'<send-message-modal lister="msg.listRef"></send-message-modal>',
-			clickOutsideToClose:true
-		});
-	};
-}
-
-
+//
+//
+//function messageCtrl($scope,messagesService, pcServices, conversations,user, $mdDialog){
+//	var vm = this;
+//	var refs = pcServices.getCommonRefs();
+//	var userInfo = pcServices.getCookieObj('user');
+//	var userRef = refs.accounts.child(userInfo.$id);
+//	var conversationsRef = refs.conversations.child(userInfo.$id);
+//	
+//    vm.delete = function(mesg){
+//       conversationsRef.child(vm.convoInfo.$id+ "/messages").child(mesg.$id).remove();
+//    }
+//	vm.conversationsList = pcServices.createFireArray(conversationsRef);
+//	vm.convoInfo = conversations[conversations.length-1]; 
+//	if(vm.convoInfo != undefined){
+//		vm.convoMessages = pcServices.createFireArray(conversationsRef.child(vm.convoInfo.$id+ "/messages")); 
+//	}
+//	vm.view = false ;
+//	vm.convo ='';    
+//	pcServices.showToastOnEvent(conversationsRef, "child_added");
+//    
+//	vm.sendReply = sendReply;
+//	vm.openConvoDialog = createSendMsgDialog;
+//	vm.viewConvoMessages = viewConvoMessages;
+//	
+//	function viewConvoMessages(convo){
+//		var messagesRef = refs.conversations.child(userInfo.$id +"/" + convo.$id +"/messages")
+//		conversationsRef.child(convo.$id).child("hasNewMsg").set(false);
+//		vm.convoInfo = convo ;
+//		vm.convoMessages = pcServices.createFireArray(messagesRef);
+//	};
+//    
+//	function sendReply(cv){
+//		var msgObj = new messagesService.Message(vm.body, userInfo.name.first +" " +userInfo.name.last);
+//		messagesService.sendReply(userInfo,vm.convoInfo, msgObj);
+//	};  
+//    
+//	function createSendMsgDialog(){
+//		$mdDialog.show({
+//			scope:$scope.$new(),
+//            template:'hey',
+//			template:'<send-message-modal lister="msg.listRef"></send-message-modal>',
+//			clickOutsideToClose:true
+//		});
+//	};
+//}
+//
+//

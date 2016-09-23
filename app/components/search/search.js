@@ -1,9 +1,9 @@
 (function(){angular.module('pcSearch',[])
 
 //SEARCH CONTROLLER
-.controller('SearchCtrl', ['$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices', searchCtrl]);
+.controller('SearchCtrl', ['$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices', '$sessionStorage',searchCtrl]);
 
-function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airports, esFactory, DataService, pcServices) {
+function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airports, esFactory, DataService, pcServices,$sessionStorage) {
 	var self = this;
 	var ref = pcServices.getCommonRefs().main;
 	var userRef = ref.child("users/accounts");
@@ -70,7 +70,7 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 		var refs= pcServices.getCommonRefs();
 		var examinerRef = refs.accounts.child(examiner.$id);
 		examinerRef.once("value",function(data){
-			pcServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
+            $sessionStorage.examinerInfo = {$id:data.key(), data:data.val()}
 		});
 		pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
 	}

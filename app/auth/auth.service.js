@@ -2,8 +2,8 @@
 	angular.module('pcAuthService', ['firebase'])
 		
 		//Auth Service
-		.factory("AuthService", ["$firebaseAuth", "$firebaseArray", "$q", "pcServices", 
-			function($firebaseAuth, $firebaseArray, $q, pcServices){
+		.factory("AuthService", ["$firebaseAuth", "$firebaseArray", "$q", "pcServices", "$sessionStorage",
+			function($firebaseAuth, $firebaseArray, $q, pcServices,$sessionStorage){
 
 			var me = this;
 			var ref = pcServices.getCommonRefs();
@@ -24,9 +24,7 @@
 				}
 				return defer.promise;
 			}
-
-
-
+                
 			function login(email, password){
 				var defer = $q.defer();
 				
@@ -50,7 +48,7 @@
 						user.$loaded().then(function(){
 
 							//Store the users object as a cookie named "currentUser"
-							pcServices.setCookieObj("user", user);
+							$sessionStorage.user = user; 
 							//And redirect to the users profile page
 							pcServices.changePath(pcServices.getRoutePaths().profile.path);
 

@@ -101,7 +101,12 @@
 					title:'Profile',
 					path: '/user/profile',
 					icon: 'person'
-				}
+				},
+                upcomingAppointments:{
+                    title:'Upcoming Appointments',
+                    path: 'user/upcomingAppointments',
+                    icon:'date_range'
+                }
 //                 notifications:{
 //                    title:"notifications",
 //                    path:"/user/notifications"
