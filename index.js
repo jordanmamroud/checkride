@@ -1,5 +1,4 @@
 // note to self next thing to set up is to file storage on heroku for the ics files
-app.set('port', (process.env.PORT || 5000));
 
 
 var cors = require('cors');
@@ -18,6 +17,8 @@ var builder = icalToolKit.createIcsFileBuilder();
 var client = new twilio.RestClient("ACcded30509c28e040d2f56f17680f8d85","58844f2471a9f7e07bc1804a6357f588");
 var app = express();
 var port = process.env.PORT || 5000 ;
+
+app.set('port', (process.env.PORT || 5000));
 
 firebase.initializeApp({
   serviceAccount: "firebaseservice.json",
