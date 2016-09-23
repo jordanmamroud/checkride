@@ -163,8 +163,7 @@ function messagesDirective(messagesService, pcServices,$mdDialog){
 
 
 
-<<<<<<< HEAD
-.controller('messagesController',['$scope','messagesService','pcServices','conversations','$mdDialog', function($scope,messagesService, pcServices, conversations, $mdDialog){
+function messageCtrl($scope,messagesService, pcServices, conversations, $mdDialog){
 	var vm = this;
 	var refs = pcServices.getCommonRefs();
 	var userInfo = pcServices.getCookieObj('user');
@@ -206,6 +205,5 @@ function messagesDirective(messagesService, pcServices,$mdDialog){
 			clickOutsideToClose:true
 		});
 	};
-}])
-=======
->>>>>>> 9256bdefcaa2a340494d5c2036b8c324fe9dfbcb
+}
+
