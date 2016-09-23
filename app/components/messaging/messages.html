@@ -1,14 +1,15 @@
-<div layout="row" layout-align="center start">
+<div layout="row" layout-align="center start" layout-fill>
 
-	<div layout="column" flex="25">
+	<sidenav flex="25">
 		<!-- Conversation List -->
-		<md-content>
-			<md-toolbar class="md-primary" >
-				<div class="md-toolbar-tools">
-					<span class="pc-capitalize">Messages</span>
-				</div>
-			</md-toolbar>
+		
+		<md-toolbar class="md-primary" >
+			<div class="md-toolbar-tools">
+				<span class="pc-capitalize">Messages</span>
+			</div>
+		</md-toolbar>
 
+		<md-content>
 			<md-list>
 				<md-list-item 
 					ng-class="{setColor: convo.hasNewMsg === true}" 
@@ -21,56 +22,56 @@
 					</div>
 				</md-list-item>
 			</md-list>
-
-			<md-button class="md-raised md-primary" ng-click="msg.openConvoDialog()" style="text-align:center;"> New Message </md-button>
-
 		</md-content>
-	</div>
+		
+		<md-button class="md-raised md-primary" flex ng-click="msg.openConvoDialog()" style="text-align:center;"> New Message </md-button>
+
+	</sidenav>
 
 	<md-divider></md-divider>
 
 
+	<!-- Message List -->
+	<div layout="column" flex ng-show="msg.convoInfo != undefined">
 
-	<div layout="column" flex>
+		<md-toolbar layout-gt-xs="row" >
+			<div class="md-toolbar-tools">
+				<span class="pc-capitalize">{{msg.convoInfo.users.name}}</span>
+			</div>
+		</md-toolbar>
 
-		<!-- Message List -->
-		<div ng-show="msg.convoInfo != undefined">
 
-			<md-toolbar>
-				<div class="md-toolbar-tools">
-					<span class="pc-capitalize">{{msg.convoInfo.users.name}}</span>
-				</div>
-			</md-toolbar>
-			
 
-			<md-content>
-				<md-list flex>
-					<md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages" flex>
-						<div class="md-list-item-text">
-
-							<span class="pc-message" ng-class="(cv.sender === msg.userName) ? 'me' : 'them'">
-								<h3 class="pc-msg-body">{{cv.body}}</h3>
+		<md-content layout-gt-xs="row" layout-padding>
+			<md-list layout="column" flex>
+				<md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages" flex>
+					<div class="md-list-item-text pc-message">
+						<div class="pc-msg-wrapper" ng-class="(cv.sender === msg.userName) ? 'me' : 'them'">
+							<div class="pc-msg-body">
+								<h3>{{cv.body}}</h3>
 								<p class="pc-capitalize pc-msg-sender">{{cv.sender === msg.userName ? "Me" : cv.sender}}</p>
-							</span>
-							<span class="pc-msg-time">{{cv.sentAt | date:'short'}}</span>
-							<!--<i ng-click="msg.delete(cv)" ng-class="(cv.sender === msg.userName) ? 'me' : 'them'" class="material-icons">delete</i></h3> -->
-
+							</div>
+							<i ng-click="msg.delete(cv)" class="material-icons">clear</i>
 
 						</div>
-					</md-list-item>
-				</md-list>
-			</md-content>
+						<div ng-show="{{cv.sentAt != null}}" class="pc-msg-time">{{cv.sentAt | date:'short'}}</div>
+						
+					</div>
+				</md-list-item>
+			</md-list>
+		</md-content>
 
-			<div layout="row" layout-align="center top">
-				<md-input-container flex="40" layout="column" >
-					<textarea id="message" rows="1" placeholder="Message..." flex ng-model="msg.body"></textarea>
-				</md-input-container>
 
-				<md-input-container >
-					<md-button ng-click="msg.sendReply()" class="md-raised md-primary">Reply</md-button>			
-				</md-input-container>
-			</div>
-
+		<div md-colors="::{backgroundColor: 'default-background-300'}" layout layout-padding layout-align="center center">
+			<md-input-container flex="80" flex-offset="5">
+				<textarea id="message" rows="1" placeholder="Message..." flex ng-model="msg.body"></textarea>
+			</md-input-container>
+			<md-input-container flex>
+				<md-button ng-click="msg.sendReply()" class="md-raised md-primary">Reply</md-button>			
+			</md-input-container>
 		</div>
 	</div>
+
+	
+
 </div>

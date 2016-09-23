@@ -202,3 +202,49 @@ function messagesDirective(messagesService, pcServices,$mdDialog){
 //	};
 //}])
 
+
+function messageCtrl($scope,messagesService, pcServices, conversations, $mdDialog){
+	var vm = this;
+	var refs = pcServices.getCommonRefs();
+	var userInfo = pcServices.getCookieObj('user');
+	var userRef = refs.accounts.child(userInfo.$id);
+	var conversationsRef = refs.conversations.child(userInfo.$id);
+	
+    vm.delete = function(mesg){
+       conversationsRef.child(vm.convoInfo.$id+ "/messages").child(mesg.$id).remove();
+    }
+	vm.conversationsList = pcServices.createFireArray(conversationsRef);
+	vm.convoInfo = conversations[conversations.length-1]; 
+	if(vm.convoInfo != undefined){
+		vm.convoMessages = pcServices.createFireArray(conversationsRef.child(vm.convoInfo.$id+ "/messages")); 
+	}
+	vm.view = false ;
+	vm.convo ='';    
+	pcServices.showToastOnEvent(conversationsRef, "child_added");
+    
+	vm.sendReply = sendReply;
+	vm.openConvoDialog = createSendMsgDialog;
+	vm.viewConvoMessages = viewConvoMessages;
+	
+	function viewConvoMessages(convo){
+		var messagesRef = refs.conversations.child(userInfo.$id +"/" + convo.$id +"/messages")
+		conversationsRef.child(convo.$id).child("hasNewMsg").set(false);
+		vm.convoInfo = convo ;
+		vm.convoMessages = pcServices.createFireArray(messagesRef);
+	};
+    
+	function sendReply(cv){
+		var msgObj = new messagesService.Message(vm.body, userInfo.name.first +" " +userInfo.name.last);
+		messagesService.sendReply(userInfo,vm.convoInfo, msgObj);
+	};  
+    
+	function createSendMsgDialog(){
+		$mdDialog.show({
+			scope:$scope.$new(),
+			template:'<send-message-modal lister="msg.listRef"></send-message-modal>',
+			clickOutsideToClose:true
+		});
+	};
+}
+
+
