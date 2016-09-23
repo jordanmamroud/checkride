@@ -42,3 +42,38 @@ img.cr-logo,
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
+
+/* line 55, ../sass/screen.scss */
+.red {
+  background: red;
+}
+
+/* line 56, ../sass/screen.scss */
+.blue {
+  background: blue;
+}
+
+/* line 57, ../sass/screen.scss */
+.green {
+  background: green;
+}
+
+/* line 58, ../sass/screen.scss */
+.orange {
+  background: orange;
+}
+
+/* line 59, ../sass/screen.scss */
+.grey {
+  background: grey;
+}
+
+/* line 60, ../sass/screen.scss */
+.purple {
+  background: purple;
+}
+
+/* line 61, ../sass/screen.scss */
+.yellow {
+  background: yellow;
+}

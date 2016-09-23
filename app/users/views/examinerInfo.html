@@ -1,43 +1,43 @@
 <div layout="row" layout-align="center center" >
-		<div flex-gt-md="60" >
-			<md-tabs md-dynamic-height md-border-bottom>
-				<md-tab label="Info">
-					<div layout="column" flex="30">
-						<img src="{{vm.examinerInfo.data.imgUrl}}">
-					</div>
-					<div class="md-padding" layout="column">
+	<div flex-gt-md="60" >
+		<md-tabs md-dynamic-height md-border-bottom>
+			<md-tab label="Info">
+				<div layout="column" flex="30">
+					<img src="{{vm.examinerInfo.data.imgUrl}}">
+				</div>
+				<div class="md-padding" layout="column">
 
-						<h1>{{vm.examinerInfo.data.name.first +" "+ vm.examinerInfo.data.name.last}}</h1>
+					<h1>{{vm.examinerInfo.data.name.first +" "+ vm.examinerInfo.data.name.last}}</h1>
 
-						<md-list>
-							<label>Certifications</label>
-							<md-list-item ng-repeat="cert in vm.certificationsList"> 
-							<h5>{{cert.$id}}</h5>
-							</md-list-item>
-						</md-list>
+					<md-list>
+						<label>Certifications</label>
+						<md-list-item ng-repeat="cert in vm.certificationsList"> 
+						<h5>{{cert.$id}}</h5>
+						</md-list-item>
+					</md-list>
 
-						<md-list>
-							<label>Airports</label>
-							<md-list-item ng-repeat="arpt in vm.airportList"> 
-								<h5>{{arpt.$id}}</h5>
-							</md-list-item>
-						</md-list>   
-						
-						<div>
-							<label>Bio</label>
-							<p ng-model="vm.examinerInfo.data.bio">{{vm.bio}}</p>
-						</div>
-
+					<md-list>
+						<label>Airports</label>
+						<md-list-item ng-repeat="arpt in vm.airportList"> 
+							<h5>{{arpt.$id}}</h5>
+						</md-list-item>
+					</md-list>   
+					
+					<div>
+						<label>Bio</label>
+						<p ng-model="vm.examinerInfo.data.bio">{{vm.bio}}</p>
 					</div>
 
-				</md-tab>
-				
-				<md-tab label="Schedule">
-					<div class="md-padding">
-					 	<viewing-cal></viewing-cal>
-					</div>
-				</md-tab>
-			</md-tabs>
-		</div>
+				</div>
+
+			</md-tab>
+			
+			<md-tab label="Schedule">
+				<div class="md-padding">
+				 	<viewing-cal></viewing-cal>
+				</div>
+			</md-tab>
+		</md-tabs>
 	</div>
+</div>
 

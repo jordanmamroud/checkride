@@ -16,7 +16,8 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 	self.simulateQuery = true;
 	self.isDisabled    = false;
 	self.searchBoxAlign = "center center";
-	self.isSearchStart = true;
+	self.hasSearch = false;
+	self.fullPage = "layout-fill";
 
 	function querySearch (query) {
 		var results = query ? self.airports.filter( createFilterFor(query) ) : self.airports, deferred;
@@ -33,12 +34,15 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
     function searchTextChange(text) {
       if(text != ""){
 
-      	self.searchBoxAlign = "start center";
       }
     }
 
 
     function selectedItemChange(item) {
+    	console.log("Changed");
+    	self.hasSearch = true;
+      	self.searchBoxAlign = "center start";
+      	self.fullPage = "";
 
     	var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.$id).orderByKey();
 		pcServices.createFireArray(ref).$loaded().then(function(val){
