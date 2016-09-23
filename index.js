@@ -1,4 +1,6 @@
 // note to self next thing to set up is to file storage on heroku for the ics files
+app.set('port', (process.env.PORT || 5000));
+
 
 var cors = require('cors');
 var express = require('express');
@@ -154,7 +156,7 @@ var icsFiles = function(reqData, ref, info ){
 
 
 //http.createServer(app).listen(port);
-app.listen(port, function() {
+app.listen(app.get("port"), function() {
  console.log('Node app is running on port', app.get('port'));
 });
 
