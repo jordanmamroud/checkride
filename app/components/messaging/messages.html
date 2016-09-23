@@ -16,6 +16,14 @@
 		border-radius: 48px;
 		border: 1px solid #ddd;
 	}
+	.me{
+		text-align:right;
+		float:left;
+	}
+	.them{
+		text-align: left;
+		float:right;
+	}
 </style>
 
 <div layout="row" >
@@ -63,14 +71,13 @@
 			
 
 			<md-content layout="row" >
-				<md-list>
-					<md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages">
-						<div class="md-list-item-text">
-							<h3>{{cv.body}}       <i ng-click="msg.delete(cv)"class="material-icons">delete</i></h3>
-							<p class="pc-capitalize">{{cv.sender}}<br>{{cv.sentAt}}</p>
+				<md-list flex>
+					<md-list-item class="md-3-line" ng-repeat="cv in msg.convoMessages" flex>
+						<div class="md-list-item-text" ng-class="(cv.sender === msg.userName) ? 'me' : 'them'">
+							<!-- <h3>{{cv.body}}<i ng-click="msg.delete(cv)" ng-class="(cv.sender === msg.userName) ? 'me' : 'them'" class="material-icons">delete</i></h3> -->
+							<p class="pc-capitalize">{{cv.sender}}<br>{{cv.sentAt}}</p>{{cv.sender == msg.userName}}
 
 						</div>
-						<md-divider inset></md-divider>
 					</md-list-item>
 				</md-list>
 			</md-content>

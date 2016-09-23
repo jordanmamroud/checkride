@@ -1,7 +1,7 @@
 (function(){angular.module('pcSearch',[])
 
 //SEARCH CONTROLLER
-.controller('SearchCtrl', ['$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices',  
+.controller('SearchCtrl', ['$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices', searchCtrl]);
 
 function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airports, esFactory, DataService, pcServices) {
 	var self = this;
@@ -31,26 +31,26 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 		}
 	}
 
-    function searchTextChange(text) {
-      if(text != ""){
+	function searchTextChange(text) {
+	  if(text != ""){
 
-      }
-    }
+	  }
+	}
 
 
-    function selectedItemChange(item) {
-    	console.log("Changed");
-    	self.hasSearch = true;
-      	self.searchBoxAlign = "center start";
-      	self.fullPage = "";
+	function selectedItemChange(item) {
+		console.log("Changed");
+		self.hasSearch = true;
+		self.searchBoxAlign = "center start";
+		self.fullPage = "";
 
-    	var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.$id).orderByKey();
+		var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.$id).orderByKey();
 		pcServices.createFireArray(ref).$loaded().then(function(val){
 			console.log("Val",val);
 			self.examiners = val;
 		});
 
-    }
+	}
 
 
 	
@@ -65,12 +65,6 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 
 
 
-	// DataService.getAirports().then(function(ap){
-	// 	console.log(ap)
-	// });
-	
-
-
 	self.viewProfile = viewProfile;
 	function viewProfile(examiner){
 		var refs= pcServices.getCommonRefs();
@@ -82,36 +76,11 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 	}
 
 
-
-
-  function loadAll() {
-    var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
-            Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
-            Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
-            Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina,\
-            North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina,\
-            South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
-            Wisconsin, Wyoming';
-
-            console.log(allStates.split(/, +/g).map( function (state) {
-				return {
-					value: state.toLowerCase(),
-					display: state
-				};
-    		}))
-
-    return allStates.split(/, +/g).map( function (state) {
-      return {
-        value: state.toLowerCase(),
-        display: state
-      };
-    })
-
-  }
-
 }
-]);
-           })()
+
+
+
+})()
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

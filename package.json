@@ -10,12 +10,12 @@
     "angular-cookies": "^1.5.8",
     "angular-material": "^1.1.1",
     "angular-route": "^1.5.8",
+    "angular-storage": "0.0.15",
     "angular-touch": "^1.5.8",
     "elasticsearch-browser": "^11.0.1",
     "express": "^4.14.0",
     "font-awesome": "^4.6.3"
   },
-
   "devDependencies": {},
   "scripts": {
     "start": "node index.js",
