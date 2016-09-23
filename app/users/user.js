@@ -55,29 +55,28 @@
 		 }])
 
 
-		.controller('examinerListController',["$scope",'$location','pcServices',function($scope,$location,pcServices){
+		.controller('examinerListController',["$scope",'$location','pcServices',"$sessionStorage",function($scope,$location,pcServices,$sessionStorage){
 			var vm = this ;
 			var refs= pcServices.getCommonRefs();     
 			vm.viewProfile  = viewProfile ;
 			vm.examiners = pcServices.createFireArray(refs.examiners);
 
 			function viewProfile(examiner){
-				pcServices.removeCookieObj("examinerInfo");
 				var examinerRef = refs.accounts.child(examiner.$id);
 				examinerRef.once("value",function(data){
-					pcServices.setCookieObj("examinerInfo", {$id:data.key(),data:data.val()});
-					console.log(pcServices.getCookieObj('examinerInfo'));
+                    $sessionStorage.examiner = {$id:data.key(), data:data.val()}
+					console.log('bang',pcServices.getCookieObj('examinerInfo'));
 					pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
 				});
 			  }    
 		}])
 
-		.controller('examinerInfoController', ['$scope', 'pcServices','user',function($scope, pcServices,user){
+		.controller('examinerInfoController', ['$scope', 'pcServices','user',"$sessionStorage",function($scope, pcServices,user,$sessionStorage){
 			var vm = this ; 
 			var refs = pcServices.getCommonRefs();
 			var userInfo = user ;
             
-            vm.examinerInfo = pcServices.getCookieObj('examinerInfo');
+            vm.examinerInfo = $sessionStorage.examiner;
 			vm.certificationsList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/certifications"));
 			vm.airportList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/airports"));
 		}])

@@ -15,23 +15,19 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
         controllerAs:"ev", 
         controller:function($scope, calendarService, $mdDialog, pcServices){
             var ev = this;
-//<<<<<<< HEAD
-//            var refs = pcServices.getCommonRefs() ;
-////            var userInfo = $scope.$parent.$resolve.currentUser ;
-//            var userInfo = pcServices.getCookieObj("currentUser");
-//=======
             var refs = pcServices.getCommonRefs();
-            var userInfo = pcServices.getCookieObj('user');
+            console.log($scope.$parent)
+            var userInfo = $scope.$parent.$resolve.user ;
             var userRef = refs.accounts.child(userInfo.$id);
             var userCalendarRef = refs.calendars.child(userInfo.$id);
             var userEventsRef =  userCalendarRef.child("events");
             var approvedAppointmentsRef = userCalendarRef.child("approvedAppointments");
             var calendarSettings= userCalendarRef.child("settings");
             var appointmentSlotsRef = userCalendarRef.child('appointmentSlots');
-            
-            ev.events = pcServices.createFireArray(userEventsRef);
-            ev.approvedApointments = pcServices.createFireArray(approvedAppointmentsRef);        
+
+            ev.approvedAppointments = pcServices.createFireArray(approvedAppointmentsRef); 
             ev.requestsList = pcServices.createFireArray(userCalendarRef.child("appointmentRequests"));
+            ev.appointmentSlots = pcServices.createFireArray(appointmentSlotsRef);
             ev.calStartTime = 0 ;
             ev.calStartTime = "00:00:00";
             ev.calEndTime = "24:00:00";
@@ -42,13 +38,14 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             ev.endRange = '2020/11/02';
             ev.numOccur = 0 ;
             ev.monthlyEvent = false ;
+            ev.appointmentSlot =false;
             ev.repeatForm={};
             ev.dow="";
             ev.daysOfWeek = [{day:'sunday',val:0},{day:'monday',val:1},{day:'tuesday',val:2},{day:'wednesday',val:3},{day:'thursday',val:4},{day:'friday',val:5},{day:'saturday',val:6}]
             
-            ev.createEvent = createEvent ;
-            
-            ev.deleteEvent = deleteEvent;
+            ev.events = pcServices.createFireArray(userEventsRef);
+            ev.createEvent = checkEventType ;
+            ev.deleteEvent = deleteEvent ;
             ev.deleteSingleMonthlyEvent = deleteSingleMonthlyEvent;
             ev.deleteAllMonthlyEvents = deleteAllMonthlyEvents;
             ev.saveCalSettings = saveCalSettings; 
@@ -57,6 +54,27 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             pcServices.orderArray($scope.requestsList, "-sentAt");
             ev.name = userInfo.name.first + " " +userInfo.name.last ;
         
+            function checkEventType (){
+                var eventId= userRef.push().key();
+                if(ev.appointmentSlot && ev.repeatingEvent== false){
+                    console.log(ev.appointmentSlot);
+                    createEvent(userEventsRef,eventId);
+                    createEvent(appointmentSlotsRef,eventId);
+                }else{
+                    createEvent(userEventsRef,eventId);
+                }
+                ev.repeatingEvent = false ;
+                $mdDialog.cancel();
+            }
+            
+            function updateEventsModal(){
+                $mdDialog.show({
+                    scope:$scope.$new(),
+                    templateUrl:'updateEventsModal',
+                    clickOutsideToClose:'true'
+                })
+            }
+            
             var onSelect = function(){
                 $mdDialog.show({
                     scope:$scope.$new(),
@@ -92,56 +110,76 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     alert('You have no appointmentRequests')
                 }
             };
-            
-            function createEvent(){
-                  var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");
-                  var eventId= userRef.push().key();
-                  var eventObj = new calendarService.Event(ev.eventTitle,ev.eventStartObj,{start:today, end:"2020/02/01"},ev.eventEndObj,'once', eventId, null, null,null,null);
-                  if(ev.repeatingEvent){
-                        switch(ev.frequency.toLowerCase()){   
-                            case "daily":       
-                                    calendarService.setEventRange(ev.repeatForm, eventObj, "days");
-                                    calendarService.createDailyEvent(eventObj,userEventsRef);
-                                    break;
-                            case "weekly":
-                                    eventObj.dow = calendarService.setDaysOfWeek(ev.daysOfWeek, ev.eventStartObj);
-                                    calendarService.setEventRange(ev.repeatForm, eventObj, "week");
-                                    calendarService.createWeeklyEvent(eventObj,userEventsRef);
-                                    break;
-                            case "monthly": 
-                                    calendarService.createMonthlyEvent(eventObj, userEventsRef, calendarService.setAmtOfMonths(ev.repeatForm, ev.eventStartObj));
-                                    break;
-                        };
-                    }else{
-                        calendarService.createRegularEvent(eventObj, userEventsRef);
-                    }   
-                    ev.repeatingEvent = false;
-                    $mdDialog.cancel();
+
+           function getFrequency(recur){
+                switch(recur){
+                    case "daily": return 'days';
+                    case "weekly": return 'weeks' ;
+                    case "monthly": return 'month' ;
+                }
+            }                         
+                                  
+             function setReccurence(){
+                 if(ev.repeatForm.length>4){
+                     var end = moment(ev.repeatForm,'YYYY-MM-DD hh:mm:ss');
+                     var occurBy = getFrequency(ev.frequency.toLowerCase());
+                     var start = ev.eventStartObj ;
+                     return end.diff(start, occurBy);
+                 }else{
+                     return ev.repeatForm ;
+                 }
             }
-           
-        
+            
+            function createEvent(ref,eventId){
+                  var today = ev.eventStartObj.format('YYYY/MM/DD').replace(/-/g, "/");
+                  var eventObj = {
+                      title: ev.eventTitle, 
+                      start:ev.eventStartObj.toString(), 
+                      end: ev.eventEndObj.toString(),
+                      recur:'once',
+                      appointmentSlot:ev.appointmentSlot 
+                  }
+                  if(ev.repeatingEvent){
+                      eventObj.userId = userInfo.$id;
+                      eventObj.recur = getFrequency(ev.frequency.toLowerCase());
+                      eventObj.recurrences= setReccurence();
+                         $.ajax({
+                            url:"http://blooming-river-27917.herokuapp.com/recurevents",
+                            dataType: "json",
+                            data:JSON.stringify(eventObj),
+                            type:"POST",
+                            success:function(req,res){
+                                console.log("ham");
+                            }
+                        });          
+                    }else{
+                        ref.child(eventId).set(eventObj);
+                    }   
+            };
+            
             function deleteEvent(){
-                 if(ev.clickedEvent.recur == "monthly"){
+                console.log(ev.clickedEvent)
+                 if(ev.clickedEvent.recur != "once"){
                         ev.monthlyEvent = true ;
                     }
                     else{
                         userEventsRef.child(ev.clickedEvent.$id).remove() ;
                         $mdDialog.cancel();
                    }
-            }
+            };
             
            function deleteSingleMonthlyEvent(){
-                    userEventsRef.child(ev.clickedEvent.$id).remove();
+                    userEventsRef.child(ev.clickedEvent.$id).remove() ;
                     ev.monthlyEvent = false ;
                     $mdDialog.cancel();
-            }
+            };
                         
         
            function deleteAllMonthlyEvents(){
-                calendarService.deleteAllMonthlyEvents(ev.clickedEvent, userEventsRef);
+                calendarService.deleteAllEvents(ev.clickedEvent, userCalendarRef);
                 ev.monthlyEvent = false ;
                 $mdDialog.cancel();
-            };
+            } ;
             
             function saveCalSettings(){
                 calendarService.saveCalSettings(ev.calStartTime , ev.calEndTime, ev.gcalId, userCalendarRef);
@@ -159,12 +197,27 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                 });
             }
             setUpCalendar();
+            
+           ev.updateAll = updateAll
+           ev.updateSingle = updateSingle ;
+            
+            function updateAll(){
+                calendarService.updateAll(ev.event,userInfo, userCalendarRef);
+            }    
+            
+           function updateSingle(){
+               userEventsRef.child(ev.event.$id).update({
+                    title: ev.event.title,
+                    start: ev.event.start.toISOString(),
+                    end: ev.event.end.toISOString()
+                });    
+           }
            
             ev.eventSources = [];
                 ev.uiConfig = {
                     calendar: {
     //                    googleCalendarApiKey: 'AIzaSyA0IwuIvriovVNGQiaN-q2pKYIpkWqSg0c',
-                        events: ev.events,
+                        events: ev.events,       
                         slotEventOverlap:false,
                         allDayDefault: false,
                         defaultView:"agendaWeek",
@@ -205,26 +258,30 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                             onSelect();
                             ev.eventStartObj = start ;
                             ev.eventEndObj = end ;
-                            console.log(ev);
                         },
                         editable: true,
                         eventClick: function (event, element) {
+                            console.log('ev',event);
                             ev.clickedEvent = event ;
                             eventClick();
                         },
                         eventDrop: function ( event , element) {
-                            calendarService.onEventChange(event, userEventsRef);
+                            calendarService.onEventChange(event, userEventsRef, updateEventsModal);
                         },
                         eventResize: function (event , element) {
-                            calendarService.onEventChange(event, userEventsRef);
+                            calendarService.onEventChange(event, userEventsRef, updateEventsModal);
+                            
+                            ev.event = event ;
+//                            userEventsRef.child(event.$id).update({
+//                                title: event.title,
+//                                start: event.start.toISOString(),
+//                                end: event.end.toISOString(),
+//                                id: event.title + event.start.toISOString() + event.end.toISOString()
+//                            }); 
+//                       
                         },
-                        eventRender: function(event,element,view){  
-                            if(event.recur != "once" && event.hasOwnProperty("range")){
-                                    var eventDate = moment(event.start).format("YYYY/MM/DD");
-                                    if(event.range.start > eventDate || event.range.end < eventDate){
-                                        return false;
-                                }
-                            }      
+                        eventRender: function(event,element,view){ 
+
                         }
                     }  
                 }
@@ -238,18 +295,16 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             return 'app/components/calendar/viewCal.html?' +  new Date();
         }, 
         controllerAs:'vc',
-        controller: ['$scope', '$mdDialog','pcServices', 'calendarService',function ($scope, $mdDialog, pcServices, calendarService){
+        controller: ['$scope', '$mdDialog','pcServices', 'calendarService',"$sessionStorage",function ($scope, $mdDialog, pcServices, calendarService,$sessionStorage){
             var refs = pcServices.getCommonRefs();
-            var examinerInfo = pcServices.getCookieObj("examinerInfo");
-/*
-<<<<<<< HEAD
-*/
-             var userInfo = pcServices.getCookieObj("user");
-            
+            var examinerInfo = $sessionStorage.examiner
+
+            var userInfo = $scope.$resolve.user ;
             var examinerRef = refs.accounts.child(examinerInfo.$id) ;
             var examinerCalRef = refs.calendars.child(examinerInfo.$id) ;
             var settingsRef = examinerRef.child("calendar/settings") ;
-            var eventsList = pcServices.createFireArray(examinerCalRef.child("events")) ;
+            var eventsList = pcServices.createFireArray(examinerCalRef.child("appointmentSlots"));
+            var examinerAppointmentsRef = refs.calendars.child(examinerInfo.$id+ "/approvedAppointments");
             
             this.aicrCats = pcServices.createFireArray(refs.root.child("config/aircraft-category"));
             this.ratings = pcServices.createFireArray(refs.root.child("config/ratings"));
@@ -259,23 +314,21 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
             this.sendRequest = sendRequest ;
             
             function sendRequest(){
-                var examinerCalRef = refs.calendars.child(examinerInfo.$id);                
-                var appointment = new calendarService.Appointment(userInfo.name.first+" "+ userInfo.name.last,$scope.eventStart,$scope.eventEnd, userInfo.$id, this.aicrCategory.$value, this.rating.$value);
-				var examinerRequestListRef = examinerCalRef.child("appointmentRequests").push(appointment);
+                var examinerCalRef = refs.calendars.child(examinerInfo.$id);
+                var appointment ={
+                    name:{
+                        first:userInfo.name.first,
+                        last:userInfo.name.last
+                    },
+                    start:$scope.clickedEvent.start.toString(),
+                    end:$scope.clickedEvent.end.toString(),
+                    senderId: userInfo.$id,
+                    category:this.aicrCategory.$value,
+                    rating: this.rating.$value
+                }  
+				var examinerRequestListRef = examinerCalRef.child("appointmentRequests/"+$scope.clickedEvent.$id).set(appointment);
                 refs.notifications.child(examinerInfo.$id).push("appointment Request from " + userInfo.name.first + ' ' + userInfo.name.last);
                 $mdDialog.hide();
-/*=======
-            var userInfo = pcServices.getCookieObj("user");
-            var examinerRef = refs.accounts.child(examinerInfo.$id);
-            var examinerCalRef = refs.calendars.child(examinerInfo.$id);
-
-            var settingsRef = examinerRef.child("calendar/settings");
-            var eventsList = pcServices.createFireArray(examinerCalRef.child("events"));
-            $scope.examinerName = examinerInfo.data.name.first +" " + examinerInfo.data.name.last ;
-            $scope.sendRequest = function(){
-                var examinerCalRef = refs.calendars.child(examinerInfo.$id);
-                calendarService.sendAppointmentRequest(examinerCalRef, userInfo,$scope.eventStart, $scope.eventEnd);
->>>>>>> c14467f705ed978789fef30f4c64ee6b32ebcf33*/
             }
             
             $scope.eventSources = [];
@@ -297,6 +350,7 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                     timezone: "local",
                     editable: true,
                     defaultView: 'agendaWeek',
+                    lazyFetching:true,
                     header: {
                         left: 'month agendaWeek  agendaDay ',
                         center: 'title',
@@ -307,28 +361,31 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                         month: true,
                         agenda: true
                     },
+                    
                     unselectAuto: true,
                     select: function (start, end, ev) {
-                        $scope.eventStart = start.toString();
-                        $scope.eventEnd = end.toString();
-                        
-                        showApptDialog();
-                        console.log('vain bane')
+
+                        console.log("select", start.toISOString());
 
                     },
                     editable: false,
                     eventClick: function (event, element){
-//                        $scope.eventStart = event.start.toString();
-//                        $scope.eventEnd = event.end.toString();
-//                        $scope.showApptDialog();
+                        $scope.clickedEvent = event;
+//                        $scope.eventStart = event.start.add(4,"hours");
+//                        $scope.eventEnd = event.end.add(4,"hours");
+                        showApptDialog();
                         // stops gcal events from going to google calendar
                           if (event.url) {
                             console.log("event",event);
-                            return false;
-                        }
+                            return false 
+                        };
+                    },
+                    eventRender:function(event,el,view){
+                 
+                        
                     }
                 }
-            }; 
+            } 
         }]
     }
 })

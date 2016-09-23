@@ -82,7 +82,9 @@
 
 		//studentPaths
 		.when(RoutePaths.examinerList.path,{
-			templateUrl:'app/users/views/examinerList.html',
+			templateUrl:function(){
+                return 'app/users/views/examinerList.html?' + Date.now()
+            },
 			controller:"examinerListController",
 			controllerAs:'vm'
 		})

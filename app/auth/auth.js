@@ -154,7 +154,7 @@
 
 
 		//CREATE ACCOUNT
-		.service('createAccountService',['pcServices', function(pcServices){
+		.service('createAccountService',['pcServices','$sessionStorage', function(pcServices){
 
 			var refs = pcServices.getCommonRefs();
 			var createUserAccount = createUserAccount;

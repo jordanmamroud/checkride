@@ -9,11 +9,44 @@
 
 <div class='toast' style='display:none'>You have a new Appointment Request</div>
 
+<!--
 
 <div layout="column" layout-fill layout-padding>	
 	<h2 class="pc-capitalize">{{ev.name}}</h2>
 	<div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div>
 </div>
+-->
+<div layout="row" layout-align="center center" >
+		<div layout-fill >
+			<md-tabs md-dynamic-height md-border-bottom>
+			
+				<md-tab label="Schedule">
+					<div class="md-padding">
+                           <h2 class="pc-capitalize">{{ev.name}}</h2>
+                           <div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div
+					</div>
+				</md-tab>
+             
+                <md-tab label="approved Appointments">
+                    <md-list>
+                        <md-list-item ng-repeat="apt in ev.approvedAppointments">
+                            <div class="md-list-item-text" layout="column">
+                                <h3 class="pc-capitalize" >{{apt.title}}</h3>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-tab>
+			</md-tabs>
+		</div>
+	</div>
+
+
+
+
+    <script id="updateEventsModal" type="text/ng-template">
+        <button ng-click="ev.updateSingle()">update Just this event</button>
+        <button ng-click="ev.updateAll()"> update all events</button>
+    </script>
 
 	<script id="addEventModal" type="text/ng-template">
 
@@ -35,6 +68,7 @@
 						<input type="text" placeholder="enter Your event" ng-model="ev.eventTitle" id="eventInput">
 							<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>
 					</md-input-container>
+                    <md-checkbox ng-model="ev.appointmentSlot">Appointment Slot?</md-checkbox>
 					<md-checkbox ng-model="ev.repeatingEvent">Repeating Event?</md-checkbox>
 
 					<div ng-class="{hide: ev.repeatingEvent == false}">
@@ -83,7 +117,7 @@
 			<p ng-show="ev.clickedEvent.category">Category: {{ev.clickedEvent.category}}</p>
 			<p ng-show="ev.clickedEvent.rating">Rating: {{ev.clickedEvent.rating}}</p>
 			<md-button ng-class="{hide:ev.clickedEvent.recur =='monthly'}" class="md-raised md-primary" ng-click="ev.deleteEvent()">Delete Event</md-button>
-			<div ng-class="{hide: ev.clickedEvent.recur != 'monthly'}">
+			<div ng-class="{hide: ev.clickedEvent.recur == 'once'}">
 				<md-button class="md-primary md-raised" ng-click="ev.deleteSingleMonthlyEvent()">remove just this event</md-button>
 				<md-button class="md-primary md-raised" ng-click="ev.deleteAllMonthlyEvents()">remove all events</md-button>
 			</div>
@@ -128,9 +162,9 @@
 			
 			<tbody>
 				<tr ng-repeat="request in ev.requestsList | orderBy:'-sentAt' track by $index">
-					<td>{{request.name}}</td>
-					<td>{{request.requestedStartTime}}</td>
-					<td>{{request.requestedEndTime}}</td>
+					<td>{{request.name.first + " " + request.name.last}}</td>
+					<td>{{request.start}}</td>
+					<td>{{request.end}}</td>
 					<td>{{request.sentAt}}</td>
 					<td><button ng-click="ev.approveAppointment(request)">Approve</button></td>
 				</tr>

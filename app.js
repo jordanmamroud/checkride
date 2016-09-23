@@ -7,6 +7,7 @@
 		'ngMaterial',    
 		'ngAnimate',
 		'ngAria',
+        "ngStorage",
 		
 		'firebase',
 		'ngRoute',

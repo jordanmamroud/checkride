@@ -12,6 +12,7 @@
 					setDaysOfWeek:setDaysOfWeek,
 					setEventRange: setEventRange,
 					onEventChange: onEventChange,
+                    updateAll:updateAll,
 					refreshEvents: refreshEvents,
 					createRegularEvent:createRegularEvent,
 					createDailyEvent:createDailyEvent,
@@ -24,7 +25,7 @@
 					eventClick:eventClick,
 					removeEvent:removeEvent,
                     Appointment:Appointment,
-					deleteAllMonthlyEvents:deleteAllMonthlyEvents,
+					deleteAllEvents:deleteAllEvents,
 					sendAppointmentRequest:sendAppointmentRequest
 				}
 			return service;
@@ -41,6 +42,7 @@
                 this.category = category ;
                 this.rating= rating
 			 }
+            
 			function setAmtOfMonths(val, startObj){
 				if(val.length > 4){
 					var startMonth = startObj.month();
@@ -56,7 +58,10 @@
 				 }else{
 						 return val;
 				}
-			 }
+            }
+            
+           
+            
 			function setDaysOfWeek(daysOfWeek, start){
 				var selectedDays=[];
 				angular.forEach(daysOfWeek, function(day){
@@ -83,21 +88,42 @@
 				}
 			}
             
-			function onEventChange(event,ref){
+			function onEventChange(event,ref, showUpdateModal){
 				if(event.recur == 'once'){
-                        console.log('ham');
-						updateEvents(event, ref).updateSingleEvent();   
-				 }
-				if(event.recur =="weekly"){
-                    console.log('bame');
-					updateEvents(event, ref).updateWeeklyEvent();
-				}
-
-				if(event.recur == "monthly"){
-                    console.log('wame');
-					updateEvents(event,ref).updateMonthlyEvent();
-				}
+                        ref.child(event.$id).update({
+							title: event.title,
+							start: event.start.toISOString(),
+							end: event.end.toISOString(),
+							id: event.title + event.start.toISOString() + event.end.toISOString()
+					  });    
+				 }else{
+                     showUpdateModal();
+                 }
 			}
+            
+            function updateAll(event, user,ref){
+                var recurEventsRef = ref.child("recurringEvents/" + event.eventKey);
+                var eventsListRef = ref.child("events");
+                var nsHour = event.start.toString().substring(16,18);
+                var nsMinute = event.start.toString().substring(19,21);                          
+                var neHour = event.end.toString().substring(16,18);
+                var neMinute = event.end.toString().substring(19,21);
+               
+                recurEventsRef.once('value',function(snap){
+                    snap.forEach(function(child){
+                        eventsListRef.child(child.key()).once('value',function(childs){
+                            var newStart = new moment(childs.val().start).set({hour:nsHour, minute:nsMinute})
+                            var newEnd = new moment(childs.val().end).set({hour:neHour,minute: neMinute});
+                            eventsListRef.child(child.key()).update({
+                                start: newStart.toISOString(),
+                                end: newEnd.toISOString()
+                            })
+                        })
+                    })
+                })
+            }
+            
+            
             
 			function refreshEvents(calSelector, eventSource){
 					$(calSelector).fullCalendar('removeEventSource', eventSource);
@@ -105,32 +131,31 @@
 					$(calSelector).fullCalendar('addEventSource', eventSource);
 			 }
             
-			function createRegularEvent(eventObj, ref){         
-				 eventObj.start = eventObj.start.toISOString();
-				 eventObj.end = eventObj.end.toISOString();
+			function createRegularEvent(eventObj){         
+				 eventObj.start = eventObj.start
+				 eventObj.end = eventObj.end
 				 eventObj.recur="once";
-				 ref.push(eventObj);      
+				 return eventObj ;     
 			 }
 
-			function createDailyEvent(eventObj, ref){ 
+			function createDailyEvent(eventObj){ 
 				eventObj.recur ="daily";
 			//                eventObj.range = range ;
 				eventObj.dow = [0,1,2,3,4,5,6];
 				eventObj.start = new Date(eventObj.start).toTimeString().substring(0,8);
 				eventObj.end = new Date(eventObj.end).toTimeString().substring(0,8);
-				ref.push(eventObj);
+				return eventObj ;
 			 }
 
-			function createWeeklyEvent(eventObj, ref){
+			function createWeeklyEvent(eventObj){
 				 eventObj.start = new Date(eventObj.start).toTimeString().substring(0,8);
 				 eventObj.end = new Date(eventObj.end).toTimeString().substring(0,8);
 				 eventObj.recur="weekly" ; 
-				 console.log('ban')
-				 console.log(eventObj);
-				 ref.push(eventObj);
+				 return eventObj 
 			}
-			function createMonthlyEvent(eventObj, ref, amtOfMonths){
-				eventObj.recur = "monthly";
+			function createMonthlyEvent(eventObj, amtOfMonths){
+				eventObj.recur = "monthly" ;
+                var newEvents= [];
 				for(var i =0 ; i <= amtOfMonths ;i++){
 					  var newObj ={
 						  title: eventObj.title,
@@ -138,8 +163,9 @@
 						  start: eventObj.start.clone().add(i,"month").toISOString(),
 						  end: eventObj.end.clone().add(i,"month").toISOString()
 					  }
-					  ref.push(newObj); 
+					  newEvents.push(newObj);
 				}
+                return newEvents; 
 			 }
 
 			function saveCalSettings(startTime, endTime, googleCalendarId, ref){
@@ -150,21 +176,28 @@
 				}
 			}
 
-			function approveAppointment(apt, user){
+			function approveAppointment(apt, userInfo){
                 var refs = pcServices.getCommonRefs();
-                var studentRef = refs.accounts.child(apt.id);
-                var userRef = refs.accounts.child(user.$id);
-                var userCalRef = refs.calendars.child(user.$id);
-                
-                var userEvent = new Event(apt.name, apt.requestedStartTime,null, apt.requestedEndTime,"once",apt.id,null,'red',apt.category, apt.rating);
-                
-                var studentEvent = new Event(user.name.first+" " + user.name.last ,apt.requestedStartTime,null, apt.requestedEndTime,"once",user.$id,null,'red', apt.category, apt.rating);
-                
-                userCalRef.child("events").push(userEvent);
-                userCalRef.child("approvedAppointments").push(userEvent);
-                studentRef.child("appointments/" + apt.$id).set(studentEvent);
-                refs.notifications.child(apt.id).push("New Appointment With " + user.name.first+' ' +user.name.last);
-                userCalRef.child("appointmentRequests" + "/" +apt.$id).remove();
+                var studentRef = refs.accounts.child(apt.senderId);
+                var userRef = refs.accounts.child(userInfo.$id);
+                var userCalRef = refs.calendars.child(userInfo.$id);
+                userCalRef.child("events/"+ apt.$id).update({
+                    appointmentSlot: false,
+                    color:"red",
+                    rating: apt.rating,
+                    category:apt.category
+                })
+                function newApt(user){
+                     var appointment =  new Event(user.name.first+" " + user.name.last ,apt.start,null, apt.end,"once", user.$id, null, 'red', apt.category, apt.rating);
+                    console.log(appointment);
+                    return appointment ;
+                }
+             
+                userCalRef.child("approvedAppointments/").child(apt.$id).set(newApt(apt));
+                userCalRef.child("appointmentSlots/" + apt.$id).remove();
+                studentRef.child("appointments/" + apt.$id).set(newApt(userInfo));
+                refs.notifications.child(apt.senderId).push("New Appointment With " + userInfo.name.first+' ' +userInfo.name.last);
+                userCalRef.child("appointmentRequests" + "/" + apt.$id).remove();
 			}
 
 			function syncGcal(userData, calendarGcalId){
@@ -205,14 +238,17 @@
 				eventToDelete.remove();
 			}
 
-			function deleteAllMonthlyEvents(event,ref){
-				ref.once("value", function(datasnapshot){
-					datasnapshot.forEach(function(childsnapshot){
-						if(childsnapshot.val().title == event.title){
-							ref.child(childsnapshot.key()).remove();
-						}
+			function deleteAllEvents(event,ref){
+                var eventsRef = ref.child("events");
+                var recurEventsRef = ref.child("recurringEvents/" + event.eventKey);
+                console.log(recurEventsRef.toString());
+				recurEventsRef.once("value", function(data){
+					data.forEach(function(child){
+                        console.log('ham');
+                        console.log('cd',child.key());
+						eventsRef.child(child.key()).remove();
 					});
-				});          
+				});       
 			}
             
 			function Appointment(name,requestedStartTime, requestedEndTime, id, category, rating){
@@ -227,7 +263,9 @@
             
 			function sendAppointmentRequest(ref, userInfo, eventStart,eventEnd){
 				var reqKey = ref.push().key();
-                var appointment = new Appointment(userInfo.name.first+" "+ userInfo.name.last,eventStart,eventEnd, userInfo.$id);
+                
+                console.log("iso", eventStart.toISOString());
+                var appointment = new Appointment(userInfo.name.first+" "+ userInfo.name.last,eventStart.toISOString(),eventEnd.toISOString(), userInfo.$id);
 				var examinerRequestListRef = ref.child("appointmentRequests").push(appointment);
 			}
 			
@@ -258,21 +296,20 @@
 				 }
 
 				function updateWeeklyEvent(){
-					  if(event.dow.length > 1){
-							ref.child(event.$id).update({
-									start: event.start.toString().substring(16,24),
-									end: event.end.toString().substring(16,24),
-									id: event.title + event.start.toString() + event.end.toString()
-							});
-					  }else{
-						   ref.child(event.$id).update({
-									dow:[event.start.day()],
-									start: event.start.toString().substring(16,24),
-									end: event.end.toString().substring(16,24),
-									id: event.title + event.start.toString() + event.end.toString()
-							});
-					  }
-				}
+                        ref.child(event.$id).update({
+                                start: event.start.toString(),
+                                end: event.end.toString(),
+                                id: event.title + event.start.toString()
+                        });
+
+                       ref.child(event.$id).update({
+                                dow:[event.start.day()],
+                                start: event.start.toString().substring(16,24),
+                                end: event.end.toString().substring(16,24),
+                                id: event.title + event.start.toString() + event.end.toString()
+                        });
+                  }
+				
 
 				function updateMonthlyEvent(){
 					ref.once("value", function(datasnapshot){
