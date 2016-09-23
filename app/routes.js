@@ -56,6 +56,7 @@
 
 		.when(RoutePaths.profile.path, {
 			templateUrl: 'app/users/views/profile.html',
+            controller:'profileController',
 			scope:true
 		})
 

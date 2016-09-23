@@ -76,27 +76,18 @@
 			}
 		})
 
-
-
-
 		//ACCOUNT
-		.directive('accountDetails', ['pcServices','profileService', "AuthService",function(pcServices,profileService, AuthService){
+		.directive('accountDetails', ['pcServices','profileService', "AuthService", function(pcServices,profileService, AuthService){
 			return{
 				templateUrl:function(){
 					return "app/users/views/accountDetails.html?" + Date.now(); 
 				},
 				scope:false,
-				controllerAs:'user',
-				transclude:true,
+				transclude:false,
 				controller: function($scope){
 					var refs= pcServices.getCommonRefs();
-					this.user = $scope.user ;
-					this.updateUser = function(ref){
-						if(this.newPassword){
-							profileService.changePassword(refs.accounts.child(this.user.$id), this.oldPassword, this.newPassword, this.emailAddress)
-						};
-					this.user.$save();
-					} 
+                    $scope.user= $scope.$resolve.user ;
+                        
 				}   
 			}
 		}])

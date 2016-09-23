@@ -12,31 +12,42 @@
 //            $scope.currentUser = currentUser ;
 		.controller("profileController", ['$scope','profileService', 'pcServices', 'user',function($scope, profileService,pcServices, user){
 			var refs = pcServices.getCommonRefs();
-			var userInfo = user;
+			var userInfo = user ;
             var userRef = refs.accounts.child(userInfo.$id);
             
-            $scope.user = user ;
             $scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
 			$scope.airportsList = pcServices.createFireArray(userRef.child("airports"));
 			$scope.saveCertification = saveCertification ;
 			$scope.saveAirport= saveAirport ;
             $scope.deleteAirport = deleteAirport ;
-            $scope.deleteCertication = deleteCertication ;
+            $scope.deleteCertification = deleteCertification ;
+            console.log($scope);
+            $scope.updateUser = function(ref){
+                    if($scope.user.newPassword){
+                        profileService.changePassword(refs.accounts.child($scope.user.$id), $scope.oldPassword, $scope.newPassword, $scope.user.emailAddress)
+                    };
+                $scope.user.$save();
+            } 
+            
             
             function saveCertification(chip){
-               saveChip(chip,"certifications");
+                refs.certifications.child(chip + "/users/"+ userInfo.$id).set(true);
+                saveChip(chip,"certifications");
             }
                         
             function saveAirport(chip){
+               refs.airports.child(chip + "/users/"+ userInfo.$id).set(true);
                saveChip(chip, "airports");
             }
             
 			function deleteAirport(chip){
 				userRef.child("airports/" + chip.$id).remove();
+                refs.airports.child(chip.$id + "/users/" + user.$id).remove();
 			}
             
-			function deleteCertication(chip){
-				userRef.child("certifications/" + chip.$id).remove();
+			function deleteCertification(chip){
+				userRef.child("certifications/users/" + chip.$id).remove();
+                refs.certifications.child(chip.$id + "/users/" + user.$id).remove();
 			}
             
            function saveChip(chip, type){

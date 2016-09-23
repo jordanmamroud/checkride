@@ -293,7 +293,6 @@ angular.module("calDir", ['ui.calendar', 'crCalendar.service', 'firebase'])
                             if(event.hasOwnProperty('category')){
                                 warningModal();
                             }else{
-                                
                                 calendarService.onEventChange(event, userEventsRef, updateEventsModal);
                            }
                         },

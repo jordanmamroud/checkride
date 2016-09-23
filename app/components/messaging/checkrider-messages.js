@@ -32,10 +32,8 @@ function messageCtrl($scope,messagesService, pcServices, conversations, user,$md
 	}
 
 	pcServices.showToastOnEvent(conversationsRef, "child_added");
-   
-	
 
-	function viewConvoMessages(convo){
+    function viewConvoMessages(convo){
 		var messagesRef = refs.conversations.child(userInfo.$id +"/" + convo.$id +"/messages")
 		conversationsRef.child(convo.$id).child("hasNewMsg").set(false);
 		self.convoInfo = convo ;
@@ -119,8 +117,6 @@ function messageService(pcServices){
 	
 	return service ;
 }
-
-
 
 function sendMessageModal(messagesService, pcServices){
 	return{
