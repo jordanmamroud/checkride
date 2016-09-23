@@ -13,7 +13,7 @@
     "angular-storage": "0.0.15",
     "angular-touch": "^1.5.8",
     "elasticsearch-browser": "^11.0.1",
-    "express": "^4.14.0",
+    "express": "^4.13.3",
     "font-awesome": "^4.6.3",
       
     "body-parser": "^1.15.2",
