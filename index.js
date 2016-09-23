@@ -31,11 +31,13 @@ var calRef = db.ref("temp/calendars");
 
 app.use(cors());
 //app.options('*', cors());
-app.get("/", function(req, res){
-    console.log('hess');
-    res.end('<h1>hey</h1>')
+// app.get("/", function(req, res){
+//     console.log('hess');
+//     res.end('<h1>hey</h1>')
+// });
+app.get('/', function(request, response) {
+response.render('index');
 });
-
 app.use(function(req, res, next){
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
