@@ -102,25 +102,42 @@ img.cr-logo,
   border: 1px solid #ddd;
 }
 
-/* line 83, ../sass/screen.scss */
-.pc-message {
+/* line 85, ../sass/screen.scss */
+.pc-message .pc-msg-wrapper {
+  display: block;
+  overflow: hidden;
+}
+/* line 89, ../sass/screen.scss */
+.pc-message .pc-msg-time {
+  text-align: center;
+  font-size: 1em;
+  color: #CCC;
+  clear: both;
+  width: 100%;
+  margin: 20px auto 0;
+  border-top: solid 1px #DDD;
+  display: block;
+}
+/* line 100, ../sass/screen.scss */
+.pc-message .pc-msg-sender {
+  font-size: .5em;
+}
+/* line 108, ../sass/screen.scss */
+.pc-message .me,
+.pc-message .them {
   padding: .5em 1em;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
 }
-/* line 89, ../sass/screen.scss */
-.pc-message .pc-msg-sender {
-  font-size: .5em;
-}
-/* line 102, ../sass/screen.scss */
-.pc-message.me {
+/* line 114, ../sass/screen.scss */
+.pc-message .me {
   text-align: right;
   float: right;
   background: #66BB6A;
 }
-/* line 107, ../sass/screen.scss */
-.pc-message.them {
+/* line 120, ../sass/screen.scss */
+.pc-message .them {
   text-align: left;
   float: left;
   background: #D0D0D0;

@@ -81,10 +81,21 @@ img.cr-logo,
 
 
 .pc-message{
-  padding: .5em 1em;
-  @include border-radius(5px);
   
-  
+  .pc-msg-wrapper{
+    display:block;
+    overflow:hidden;
+  }
+  .pc-msg-time{
+    text-align:center;
+    font-size: 1em;
+    color:#CCC;
+    clear:both;
+    width:100%;
+    margin: 20px auto 0;
+    border-top: solid 1px #DDD;
+    display:block;
+  }
 
   .pc-msg-sender{
     font-size: .5em;
@@ -93,18 +104,20 @@ img.cr-logo,
   .pc-msg-body{
     
   }
-
+  
   .me,
   .them{
-    
+    padding: .5em 1em;
+    @include border-radius(5px);
   }
 
-  &.me{
+  .me{
     text-align:right;
     float:right;
     background: #66BB6A;
   }
-  &.them{
+
+  .them{
     text-align: left;
     float: left;
     background:#D0D0D0;
