@@ -117,17 +117,17 @@ app.post("/messages", function(req, res){
 });
 
 app.post("/work", function(req, res){
-       res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-        res.setHeader('Access-Control-Allow-Headers', "Content-Type, Accept");
-        req.on("data", function(data){
-            console.log('handsy');
-            console.log("data: " + data);
-            var info = JSON.parse(data);
-            res.send("bane");    
-            icsFiles(req, usersRef, info);
-            
-        });  
+   res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', "Content-Type, Accept");
+    req.on("data", function(data){
+        console.log('handsy');
+        console.log("data: " + data);
+        var info = JSON.parse(data);
+        res.send("bane");    
+        icsFiles(req, usersRef, info);
+        
+    });  
 });
         
 
@@ -153,8 +153,10 @@ var icsFiles = function(reqData, ref, info ){
 }
 
 
-http.createServer(app).listen(port);
-
+//http.createServer(app).listen(port);
+app.listen(port, function() {
+ console.log('Node app is running on port', app.get('port'));
+});
 
 //
 //http.createServer(function(req, res){
