@@ -260,10 +260,10 @@ app.listen(app.get("port"), function() {
 //
 //app.set('port', (process.env.PORT || 5000));
 //
-//app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/'));
 //
 //// views is directory for all template files
-app.set('views', __dirname + '/views');
+//app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 //
 //app.get('/', function(request, response) {
