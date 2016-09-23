@@ -102,12 +102,17 @@ img.cr-logo,
   border: 1px solid #ddd;
 }
 
-/* line 85, ../sass/screen.scss */
+/* line 83, ../sass/screen.scss */
+.search-offset {
+  margin-top: -10em;
+}
+
+/* line 89, ../sass/screen.scss */
 .pc-message .pc-msg-wrapper {
   display: block;
   overflow: hidden;
 }
-/* line 89, ../sass/screen.scss */
+/* line 93, ../sass/screen.scss */
 .pc-message .pc-msg-time {
   text-align: center;
   font-size: 1em;
@@ -118,11 +123,11 @@ img.cr-logo,
   border-top: solid 1px #DDD;
   display: block;
 }
-/* line 100, ../sass/screen.scss */
+/* line 104, ../sass/screen.scss */
 .pc-message .pc-msg-sender {
   font-size: .5em;
 }
-/* line 104, ../sass/screen.scss */
+/* line 108, ../sass/screen.scss */
 .pc-message .pc-msg-wrapper .pc-msg-body {
   padding: .5em 1.5em;
   -moz-border-radius: 5px;
@@ -130,28 +135,28 @@ img.cr-logo,
   border-radius: 5px;
   margin-bottom: 10px;
 }
-/* line 110, ../sass/screen.scss */
+/* line 114, ../sass/screen.scss */
 .pc-message .material-icons {
   color: #CCC;
   font-size: 1.5em;
   margin: 10px;
 }
-/* line 116, ../sass/screen.scss */
+/* line 120, ../sass/screen.scss */
 .pc-message .me {
   text-align: right;
   float: right;
 }
-/* line 120, ../sass/screen.scss */
+/* line 124, ../sass/screen.scss */
 .pc-message .me .pc-msg-body {
   background: #66BB6A;
   float: left;
 }
-/* line 128, ../sass/screen.scss */
+/* line 132, ../sass/screen.scss */
 .pc-message .them {
   text-align: left;
   float: left;
 }
-/* line 132, ../sass/screen.scss */
+/* line 136, ../sass/screen.scss */
 .pc-message .them .pc-msg-body {
   float: right;
   background: #D0D0D0;

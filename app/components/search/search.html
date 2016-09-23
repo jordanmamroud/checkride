@@ -5,7 +5,7 @@
 		layout
 		>
 		
-		<form name="pc-search" flex="40" layout="column" md-theme="dark" >
+		<form name="pc-search" flex="40" ng-class="{'search-offset' : !search.hasSearch}" layout="column" md-theme="dark" >
 			
 			<h1 class="md-display" style="text-align: center; font-weight:normal;" ng-show="!search.hasSearch">Find an examiner near you</h1>
 
