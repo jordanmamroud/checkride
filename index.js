@@ -1,5 +1,6 @@
 // note to self next thing to set up is to file storage on heroku for the ics files
 
+
 var cors = require('cors');
 var express = require('express');
 var http = require('http');
@@ -17,6 +18,8 @@ var client = new twilio.RestClient("ACcded30509c28e040d2f56f17680f8d85","58844f2
 var app = express();
 var port = process.env.PORT || 5000 ;
 
+app.set('port', (process.env.PORT || 5000));
+app.set('view engine', 'ejs');
 firebase.initializeApp({
   serviceAccount: "firebaseservice.json",
   databaseURL: "https://checkride.firebaseio.com/"
@@ -28,11 +31,13 @@ var calRef = db.ref("temp/calendars");
 
 app.use(cors());
 //app.options('*', cors());
-app.get("/", function(req, res){
-    console.log('hess');
-    res.end('<h1>hey</h1>')
+// app.get("/", function(req, res){
+//     console.log('hess');
+//     res.end('<h1>hey</h1>')
+// });
+app.get('/', function(request, response) {
+response.render('index');
 });
-
 app.use(function(req, res, next){
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -117,17 +122,17 @@ app.post("/messages", function(req, res){
 });
 
 app.post("/work", function(req, res){
-       res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-        res.setHeader('Access-Control-Allow-Headers', "Content-Type, Accept");
-        req.on("data", function(data){
-            console.log('handsy');
-            console.log("data: " + data);
-            var info = JSON.parse(data);
-            res.send("bane");    
-            icsFiles(req, usersRef, info);
-            
-        });  
+   res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', "Content-Type, Accept");
+    req.on("data", function(data){
+        console.log('handsy');
+        console.log("data: " + data);
+        var info = JSON.parse(data);
+        res.send("bane");    
+        icsFiles(req, usersRef, info);
+        
+    });  
 });
         
 
@@ -153,8 +158,10 @@ var icsFiles = function(reqData, ref, info ){
 }
 
 
-http.createServer(app).listen(port);
-
+//http.createServer(app).listen(port);
+app.listen(app.get("port"), function() {
+ console.log('Node app is running on port', app.get('port'));
+});
 
 //
 //http.createServer(function(req, res){
@@ -253,16 +260,16 @@ http.createServer(app).listen(port);
 //
 //app.set('port', (process.env.PORT || 5000));
 //
-//app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/'));
 //
 //// views is directory for all template files
-////app.set('views', __dirname + '/views');
-////app.set('view engine', 'ejs');
+//app.set('views', __dirname + '/views');
+
 //
-//app.get('/', function(request, response) {
-// response.render('index');
-//});
+app.get('/', function(request, response) {
+response.render('index');
+});
 //
-//app.listen(app.get('port'), function() {
-//  console.log('Node app is running on port', app.get('port'));
-//});
+app.listen(app.get('port'), function() {
+ console.log('Node app is running on port', app.get('port'));
+});
