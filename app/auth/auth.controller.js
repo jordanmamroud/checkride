@@ -1,89 +1,50 @@
 (function(){
 	angular.module('pcAuthController', ['firebase'])
 
+    
+        
 		//AUTH CONTROLLER
-		.controller("AuthCtrl", ["$scope", "$location", "$timeout", "AuthService",  "$firebaseObject", "pcServices",'$sessionStorage',
-									function($scope, $location, $timeout, AuthService,  $firebaseObject, pcServices,$sessionStorage){
+		.controller("AuthCtrl", AuthCtrl)
+
+        AuthCtrl.$inject = ["$scope", "AuthService", "pcServices","$mdDialog","$localStorage"];
+        
+        function AuthCtrl($scope, AuthService, pcServices, $mdDialog,$localStorage){
+            
 			var self = this;
 			self.auth = AuthService.auth;
-			self.authData = AuthService.getAuth;
 			self.login = login;
+            self.roles= ['student', 'instructor','examiner'];
 			self.user = null;
-			self.logout = logout;
+            
+            //functions
+			self.logout = AuthService.logout;
             self.createAccountPage = createAccountPage;
             self.createAccount = createAccount;
-            self.roles= ['student', 'instructor','examiner'];
+            self.sendPasswordResetEmail = sendPasswordResetEmail
+            self.showPasswordResetModal = showPasswordResetModal;
 
-			self.auth.$onAuth(function(authData){
-				if(!authData){
-					//logout();
-					self.isLoggedIn=false;
-				}else{
-					if(!self.user){
-						getUser();
-					}
-					self.isLoggedIn=true;
-				}
-				self.authData = authData;
-			});
+            function login(){
+				AuthService.login(self.emailAddress, self.password);
+			};
 
-			//LOGIN
-			function login(){
-				AuthService.login(self.email, self.password)
-				.then(function(user){
-					self.user = user;
-					pcServices.changePath(pcServices.getRoutePaths().profile.path);
-					self.isLoggedIn = true;
-				})
-				.catch(function(error){
-					alert(error);
-				})
-			}
-
-			//LOGOUT
-			function logout(){
-				self.isLoggedIn = false;
-				self.user = null;
-				AuthService.logout();
-			}
-
-			function getUser(){
-				if(typeof self.user === "undefined" || !self.user){
-					AuthService.getUser().then(function(user){
-						self.user = user;
-					}).catch(function(err){
-						console.log(err);
-					})
-				}
-			}
-
-			function getAirportList(){
-
-			}
-                                        
             function createAccountPage(){
-					pcServices.changePath(pcServices.getRoutePaths().signUp.path);
+				pcServices.changePath(pcServices.getRoutePaths().signUp.path) ;
 			}
-                                        
+            
+            function sendPasswordResetEmail(){
+                AuthService.sendPasswordResetEmail(self.email);
+            }
+            
+            function showPasswordResetModal(){
+                pcServices.showModal('passwordResetModal', true);
+            }
+            
             function createAccount(){
-				var user = {
-						name:{ first:self.firstName,last: self.lastName},
-						emailAddress:self.emailAddress,
-						phone:self.phone,
-						role: self.role,
-                        photoUrl:self.photoUrl
-				}
-
-				AuthService.createUser(user, self.password);
-			}
-			
-		}])
+                var newUser = new AuthService.User({first:self.firstName,last:self.lastName}, self.emailAddress, self.phone, self.role, self.photoUrl);
+				AuthService.createUser(newUser, self.password);
+            }
+		}
 })()
-
-
-
-
-
 
 
 

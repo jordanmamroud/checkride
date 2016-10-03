@@ -1,0 +1,73 @@
+
+
+<!-- Not Logged In -->
+<span ng-show="!layout.isLoggedIn">
+	<a ng-href="/create-account"><md-button class="md-primary" aria-label="Sign Up">Sign Up</md-button></a>
+	<a ng-href="/log-in"><md-button class="md-raised md-primary" aria-label="Log In">log in</md-button></a>
+</span>
+
+<!-- Logged In -->
+<span ng-show="layout.isLoggedIn">
+   
+    <span ng-click="layout.showConversations()"><i class="material-icons">assistant</i></span>
+    <span ng-click="layout.showNotifications()"><i class="material-icons">layers</i></span>
+	<!-- Users Name -->
+	<span class="pc-capitalize">{{layout.user.name.first}} {{layout.user.name.last}}</span>	
+	
+	<md-menu>
+		<!-- Trigger element is a md-button with an icon -->
+
+		<md-button 
+			ng-click="$mdOpenMenu($event)" 
+			class="md-icon-button" 
+			aria-label="Open sample menu" 
+			style="background-image:url({{layout.user.photoUrl}}); background-size: cover;">
+		</md-button>
+
+		<md-menu-content>
+		
+			<md-menu-item>
+				<a href="../user/profile" class="md-button">My Profile</a>
+			</md-menu-item>
+
+			<md-menu-item>	
+
+				<md-button ng-click="layout.logout()">Log out <span class="pc-capitalize">{{layout.user.name.first}}</span></md-button>
+			</md-menu-item>
+		</md-menu-content>
+		
+	</md-menu>
+</span>
+
+<script id="conversationsModal" type="text/ng-template">
+        <md-list>
+			<md-card ng-repeat="convo in layout.conversationsList">
+				<md-card-title>
+					<div layout="column" flex>
+						<md-card-title-text layout-padding layout layout-align="start start">
+							<span style="background-image:url({{note.photoUrl}}); background-size: cover;"></span>
+                            <h4 class="md-headline pc-capitalize md-block">{{convo.users.name}}</h4>
+							<h5 class="md-subhead pc-capitalize md-block">{{convo.lastMsg}}</h5>
+						</md-card-title-text>
+					</div>
+				</md-card-title>
+			</md-card>
+		</md-list>
+</script>
+
+<script id="notificationsModal" type="text/ng-template">
+    <md-list>
+			<md-card ng-repeat="note in layout.notifications">
+				<md-card-title>
+					<div layout="column" flex>
+
+						<md-card-title-text layout-padding layout layout-align="start start">
+							<span style="background-image:url({{note.photoUrl}}); background-size: cover;"></span>
+                            <h4 class="md-headline pc-capitalize md-block">{{note.name}}</h4>
+							<h5 class="md-subhead pc-capitalize md-block">{{note.sentAt}}</h5>
+						</md-card-title-text>
+					</div>
+				</md-card-title>
+			</md-card>
+		</md-list>
+</script>

@@ -2,214 +2,85 @@
 	angular.module('pcAuthService', ['firebase'])
 		
 		//Auth Service
-		.factory("AuthService", ["$firebaseAuth", "$firebaseArray", "$q", "pcServices", "$sessionStorage",
-			function($firebaseAuth, $firebaseArray, $q, pcServices,$sessionStorage){
+		.factory("AuthService", AuthService )
+        
+        AuthService.$inject = ["$firebaseAuth", "$firebaseArray", "$q", "pcServices", "$localStorage"];
+        
+        function AuthService($firebaseAuth, $firebaseArray, $q, pcServices, $localStorage){
+            
+                var ref = pcServices.getCommonRefs();
+                var auth = $firebaseAuth();
+                var service = {
+                    auth: auth,
+                    //functions
+                    createUser:createUser,
+                    login: login,
+                    logout: logout,
+                    sendPasswordResetEmail: sendPasswordResetEmail,
+                    User:User
+                }    
 
-			var me = this;
-			var ref = pcServices.getCommonRefs();
-			var auth = $firebaseAuth(ref.main);
-			var authObj = auth.$getAuth();
-			var savedUser;
-
-			function getUser(){
-				var defer = $q.defer();
-				if(authObj){
-					pcServices.firebaseObject(ref.accounts.child(authObj.uid))
-					.$loaded().then(function(user){
-						savedUser = user;
-						defer.resolve(user);
-					}).catch(function(err){
-						defer.reject(err);
-					})
-				}
-				return defer.promise;
-			}
+                return service ;
                 
-			function login(email, password){
-				var defer = $q.defer();
-				
-				//Send email and password to be authenticated
-				auth.$authWithPassword({
-					email: email,
-					password: password
-				})
+                function createUser(newUser, password){
+                        auth.$createUserWithEmailAndPassword(newUser.emailAddress, password)
+                        .then(function(user){
+                            createUserAccount(newUser, user.uid);
+                        }).catch(function(error){
+                            alert(error);
+                        });
+                    //inner function
+                     function createUserAccount(newUser, userId){
+                        ref.accounts.child(userId).set(newUser);
+                        ref.roles.child(newUser.role.toLowerCase() + "/" + userId).set({name:newUser.name.first +" " + newUser.name.last});
+                    }
+                }
 
-				//Once its authenticated...
-				.then(function(authData) {
-                    
-					authObj = auth.$getAuth();
-					//Get the users data object and assign it to the "user" variable
-					getUser().then(function(user){
-						defer.resolve(user);
+                function login(email, password){
+                        auth.$signInWithEmailAndPassword(email, password).then(function(authData) {
+                            var user = pcServices.createFireObj(ref.accounts.child(authData.uid));
+                            $localStorage.$reset();
+                                user.$loaded().then(function(){
+                                    $localStorage.currentUser ={name:user.name, uid: user.$id}
+                                    pcServices.changePath(pcServices.getRoutePaths().profile.path);
+                                })
+                            }).catch(function(error){
+                            alert(error);
+                        })
+                }
 
-                        	//Get the users data object and assign it to the "user" variable
-						user = pcServices.createFireObj(ref.accounts.child(authData.uid));
-						//Once its been loaded...
-						user.$loaded().then(function(){
+                function logout(){
+                    auth.$signOut().then(function(){
+                        $localStorage.$reset();
+                        pcServices.changePath("log-in");
+                    }).catch(function(error){
+                        alert(error);
+                    })
+                }
+            
+                function sendPasswordResetEmail(email){
+                    auth.$sendPasswordResetEmail(email).then(function() {
+                          console.log("Password reset email sent successfully!");
+                    }).catch(function(error){
+                          alert("Error: ", error);
+                    });
+                }
+            
+                function User(name, emailAddress, phone, role,photoUrl){
+                        this.name = name;   
+                        this.emailAddress= emailAddress;
+                        this.phone=phone;
+                        this.role= role;
+                        this.photoUrl=photoUrl;
+                }
 
-							//Store the users object as a cookie named "currentUser"
-							$sessionStorage.user = user; 
-							//And redirect to the users profile page
-							pcServices.changePath(pcServices.getRoutePaths().profile.path);
-
-							//Then return the users object
-							return authData;
-						})
-                        
-					})
-
-					//If couldnt authenticate....
-					.catch(function(error) {
-						defer.reject(error);
-					})
-
-				}).catch(function(err){
-					defer.reject(err);
-				})
-
-				return defer.promise;
-			}
-
-			function logout(){
-				//Unauths session				
-				auth.$unauth();
-				savedUser = null;
-				//Redirect to the login page
-				pcServices.changePath(pcServices.getRoutePaths().login.path);
-			}
-
-			function getAuth(){
-				return authObj;
-			}
-                
-            function createUserAccount(newUser, userId){
-				ref.accounts.child(userId).set(newUser);
-				ref.roles.child(newUser.role.toLowerCase() + "/" + userId).set({name:newUser.name.first +" " + newUser.name.last});
-			}
-                
-            function createUser(newUser, password){
-					ref.main.createUser({
-							email: newUser.emailAddress ,
-							password: password
-						},
-						
-						function(error, userData){
-							if (error) {
-								console.log("Error creating user:", error);
-							} else {
-								createUserAccount(newUser, userData.uid);
-							}
-					});
-            }
-
-
-			return {
-                createUser:createUser,
-				user:savedUser,
-				auth:auth,
-				getAuth:getAuth(),
-				getUser:getUser,
-				login: function(email,password){
-					return login(email,password);
-					},
-				logout: logout,
-			}
-		}])
+                function updatePassword(newPassword){
+                   auth.$updatePassword(newPassword).then(function() {
+                          console.log("Password changed successfully!");
+                    }).catch(function(error) {
+                          console.error("Error: ", error);
+                    });
+                }  
+        }
 })()
 
-
-
-
-
-
-
-				// getAuth: function(){
-				// 	return authObj.$getAuth();
-				// },
-
-				// getUser: function(uid){
-				// 	//Returns a promise
-				// 	return getUser(uid);
-				// },
-
-				// getuser: function(){
-				// 	//Returns a promise
-				// 	return getUser();
-				// }
-
-
-
-/*			var defer = $q.defer();
-
-			//checks if a user id was passed in, else gets the current users id
-			uid = (typeof uid === "undefined") ? uid = null : uid;
-			
-			if(!uid){
-				var authData = pcAuth.$getAuth();
-				if(authData){
-					uid = authData.uid;
-				}
-			}
-
-			if(uid){
-
-				//Get the users data object and assign it to the "user" variable
-				pcServices.createFireObj(ref.accounts.child(uid))
-				.$loaded()
-				.then(function(user){
-					defer.resolve(user);
-				})
-				.catch(function(error) {
-					defer.resolve(error);
-				});
-			}
-
-			return defer.promise;*/
-
-
-
-
-
-
-			// var ref = pcServices.getCommonRefs();
-			// var authObj = $firebaseAuth(ref.main);
-			// var authObjData = authObj.$getAuth();
-			// var user = null;
-
-
-			// function getUserObject(uid){
-			// 	console.log("getUserObject");
-			// 	return pcServices.createFireObj(ref.accounts.child(uid));
-			// };
-
-			//Leave Blank to get current user
-			// function getUser(uid){
-			// 	console.log("getUser");
-
-			// 	var defer = $q.defer();
-
-			// 	//checks if a user id was passed in, else gets the current users id
-			// 	uid = (typeof uid === "undefined") ? uid = null : uid;
-				
-			// 	if(!uid){
-			// 		var authData = pcAuth.$getAuth();
-			// 		if(authData){
-			// 			uid = authData.uid;
-			// 		}
-			// 	}
-
-			// 	if(uid){
-
-			// 		//Get the users data object and assign it to the "user" variable
-			// 		pcServices.createFireObj(ref.accounts.child(uid))
-			// 		.$loaded()
-			// 		.then(function(user){
-			// 			defer.resolve(user);
-			// 		})
-			// 		.catch(function(error) {
-			// 			defer.resolve(error);
-			// 		});
-			// 	}
-
-			// 	return defer.promise;
-			// }

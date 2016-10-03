@@ -2,9 +2,9 @@
 //Should be one service to accept user type argument (along with other optional) / May have to be multiple services
 (function(){
 	angular.module('pcDataService',[])
-	.service('DataService',["$firebaseArray",'$firebaseObject', 'globalConst', '$q', '$log', function($firebaseArray, $firebaseObject,globalConst,$q, $log){
+	.service('DataService',["$firebaseArray",'$firebaseObject', 'globalConst', '$q', '$log',"pcServices", function($firebaseArray, $firebaseObject,globalConst,$q, $log,pcServices){
 		
-		var fbRef = new Firebase(globalConst.firebase.ref + "/temp");
+		var fbRef = pcServices.getCommonRefs().main;
 		var usersRef = fbRef.child("users");
 		var userAccountsRef = usersRef.child("accounts");
 		var userRolesRef = usersRef.child("roles");

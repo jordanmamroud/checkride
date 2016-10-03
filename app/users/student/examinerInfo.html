@@ -1,0 +1,50 @@
+<div layout="row"  layout-align="center center">
+	<div layout="column" layout-fill>
+		<md-tabs md-dynamic-height md-border-bottom layout-padding>
+			<md-tab label="Info" >
+			    <div layout layout-padding>
+                    <div layout="column" flex="30">
+                        <img src="{{vm.examinerInfo.data.photoUrl}}" width="100%">
+                    </div>
+                    <div class="md-padding" layout="column" flex>
+
+                        <h1 class='pc-capitalize'>{{vm.examinerInfo.data.name.first +" "+ vm.examinerInfo.data.name.last}}</h1>
+                        <h4>{{vm.examinerInfo.data.emailAddress}}</h4>
+                        <md-list>
+                            <label>Certifications</label>
+                            <md-list-item ng-repeat="cert in vm.certificationsList"> 
+                            <h5>{{cert.$id}}</h5>
+                            </md-list-item>
+                        </md-list>
+
+                        <md-list>
+                            <label>Airports</label>
+                            <md-list-item ng-repeat="arpt in vm.airportList"> 
+                                <h5>{{arpt.$id}}</h5>
+                            </md-list-item>
+                        </md-list>   
+
+                        <div>
+                            <label>Bio</label>
+                            <p ng-model="vm.examinerInfo.data.bio">{{vm.examinerInfo.data.bio}}</p>
+                        </div>
+
+                    </div>
+                </div>
+
+			</md-tab>
+			
+			<md-tab label="Schedule">
+				<div class="md-padding">
+                       <div layout="row">
+            
+                        <md-content>
+				         	<viewing-cal></viewing-cal>
+				 	    </md-content>
+				    </div>
+				</div>
+			</md-tab>
+		</md-tabs>
+	</div>
+</div>
+

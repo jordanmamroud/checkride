@@ -1,7 +1,12 @@
 angular.module('pcNotificationsController',[])
 
-.controller('notificationsController', ["$scope",'pcServices','currentUser',function($scope,pcServices,currentUser){
-    var refs= pcServices.getCommonRefs();
-    var userNotifications = pcServices.getCommonRefs().notifications.child(currentUser.$id);
-    this.notificationsList = pcServices.createFireArray(userNotifications); 
-}])
+    
+    .controller('notificationsController', notificationsController)
+            
+    notificationsController.$inject = ["$scope",'pcServices','$localStorage'];
+    function notificationsController($scope,pcServices,$localStorage){
+        if($localStorage.currentUser){
+             var userNotifications = pcServices.getCommonRefs().notifications.child($localStorage.currentUser.uid);
+            this.notificationsList = pcServices.createFireArray(userNotifications); 
+        }
+    }

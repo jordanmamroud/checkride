@@ -1,22 +1,63 @@
+<md-input-container layout>
+     
+     <md-select ng-model="selectedAirport">
+        <md-option ng-click="vc.getForecast(aprt.$id)" ng-value="{{aprt.$id}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in vc.availableAirports">{{aprt.$id}}</md-option>
+     </md-select>
+</md-input-container>
+    
+
 <div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div>
 
 
-<script id="requestModal" type="text/ng-template">
-                    <h2>Time</h2><br>
-                    <p>{{eventStart}}</p>
-                    <p>{{eventEnd}}</p>
-                    <md-button  class="md-raised md-primary" ng-click="vc.sendRequest()">Request Appointment</md-button>
+<script type="text/ng-template" id="weatherModal">
+		<md-list>
+			<md-card ng-repeat="day in vc.weather.weatherForecast">
+				<md-card-title>
+					<div layout="column" flex>
 
-                    <md-input-container layout>
-                        <md-select ng-model="vc.aicrCategory">
-                            <md-option ng-value="cat" placeholder="Categores"  class="pc-capitalize" ng-repeat="cat in vc.aicrCats">{{cat.$value}}</md-option>
-                        </ms-select>       
-                    </md-input-container>
-                    
-                     <md-input-container layout>
-                        <md-select ng-model="vc.rating">
-                            <md-option ng-value="{{rate}}" placeholder="Ratings"  class="pc-capitalize" ng-repeat="rate in vc.ratings">{{rate.$value}}</md-option>
-                        </ms-select>       
-                    </md-input-container>
-                    
+						<md-card-title-text layout-padding layout layout-align="start start">
+							<h4 class="md-headline pc-capitalize md-block">{{day.dayName}}</h4>
+							<br>
+							<h5 class="md-subhead pc-capitalize md-block">{{day.nightProbabilityOfPrecip}}</h5>
+						</md-card-title-text>
+					</div>
+				</md-card-title>
+			</md-card>
+		</md-list>
+</script>
+
+<script id="requestModal" type="text/ng-template">
+   
+    <div role="dialog" aria-label="Send New Message" layout="column" layout-align="center center">
+        <md-toolbar>
+            <div class="md-toolbar-tools" layout-align="center center">
+                <h2>Schedule Checkride</h2>
+            </div>
+        </md-toolbar>
+        
+        <div layout  layout-padding>
+            <h2>Time</h2>
+        </div>
+        
+        <div layout  layout-padding>
+            <p>Start: {{clickedEvent.start.toString()}}</p> <p> End: {{clickedEvent.end.toString()}}</p>
+        </div>
+       
+        <div layout  layout-padding>
+            <md-input-container layout>
+                <md-select ng-model="clickedEvent.category">
+                    <md-option ng-value="cat" placeholder="Categories"  class="pc-capitalize" ng-repeat="cat in vc.aicrCats">{{cat.$value}}</md-option>
+                </ms-select>       
+            </md-input-container>
+
+             <md-input-container layout>
+                <md-select ng-model="clickedEvent.rating">
+                    <md-option ng-value="{{rate}}" placeholder="Ratings"  class="pc-capitalize"  value="" ng-repeat="rate in vc.ratings">{{rate.$value}}</md-option>
+                </ms-select>       
+            </md-input-container>
+        </div>
+    </div>
+    
+     <md-button  class="md-raised md-primary" ng-click="vc.sendRequest()">Request Appointment</md-button>
+    
 </script>

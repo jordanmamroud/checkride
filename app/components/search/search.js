@@ -8,21 +8,26 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 	var ref = pcServices.getCommonRefs().main;
 	var userRef = ref.child("users/accounts");
 
-	self.airports = airports;
+	self.airports = ''
 	self.searchText = "";
 	self.querySearch = querySearch;
 	self.searchTextChange = searchTextChange;
 	self.selectedItemChange = selectedItemChange;
+    self.viewProfile = viewProfile;
+    
 	self.simulateQuery = true;
 	self.isDisabled    = false;
 	self.searchBoxAlign = "center center";
 	self.hasSearch = false;
 	self.fullPage = "layout-fill";
-
+   
 	function querySearch (query) {
-		var results = query ? self.airports.filter( createFilterFor(query) ) : self.airports, deferred;
+	//	var results = query ? self.airports.filter( createFilterFor(query) ) : self.airports, deferred;
+        searchApi(query);
 
-		if (self.simulateQuery) {
+		var results = query ? self.airports : self.airports, deferred ; 
+
+        if (self.simulateQuery) {
 			deferred = $q.defer();
 			$timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
 			return deferred.promise;
@@ -37,23 +42,38 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 	  }
 	}
 
-
+    function searchApi(query){
+        console.log(query);
+         var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "https://airport.api.aero/airport/match/"+query+ "?user_key=778ec1573f3e4555c9cb82e66f2c27bc",
+              'dataType': "jsonp",
+              "method": "GET",
+              "headers": {
+                "cache-control": "no-cache",
+                "postman-token": "061f9e93-0e70-8c49-a06c-fa8602a6c1bc"
+              }
+            }
+            $.ajax(settings).done(function (response) {
+                console.log(response.airports);
+                self.airports = response.airports ;
+            });
+    }
+    
 	function selectedItemChange(item) {
-		console.log("Changed");
+
 		self.hasSearch = true;
 		self.searchBoxAlign = "center start";
 		self.fullPage = "";
-
-		var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.$id).orderByKey();
+        console.log("item", item);
+		var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.code.toLowerCase()).orderByKey();
 		pcServices.createFireArray(ref).$loaded().then(function(val){
-			console.log("Val",val);
 			self.examiners = val;
 		});
 
 	}
-
-
-	
+    
 	function createFilterFor(query) {
 		var lowercaseQuery = angular.lowercase(query);
 
@@ -62,15 +82,12 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 		};
 
 	}
-
-
-
-	self.viewProfile = viewProfile;
-	function viewProfile(examiner){
+    
+    function viewProfile(examiner){
 		var refs= pcServices.getCommonRefs();
 		var examinerRef = refs.accounts.child(examiner.$id);
 		examinerRef.once("value",function(data){
-            $sessionStorage.examinerInfo = {$id:data.key(), data:data.val()}
+            $sessionStorage.examinerInfo = {$id:data.key, data:data.val()}
 		});
 		pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
 	}

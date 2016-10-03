@@ -9,7 +9,7 @@
 		<form ng-submit="auth.login()" name="pc-login" class="signin">
 			<!-- EMAIL -->
 			<md-input-container layout>
-				<input placeholder="Email" required type="email" ng-model="auth.email">
+				<input placeholder="Email" required type="email" ng-model="auth.emailAddress">
 			</md-input-container>
 
 			<!-- PASSWORD -->
@@ -23,11 +23,18 @@
 			</ms-input-container>
 
 			<ms-input-container layout>
-				<a data-show-modal data-modal-to-open="#resetModal">Forgot password?</a>
+				<a ng-click="auth.showPasswordResetModal()">Forgot password?</a>
 			</ms-input-container>
 
 		</form>
-
 	</div>
-
 </div>
+
+<script type="text/ng-template" id="passwordResetModal">
+   <h1>Password Reset Email</h1>
+   	<md-input-container layout>
+            <input placeholder="Email" required type="email" ng-model="auth.email">
+    </md-input-container>
+    <md-button ng-click="auth.sendPasswordResetEmail()">Send</md-button>
+    
+</script>

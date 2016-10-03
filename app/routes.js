@@ -1,171 +1,148 @@
 (function(){    
-	angular.module('pcRoutes',['ngRoute'])
-    
+	angular.module('pcRoutes',['ui.router'])
 
-	.config(['$routeProvider', '$locationProvider', '$logProvider', 'RoutePaths', function( $routeProvider, $locationProvider, $logProvider, RoutePaths){
-        
-        var originalWhen = $routeProvider.when;
-            $routeProvider.when = function(path, route) {
-                route.resolve || (route.resolve = {});
-                angular.extend(route.resolve, {
-                    "user" : function(pcServices){
-                        var ref = pcServices.getCommonRefs();
-                        var authObjData = ref.main.getAuth();
-                        if(authObjData){
-                            var user = pcServices.createFireObj(ref.accounts.child(authObjData.uid));
-                            if(user){
-                                return user.$loaded();
-                            }else{
-                                return null ;
-                            }
-                        }
-                }
-            });
-            return originalWhen.call($routeProvider, path, route);
-        }
-        
-		$routeProvider
-		.when('/', {
+	.config(['$stateProvider', '$locationProvider', '$logProvider', 'RoutePaths', routeConfig])
+    
+	//Move later
+	.constant('RoutePaths',RoutePaths())
+    
+     function routeConfig( $stateProvider, $locationProvider, $logProvider, RoutePaths){
+        console.log('hamsersonyseser')
+
+		$stateProvider
+		.state('search', {
+            url:"/",
 			templateUrl : 'app/components/search/search.html',
 			controller: 'SearchCtrl as search',
 			resolve: {
-				airports: function(firebaseRef, $firebaseArray){
-					var ref = new Firebase('https://checkride.firebaseio.com/temp/airports/detail');
+				airports: function( $firebaseArray,pcServices){
+					var ref = pcServices.getCommonRefs().airports.child("detail");
 					return $firebaseArray(ref).$loaded();
 				},
-				examiners: function(firebaseRef, $firebaseArray){
-					var ref = new Firebase('https://checkride.firebaseio.com/temp/users/roles/examiner');
+				examiners: function( $firebaseArray,pcServices){
+					var ref = pcServices.getCommonRefs().examiners
 					return $firebaseArray(ref).$loaded();
 				}
 			}
 		})
 
-		.when(RoutePaths.login.path, {
+		.state("login", {
+            url:'/log-in',
 			templateUrl:'app/auth/login.html',
+            controller:'AuthCtrl',
+            controllerAs:'auth'
 		})
 
-		.when(RoutePaths.signUp.path, {
-			templateUrl: 'app/auth/create-account.html'
+		.state('signUp', {
+            url:RoutePaths.signUp.path,
+			templateUrl: 'app/auth/create-account.html',
+            controller:"AuthCtrl",
+            controllerAs:'auth'
         })
 
-		.when(RoutePaths.examinerCal.path, {
-			templateUrl:"app/users/views/examinerCalendar.html",
-			controller:"examinerCalendarController",
-			controllerAs:"ev"
+		.state('scheduler', {
+            url:RoutePaths.scheduler.path,
+			templateUrl:function(){
+                return "app/components/calendar/scheduler.html?" +Date.now()
+            },
+			controller:"schedulerController",
+            controllerAs:"ev"
 		})
 
-		.when(RoutePaths.profile.path, {
-			templateUrl: 'app/users/views/profile.html',
+		.state('profile',{
+            url:RoutePaths.profile.path,
+			templateUrl: 'app/users/profile/profile.html',
             controller:'profileController',
 			scope:true
 		})
 
-		.when(RoutePaths.examinerMessages.path,{
-			 templateUrl:"app/components/messaging/messages.html",
+		.state('messaging',{
+             url:RoutePaths.messages.path,
+			 templateUrl: function(){
+              return "app/components/messaging/messages.html?" + Date.now();   
+             },
 			 controller:"messagesController",
-			 controllerAs:"msg",
-			 resolve:{
-				 conversations:function(pcServices, $sessionStorage){
-                     console.log($sessionStorage.user);
-					var userInfo = $sessionStorage.user ;
-					var refs = pcServices.getCommonRefs();
-					var conversationsRef = refs.conversations.child(userInfo.$id);
-					var messagesRef = conversationsRef.child("/messages");
-					return pcServices.createFireArray(conversationsRef).$loaded()
-			}
-		}})
+			 controllerAs:"msg"
+		})
         
-        .when(RoutePaths.notifications.path, {
+        .state('notifications', {
+            url: RoutePaths.notifications.path,
             templateUrl:"app/components/notifications/notifications.html",
             controller:"notificationsController",
             controllerAs:"notify"
         })
 
 		//studentPaths
-		.when(RoutePaths.examinerList.path,{
+		.state('list-of-examiners',{
+            url:RoutePaths.examinerList.path,
 			templateUrl:function(){
-                return 'app/users/views/examinerList.html?' + Date.now()
+                return 'app/users/student/examinerList.html?' + Date.now()
             },
 			controller:"examinerListController",
 			controllerAs:'vm'
 		})
 
-		.when(RoutePaths.examinerInfo.path,{
-			templateUrl: "app/users/views/examinerInfo.html",
+		.state('examinerInfo',{
+            url:RoutePaths.examinerInfo.path,
+			templateUrl: "app/users/student/examinerInfo.html",
 			controller: "examinerInfoController",
 			controllerAs:'vm'
 		})
-
-		.when(RoutePaths.viewExaminerAvailability.path,{
-			templateUrl: "app/users/views/examinerAvailability.html",
-			controller: "examinerAvailabilityController"
-		})
-		.when(RoutePaths.studentMessages.path,{
-			templateUrl:"app/users/views/studentMessages.html"
-		})
         
-        .when(RoutePaths.upcomingAppointments.path,{
-            templateUrl:"app/users/views/upcomingAppointments.html",
-            controller: 'upcomingAppointmentsController'
+        .state('upcomingAppointments',{
+            url:RoutePaths.upcomingAppointments.path,
+            templateUrl:"app/users/student/upcomingAppointments.html",
+            controller:"upcomingAppointmentsCtrl"
         })
 
-		.otherwise({
-			redirectTo:'/'
-
-		})
+//      
+//		.otherwise({
+//			redirectTo:'/'
+//
+//		})
 		//End Author
-	}])	
+	}
+    
+    function RoutePaths(){
+        return{
+            login: {
+                path: '/log-in', 
+            },
+            signUp: {
+                path: '/create-account'
+            },
+            scheduler:{  
+                path:'/user/calendar'
+            },
+            messages:{
+                path:"/user/messages"
+            },
+            profile:{
+                path:"/user/profile"
+            },
+            notifications:{
+                path:"/user/notifications"
+            },
+            upcomingAppointments:{
+                path:"/user/upcomingAppointments"
+            },
 
-	//Move later
-	.constant('RoutePaths', {
-		login: {
-			name: 'Log in',
-			path: '/log-in',
-			eula: '/login/eula',
-			noSubscription: '/no-subscription',
-			myAccount: '/my-account',
-			createAccount: '/my-account/create',
-			createAccountFromXID: '/my-account/update',
-		},
-		signUp: {
-			name: 'Sign-Up',
-			path: '/create-account'
-			// more routes here
-		},
-		examinerCal:{  
-			path:'/user/calendar'
-		},
-		examinerMessages:{
-			path:"/user/messages"
-		},
-		profile:{
-			path:"/user/profile"
-		},
-
-		//student paths
-		examinerInfo:{
-			path:"/user/examiner-info"
-		},
-		examinerList:{
-			path:'/user/list-of-examiners'
-		},
-		viewExaminerProfile:{
-			path:"/user/view-profile-info"
-		},
-		viewExaminerAvailability:{
-			path:"/user/view-availability"
-		},
-		studentMessages:{
-			path:"/user/student-messages"
-		},
-        notifications:{
-            path:"/user/notifications"
-        },
-        upcomingAppointments:{
-            path:"/user/upcomingAppointments"
+            //student paths
+            examinerInfo:{
+                path:"/user/examiner-info"
+            },
+            examinerList:{
+                path:'/user/list-of-examiners'
+            }
         }
-        
-	})
-
-
+    }
 })()
+
+
+//name: 'Log in',
+//                path: '/log-in',
+//                eula: '/login/eula',
+//                noSubscription: '/no-subscription',
+//                myAccount: '/my-account',
+//                createAccount: '/my-account/create',
+//                createAccountFromXID: '/my-account/update',
