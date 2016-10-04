@@ -11,9 +11,39 @@
 
         <account-details></account-details>
         <div ng-show="user.role = 'examiner'">
+            <div layout="row">
+            <md-input-container class="md-block" flex-gt-sm="">
+                <label>Category</label>
+                <md-select ng-model="certification.category">
+                  <md-option ng-repeat="category in categories" value="{{category}}">
+                        {{category}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+                
+              <md-input-container class="md-block" flex-gt-sm="">
+                <label>Ratings</label>
+                <md-select ng-model="certification.rating">
+                  <md-option ng-repeat="rating in ratings" value="{{rating}}">
+                        {{rating}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+                
+              <md-input-container class="md-block" flex-gt-sm="">
+                <label>Class</label>
+                <md-select ng-model="certification.class">
+                  <md-option ng-repeat="class in classes" value="{{class}}">
+                        {{class}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+                <md-button ng-click="saveCertification()">Save Certici</md-button>
+        </div> 
+            
              <md-input-container class="md-block" flex-gt-sm>
                  <label>Yours Certifications</label>
-                  <md-chips md-select-on-focus ng-model="certificationsList" readonly="false"
+                  <md-chips md-select-on-focus read-only="true"ng-model="certificationsList" readonly="false"
                             md-on-remove="deleteCertification($chip)" md-transform-chip="saveCertification($chip)" md-max-chips="30">
                         <md-chip-template>
                           <strong>{{$chip.$id}}</strong>
@@ -24,8 +54,9 @@
             <md-input-container layout>
 			<md-select ng-click="" ng-model="selectedAirport">
 				<md-option ng-click="saveAirport(aprt.$id)" ng-value="{{aprt.$id}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in airportOptions">{{aprt.$id}}</md-option>
-			</ms-select>       
+			</md-select>      
 		</md-input-container>
+            
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Airports Your Serving</label>
                 <md-chips md-select-on-focus  md-max-chips="5000" md-on-add="saveAirport($chip)"class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)">

@@ -12,7 +12,9 @@
 		$stateProvider
 		.state('search', {
             url:"/",
-			templateUrl : 'app/components/search/search.html',
+			templateUrl :function(){
+              return 'app/components/search/search.html?'+ Date.now()  
+            } ,
 			controller: 'SearchCtrl as search',
 			resolve: {
 				airports: function( $firebaseArray,pcServices){

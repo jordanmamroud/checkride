@@ -32,6 +32,7 @@
 		
         'pcLayoutController',
         'pcLayoutDirectives',
+        'pcCommonDirectives',
         
         'pcProfileController',
         'pcProfileService',

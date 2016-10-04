@@ -153,7 +153,11 @@
                 self.uiConfig = {
                     calendar: {
     //                    googleCalendarApiKey: 'AIzaSyA0IwuIvriovVNGQiaN-q2pKYIpkWqSg0c',
-                        events: self.events,       
+                        events: function(start, end, timezone, callback){
+                            var a = angular.merge(self.events,self.approvedAppointments);
+                            console.log(a);
+                           callback(a)
+                        },       
                         slotEventOverlap:false,
                         allDayDefault: false,
                         defaultView:"agendaWeek",

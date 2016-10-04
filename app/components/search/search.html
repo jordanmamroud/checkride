@@ -1,5 +1,30 @@
+
 <div md-colors="::{backgroundColor: 'default-primary-800'}" ng-class="{'layout-fill' : !search.hasSearch}" layout-padding>
-	<div 
+	<div layout="row" layout-align="center start" layout-fill>
+
+        <sidenav flex="25">
+            <!-- Conversation List -->
+
+            <md-toolbar class="md-primary" >
+                <div class="md-toolbar-tools">
+                    <span class="pc-capitalize">Certifications</span>
+                </div>
+            </md-toolbar>
+            
+
+            <md-content>
+                
+                <pc-dropdown-input optionclick="search.filterOut" my-label="Category"my-select="search.category" my-list="search.categories"></pc-dropdown-input>
+              
+               <pc-dropdown-input optionclick="search.filterOut" my-label="Rating" my-select="search.rating" my-list="search.ratings"></pc-dropdown-input>
+                
+               <pc-dropdown-input optionclick="search.filterOut" my-label="Class" my-class="Class" my-select="search.class" my-list="search.classes"></pc-dropdown-input>
+
+            </md-content>
+        </sidenav>
+
+    
+    <div 
 		layout-align="{{search.searchBoxAlign}}"
 		ng-class="{'layout-fill' : !search.hasSearch}"
 		layout
@@ -51,8 +76,8 @@
 	<div  layout="column" flex-gt-md="40" flex >
 			
 		<md-list>
-
-			<md-card ng-repeat="user in search.examiners | filter: searchBox: user.userData.airports">
+<!-- | filter: searchBox: user.userData.airports" -->
+			<md-card ng-repeat="user in search.examiners">
 
 				<md-card-title>
 				
@@ -87,7 +112,9 @@
 			</md-card>
 
 		</md-list>
-
+        
 	</div>
 
-</div>
+</div
+    
+    </div>

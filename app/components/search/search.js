@@ -5,11 +5,12 @@
 
 function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airports, esFactory, DataService, pcServices,$sessionStorage) {
 	var self = this;
-	var ref = pcServices.getCommonRefs().main;
-	var userRef = ref.child("users/accounts");
+	var refs = pcServices.getCommonRefs();
+	var userRef = refs.accounts ;
 
 	self.airports = ''
 	self.searchText = "";
+    
 	self.querySearch = querySearch;
 	self.searchTextChange = searchTextChange;
 	self.selectedItemChange = selectedItemChange;
@@ -20,7 +21,15 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 	self.searchBoxAlign = "center center";
 	self.hasSearch = false;
 	self.fullPage = "layout-fill";
-   
+    
+    self.categories = ["airplane","rotocraft", "Lighter_Than_Air", "Power_lift"];
+
+    self.ratings = ['sport', 'recreational', 'private', 'commercial', 'flight instructor', 'Airline Transport Pilot'];
+    self.classes = ['single-engine','multiengine','land','water', 'gyroplane','helicopter','airship','free ballon'];
+    
+    self.rating = ''; self.class = ''; self.category='';
+    self.filterOut = filterOut;
+    
 	function querySearch (query) {
 	//	var results = query ? self.airports.filter( createFilterFor(query) ) : self.airports, deferred;
         searchApi(query);
@@ -35,15 +44,33 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 			return results;
 		}
 	}
-
-	function searchTextChange(text) {
+    
+    function filterOut(prop){
+        if(self.categories.indexOf(prop) != -1){
+            self.category = prop
+            var theRef = refs.certifications.child(self.category +"/users");
+            self.examiners = pcServices.createFireArray(theRef);
+            console.log(theRef.toString());
+            self.hasSearch = true;
+        }else{
+            var theRef = refs.certifications.child(self.category +"/" + prop +"/users");
+            self.examiners = pcServices.createFireArray(theRef);
+            self.hasSearch = true;
+        }
+    }
+    
+	function searchTextChange(text){
 	  if(text != ""){
 
 	  }
 	}
+    
+    function onSelect(rating){
+        var certRef = refs.certifications.child(rating);
+        
+    }
 
     function searchApi(query){
-        console.log(query);
          var settings = {
               "async": true,
               "crossDomain": true,
@@ -62,37 +89,31 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
     }
     
 	function selectedItemChange(item) {
-
 		self.hasSearch = true;
 		self.searchBoxAlign = "center start";
 		self.fullPage = "";
-        console.log("item", item);
-		var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.code.toLowerCase()).orderByKey();
+
+        var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.code.toLowerCase()).orderByKey();
 		pcServices.createFireArray(ref).$loaded().then(function(val){
 			self.examiners = val;
 		});
-
 	}
     
 	function createFilterFor(query) {
 		var lowercaseQuery = angular.lowercase(query);
-
 		return function filterFn(airports) {
 			return (airports.$id.indexOf(lowercaseQuery) === 0);
 		};
-
 	}
     
     function viewProfile(examiner){
-		var refs= pcServices.getCommonRefs();
+		
 		var examinerRef = refs.accounts.child(examiner.$id);
 		examinerRef.once("value",function(data){
             $sessionStorage.examinerInfo = {$id:data.key, data:data.val()}
 		});
 		pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
 	}
-
-
 }
 
 
