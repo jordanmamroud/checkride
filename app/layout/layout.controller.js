@@ -5,14 +5,15 @@
 	//LAYOUT CONTROLLER
 	.controller('LayoutCtrl', layoutCtrl)
     
-    layoutCtrl.$inject = ["$scope", "$mdSidenav", 'pcServices', "AuthService", 'globalConst', "$mdDialog"];
+    layoutCtrl.$inject = ["$scope", "$mdSidenav", 'pcServices', "AuthService", 'globalConst', "$mdDialog","crUserNavData"];
     
-    function layoutCtrl($scope, $mdSidenav, pcServices, AuthService, globalConst, $mdDialog){
+    function layoutCtrl($scope, $mdSidenav, pcServices, AuthService, globalConst, $mdDialog,crUserNavData){
         
         var layout = this ;
         var refs = pcServices.getCommonRefs();
         $scope.logoUrl = globalConst.app.logoPath ;
         $scope.user= '';
+        $scope.navItems = navItems ; 
         
         layout.user =  '';
         layout.isSession = false;
@@ -48,8 +49,21 @@
             });  
         }())
 
+        function navItems(role){
+            switch(role){
+                case 'examiner': 
+                    return crUserNavData.examiner ;
+                    break;
+                case 'student':
+                    return crUserNavData.student ;
+                    break;
+                default : return null ;
+            };
+        }
+        
         function showNotifications(){
-            console.log('bangers');
+            var notificationsRef = refs.notifications.child(layout.user.$id);
+            layout.notifications - pcServices.createFireArray(notificationsRef);
             $mdDialog.show({
                 scope: $scope.$new(),
                 templateUrl:'notificationsModal',

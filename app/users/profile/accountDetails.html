@@ -41,17 +41,24 @@
 	</div>
 
 	<div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+			<label>Address</label>
+			<input ng-model="user.address.address">
+		</md-input-container>
 
 		<md-input-container class="md-block" flex-gt-sm>
 			<label>City</label>
-			<input ng-model="city">
+			<input ng-model="user.address.city">
 		</md-input-container>
 
 		<md-input-container class="md-block" flex-gt-sm>
 			<label>State</label>
-			<input ng-model="state">
+			<input ng-model="user.address.state">
 		</md-input-container>
-
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>zipcode</label>
+			<input ng-model="user.address.zipcode">
+		</md-input-container>
 	</div>
 
 	<div layout-gt-sm="row">  

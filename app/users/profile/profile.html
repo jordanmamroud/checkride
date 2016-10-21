@@ -2,48 +2,54 @@
 
 	<div layout="column" flex flex-gt-md="60" layout-padding>
        
-    <form stripe-form="stripeCallback">
-        <input ng-model="number" placeholder="Card Number" />
-        <input ng-model="expiry" placeholder="Expiration" />
-        <input ng-model="cvc" placeholder="CVC" />
-        <button type="submit">Submit</button>
-    </form>
-
         <account-details></account-details>
-        <div ng-show="user.role = 'examiner'">
+        
+        <div ng-show="user.role == 'examiner'">
             <div layout="row">
-            <md-input-container class="md-block" flex-gt-sm="">
-                <label>Category</label>
-                <md-select ng-model="certification.category">
-                  <md-option ng-repeat="category in categories" value="{{category}}">
-                        {{category}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-                
-              <md-input-container class="md-block" flex-gt-sm="">
-                <label>Ratings</label>
-                <md-select ng-model="certification.rating">
-                  <md-option ng-repeat="rating in ratings" value="{{rating}}">
-                        {{rating}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-                
-              <md-input-container class="md-block" flex-gt-sm="">
-                <label>Class</label>
-                <md-select ng-model="certification.class">
-                  <md-option ng-repeat="class in classes" value="{{class}}">
-                        {{class}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-                <md-button ng-click="saveCertification()">Save Certici</md-button>
-        </div> 
+                 <pc-dropdown-input optionclick="null" my-label="Category" my-select="certification.category" my-list="categories"></pc-dropdown-input>   
+
+                 <pc-dropdown-input optionclick="null" my-label="Ratings" my-select="certification.rating" my-list="ratings"></pc-dropdown-input>
+
+                 <pc-dropdown-input optionclick="null" my-label="Class" my-select="certification.class" my-list="classes"></pc-dropdown-input>
+
+                <md-button ng-click="saveCertification()">Save Certification</md-button>
+            </div>
+            
+            <md-input-container layout>
+                <md-autocomplete
+                    flex="80"
+                    ng-model="searchBox" 
+                    md-selected-item="selectedItem" 
+                    md-search-text="searchText" 
+                    md-items="airport in querySearch(searchText)"
+                    md-selected-item-change="saveAirport(airport.code)"
+                    md-item-text="airport.name"
+                    placeholder="Search by airports"
+                    ng-disabled="false"
+                    md-colors="::{backgroundColor: 'default-grey-100'}">
+
+                    <md-item-template>
+                        <span 
+                            ng-model="searchBox" 
+                            md-highlight-text="searchText"
+                            style="text-transform:uppercase; font-weight:bold;">
+                            {{airport.$id}}
+                        </span>
+                        <i> ({{airport.name}}) </i>
+                    </md-item-template>
+                    
+                </md-autocomplete>
+
+<!--
+                <md-select ng-model="mainAirport">
+                    <md-option ng-click="mainAirport(aprt)" ng-value="{{aprt}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in h.airportOptions">{{aprt.code}}</md-option>
+                </md-select>      
+-->
+             </md-input-container>
             
              <md-input-container class="md-block" flex-gt-sm>
                  <label>Yours Certifications</label>
-                  <md-chips md-select-on-focus read-only="true"ng-model="certificationsList" readonly="false"
+                  <md-chips md-select-on-focus read-only="true" ng-model="certificationsList" readonly="false"
                             md-on-remove="deleteCertification($chip)" md-transform-chip="saveCertification($chip)" md-max-chips="30">
                         <md-chip-template>
                           <strong>{{$chip.$id}}</strong>
@@ -52,83 +58,22 @@
             </md-input-container>
             
             <md-input-container layout>
-			<md-select ng-click="" ng-model="selectedAirport">
-				<md-option ng-click="saveAirport(aprt.$id)" ng-value="{{aprt.$id}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in airportOptions">{{aprt.$id}}</md-option>
-			</md-select>      
-		</md-input-container>
+                <md-select ng-model="selectedAirport">
+                    <md-option ng-click="saveAirport(aprt.code)" ng-value="{{aprt.code}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in airportOptions">{{aprt.$id}}</md-option>
+                </md-select>      
+            </md-input-container>
             
             <md-input-container class="md-block" flex-gt-sm>
                 <label>Airports Your Serving</label>
-                <md-chips md-select-on-focus  md-max-chips="5000" md-on-add="saveAirport($chip)"class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)">
+                <md-chips read-only="true" md-select-on-focus  md-max-chips="5000" md-on-add="saveAirport($chip)"class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)">
                     <md-chip-template>
                       <strong>{{$chip.$id}}</strong>
                         <em></em>
                     </md-chip-template>
                 </md-chips>
             </md-input-container>
-
-          <md-button class='md-primary' ng-click="updateUser()">Update Account</md-button>
+            
         </div>
+         <md-button class='md-primary' ng-click="updateUser()">Update Account</md-button>
     </div>
 </div>
-<!--
-
-<div layout-align="center start" layout="row" layout-padding>
-
-	<div layout="column" flex flex-gt-md="60" layout-padding>
-
-		<account-details>
-
-			<span ng-show="user.user.role === 'examiner'">
-
-				<div layout>
-					
-					<label>Certifications</label>
-					<md-chips 
-						md-select-on-focus 
-						ng-model="user.certificationsList" 
-						readonly="false" 
-						md-on-remove="user.deleteCertication($chip)" 
-						md-transform-chip="user.saveCertification($chip)" 
-						md-max-chips="30">
-
-						<md-chip-template>
-							<strong>{{$chip.$id}}</strong>
-						</md-chip-template>
-						
-					</md-chips>
-						
-				</div>
-
-				<div layout class="blue">
-					<label>Airports</label>
-
-					<md-chips 
-						md-select-on-focus  
-						class="custom-chips" 
-						ng-model="airportsList" 
-						name="airport" 
-						readonly="false" 
-						md-on-remove="deleteAirport($chip)" 
-						md-transform-chip="saveAirport($chip)" 
-						md-max-chips="30">
-
-						<md-chip-template>
-							<strong>{{$chip.$id}}</strong>
-							<em></em>
-						</md-chip-template>
-
-					</md-chips>
-
-				</div>
-			
-			</span>
-
-		</account-details>
-
-		<md-button class='md-primary' ng-click="user.updateUser()">Update Account</md-button>
-
-	</div>
-
-</div>
--->

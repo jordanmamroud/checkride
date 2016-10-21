@@ -9,40 +9,42 @@
         AuthCtrl.$inject = ["$scope", "AuthService", "pcServices","$mdDialog","$localStorage"];
         
         function AuthCtrl($scope, AuthService, pcServices, $mdDialog,$localStorage){
-            
+            console.log('fame')
 			var self = this;
 			self.auth = AuthService.auth;
-			self.login = login;
+		
             self.roles= ['student', 'instructor','examiner'];
 			self.user = null;
             
             //functions
+            self.login = login;
+            self.loginOnKeypress = loginOnKeypress ; 
 			self.logout = AuthService.logout;
             self.createAccountPage = createAccountPage;
             self.createAccount = createAccount;
             self.sendPasswordResetEmail = sendPasswordResetEmail
             self.showPasswordResetModal = showPasswordResetModal;
 
-            function login(){
-				AuthService.login(self.emailAddress, self.password);
+            function login(keyCode){
+                AuthService.login(self.emailAddress, self.password);
 			};
-
+            
             function createAccountPage(){
 				pcServices.changePath(pcServices.getRoutePaths().signUp.path) ;
-			}
+			};
             
             function sendPasswordResetEmail(){
                 AuthService.sendPasswordResetEmail(self.email);
-            }
+            };
             
             function showPasswordResetModal(){
                 pcServices.showModal('passwordResetModal', true);
-            }
+            };
             
             function createAccount(){
                 var newUser = new AuthService.User({first:self.firstName,last:self.lastName}, self.emailAddress, self.phone, self.role, self.photoUrl);
 				AuthService.createUser(newUser, self.password);
-            }
+            };
 		}
 })()
 

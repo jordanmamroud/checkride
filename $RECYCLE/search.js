@@ -1,18 +1,68 @@
 (function(){angular.module('pcSearch',[])
 
 //SEARCH CONTROLLER
-.controller('SearchCtrl', ['$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices', '$sessionStorage',searchCtrl]);
+.controller('SearchCtrl', ['$filter','$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'esFactory', 'DataService', 'pcServices', '$sessionStorage', searchCtrl ]);
 
-function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airports, esFactory, DataService, pcServices,$sessionStorage) {
+function searchCtrl($filter,$scope, $log, $q, $timeout, $firebaseArray,examiners, airports, esFactory, DataService, pcServices,$sessionStorage) {
 	var self = this;
 	var refs = pcServices.getCommonRefs();
 	var userRef = refs.accounts ;
+    
+       var mapsRequest= {
+            url:"https://blooming-river-27917.herokuapp.com/gmapreq?url=http://maps.googleapis.com/maps/api/geocode/json?address=08901&key=AIzaSyAP1qGdGeoLizmASNHuCbBmj0A--M3T31o",
+            type:"GET",
+            error:function(er,arr,thr){
+                console.log(thr)
+            }
+        }
+
+        $.ajax(mapsRequest).done(function(res){
+            console.log(JSON.parse(res));
+            var location = JSON.parse(res).results[0].geometry.location;
+            self.lat = location.lat ;
+            self.lng = location.lng;
+
+        })  
+        
+    function distance(lon1, lat1, lon2, lat2) {
+        console.log(lon1,lat1,lon2,lat2)
+          var R = 6371; // Radius of the earth in km
+          var dLat = (lat2-lat1) * Math.PI / 180;  // Javascript functions in radians
+          var dLon = (lon2-lon1) * Math.PI / 180; 
+          var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                  Math.sin(dLon/2) * Math.sin(dLon/2); 
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+          var d = R * c; // Distance in km
+        
+          return d;
+    }
+
+    function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                alert( "User denied the request for Geolocation.")
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.")
+                break;
+            case error.TIMEOUT:
+               alert( "The request to get user location timed out.")
+                break;
+            case error.UNKNOWN_ERROR:
+                alert( "An unknown error occurred.")
+                break;
+        }
+    }
+    
+    
+    self.filters =  '';
+    self.searchInput = true ;
 
 	self.airports = ''
 	self.searchText = "";
     
 	self.querySearch = querySearch;
-	self.searchTextChange = searchTextChange;
 	self.selectedItemChange = selectedItemChange;
     self.viewProfile = viewProfile;
     
@@ -23,15 +73,14 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 	self.fullPage = "layout-fill";
     
     self.categories = ["airplane","rotocraft", "Lighter_Than_Air", "Power_lift"];
-
     self.ratings = ['sport', 'recreational', 'private', 'commercial', 'flight instructor', 'Airline Transport Pilot'];
     self.classes = ['single-engine','multiengine','land','water', 'gyroplane','helicopter','airship','free ballon'];
     
-    self.rating = ''; self.class = ''; self.category='';
+    self.rating = null; self.class = null ; self.category=null;
     self.filterOut = filterOut;
+    self.user = pcServices.createFireObj(refs.user);
     
 	function querySearch (query) {
-	//	var results = query ? self.airports.filter( createFilterFor(query) ) : self.airports, deferred;
         searchApi(query);
 
 		var results = query ? self.airports : self.airports, deferred ; 
@@ -45,29 +94,54 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 		}
 	}
     
+//    $timeout(function(){
+//        
+//    })
+    
     function filterOut(prop){
-        if(self.categories.indexOf(prop) != -1){
-            self.category = prop
-            var theRef = refs.certifications.child(self.category +"/users");
-            self.examiners = pcServices.createFireArray(theRef);
-            console.log(theRef.toString());
-            self.hasSearch = true;
-        }else{
-            var theRef = refs.certifications.child(self.category +"/" + prop +"/users");
-            self.examiners = pcServices.createFireArray(theRef);
-            self.hasSearch = true;
+
+        if(self.categories.indexOf(prop)!= -1){self.category = prop;} ;
+        if(self.ratings.indexOf(prop)!= -1){self.rating = prop } ;
+        if(self.classes.indexOf(prop)!= -1){self.class = prop } ;   
+    
+        if(self.category && !self.rating){
+            var filteredExaminers = refs.certifications.child(self.category);
+            self.examiners = pcServices.createFireArray(filteredExaminers);
+            self.hasSearch =true
+        }
+        var filteredExaminers = refs.certifications.child(self.category);
+        self.examiners = pcServices.createFireArray(filteredExaminers);
+        self.examiners.$loaded().then(function(){
+            var latlon = self.lat + "," + self.lng ;
+            for(var i =0; i<self.examiners.length; i++){
+                var distanceToUser = distance(self.lng,self.lat, self.examiners[i].mainAirport.lng , self.examiners[i].mainAirport.lat);
+                console.log(distanceToUser);
+                self.examiners[i].distance = parseFloat(distanceToUser * 0.62137).toFixed(2).toString();
+            }
+        });  
+        
+        if(self.category && self.rating){
+            self.my = function(examiner){
+                if(examiner.rating.hasOwnProperty(self.rating)){
+                    if(self.class){
+                        for(var b in examiner.rating){
+                           if(examiner.rating[b].hasOwnProperty(self.class)){
+                                return true
+                            }
+                        }
+                    }else{
+                            return true;
+                    }
+                }   
+                else{
+                    return false
+                }
+            }
         }
     }
-    
-	function searchTextChange(text){
-	  if(text != ""){
 
-	  }
-	}
-    
     function onSelect(rating){
         var certRef = refs.certifications.child(rating);
-        
     }
 
     function searchApi(query){
@@ -95,7 +169,7 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 
         var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.code.toLowerCase()).orderByKey();
 		pcServices.createFireArray(ref).$loaded().then(function(val){
-			self.examiners = val;
+			self.examiners = val ;
 		});
 	}
     
@@ -107,7 +181,6 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 	}
     
     function viewProfile(examiner){
-		
 		var examinerRef = refs.accounts.child(examiner.$id);
 		examinerRef.once("value",function(data){
             $sessionStorage.examinerInfo = {$id:data.key, data:data.val()}
@@ -115,9 +188,6 @@ function searchCtrl($scope, $log, $q, $timeout, $firebaseArray,examiners, airpor
 		pcServices.changePath(pcServices.getRoutePaths().examinerInfo.path);
 	}
 }
-
-
-
 })()
 
 

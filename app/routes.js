@@ -7,7 +7,6 @@
 	.constant('RoutePaths',RoutePaths())
     
      function routeConfig( $stateProvider, $locationProvider, $logProvider, RoutePaths){
-        console.log('hamsersonyseser')
 
 		$stateProvider
 		.state('search', {
@@ -91,13 +90,13 @@
 			controllerAs:'vm'
 		})
         
-        .state('upcomingAppointments',{
-            url:RoutePaths.upcomingAppointments.path,
-            templateUrl:"app/users/student/upcomingAppointments.html",
-            controller:"upcomingAppointmentsCtrl"
+        .state('reports',{
+            url:RoutePaths.reports.path,
+            templateUrl:"app/components/reports/reports.html",
+            controller:"reportsController",
+            controllerAs:"reports"
         })
-
-//      
+    
 //		.otherwise({
 //			redirectTo:'/'
 //
@@ -125,16 +124,15 @@
             notifications:{
                 path:"/user/notifications"
             },
-            upcomingAppointments:{
-                path:"/user/upcomingAppointments"
+            reports:{
+                path:"/user/reports"
             },
-
-            //student paths
-            examinerInfo:{
-                path:"/user/examiner-info"
-            },
+            
             examinerList:{
                 path:'/user/list-of-examiners'
+            },
+            examinerInfo:{
+                path:'/user/examiner-info'
             }
         }
     }

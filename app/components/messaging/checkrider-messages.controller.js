@@ -10,7 +10,9 @@
         var self = this;
         
 	    var conversationsRef = refs.userConversations;
-  
+        
+        
+          self.viewingMessages = false
         // scope variables
         self.currentConversation  ;
         self.conversationMessages =[];
@@ -19,6 +21,8 @@
         self.recipientsList= 'no recipients';
         self.recipient = {name: null}; 
 	    self.user = pcServices.createFireObj(refs.user); 
+        
+    
         
         //scope functions
         self.deleteMessage = deleteMessage
@@ -47,6 +51,7 @@
             conversationsRef.child(convo.$id).child("hasNewMsg").set(false);
             self.currentConversation = convo ;
             self.conversationMessages = pcServices.createFireArray(currentConvoMessages);
+            self.viewingMessages = true
         };
 
         function sendReply(){
@@ -56,7 +61,6 @@
 
         function setNewConversationDialog(){
             self.recipientsList = messagesService.setRecipientsList(self.user);
-            console.log('ah',self.user);
             $mdDialog.show({
                 scope:$scope.$new(),
                 templateUrl:"sendMessageModal",

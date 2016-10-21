@@ -4,9 +4,34 @@
 			<div class="md-list-item-text">
 				<a href="{{item.path}}">
 					<h3 class="md-primary" styl><i class="material-icons">{{item.icon}}</i>&nbsp;&nbsp;{{item.title}}</h3>
-				</a> 
-				
+				</a>
 			</div> 
 		</md-list-item>
 	</md-list> 
 </md-content>
+
+
+<!--
+
+	<md-sidenav
+				ng-show="layout.showSidebar" 
+			md-is-locked-open="true"
+			flex="15"
+			 md-colors="::{backgroundColor: 'default-primary'}"
+			 md-theme="dark"
+			md-component-id="pc-sidenav-left">
+			
+		    <md-content flex layout="column" layout-padding  md-colors="::{backgroundColor: 'default-primary'}">
+                <md-list>
+                    <md-list-item ng-repeat="item in navItems(user.role)" class="md-3-line">
+                        <div class="md-list-item-text">
+                            <a href="{{item.path}}">
+                                <h3 class="md-primary" styl><i class="material-icons">{{item.icon}}</i>&nbsp;&nbsp;{{item.title}}</h3>
+                            </a> 
+
+                        </div> 
+                    </md-list-item>
+                </md-list> 
+            </md-content>
+		</md-sidenav>
+-->

@@ -239,7 +239,7 @@ angular.module('ui.calendar', [])
                     calendarWatchEvent : '&'
                 },
                 controller : 'uiCalendarCtrl',
-                link : function (scope, elm, attrs, controller) {
+                link : function (scope, elm, attrs, controller){
                     var sources = scope.eventSources;
                     var sourcesChanged = false;
                     var calendar;

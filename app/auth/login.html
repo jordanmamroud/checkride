@@ -6,19 +6,19 @@
 
 	<div layout="row">
 
-		<form ng-submit="auth.login()" name="pc-login" class="signin">
+		<form name="pc-login" class="signin">
 			<!-- EMAIL -->
-			<md-input-container layout>
+			<md-input-container class="md-block">
 				<input placeholder="Email" required type="email" ng-model="auth.emailAddress">
 			</md-input-container>
 
 			<!-- PASSWORD -->
-			<md-input-container layout>
-					<input placeholder="Password" required type="password" ng-model="auth.password">
+			<md-input-container class="md-block">
+					<input ng-keypress="$event.keyCode === 13 ? auth.login(): null" placeholder="Password" required type="password" ng-model="auth.password">
 			</md-input-container>
 
-			<ms-input-container layout>
-				<md-button type="submit" class="md-raised md-primary">Login</md-button>
+			<ms-input-container layout >
+				<md-button ng-click="auth.login()" class="md-raised md-primary">Login</md-button>
 				<md-button ng-click="auth.createAccountPage()" class="md-raised">Create account</md-button>
 			</ms-input-container>
 
@@ -29,6 +29,7 @@
 		</form>
 	</div>
 </div>
+<!--</div>event.keyCode === 13 ? auth.login(): null-->
 
 <script type="text/ng-template" id="passwordResetModal">
    <h1>Password Reset Email</h1>

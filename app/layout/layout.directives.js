@@ -27,26 +27,12 @@
                 return "app/layout/sidebar.html?" + Date.now();
             },
             scope: false,
-            controller:sidebarController
+            controller: sidebarController
         }
     }
     
-   
-    
-    function sidebarController($scope, crUserNavData){
-        $scope.navItems = navItems ; 
-
-        function navItems(role){
-            switch(role){
-                case 'examiner': 
-                    return crUserNavData.examiner ;
-                    break;
-                case 'student':
-                    return crUserNavData.student ;
-                    break;
-                default : return null ;
-            };
-        }
+    function sidebarController($scope){
+        
     }
     
     function pcSessionStatus(pcServices, profileService){

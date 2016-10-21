@@ -29,7 +29,9 @@
 		'firebase',
 		'ngRoute',
 		'elasticsearch',
+        'ui.bootstrap',
 		
+        
         'pcLayoutController',
         'pcLayoutDirectives',
         'pcCommonDirectives',
@@ -40,11 +42,14 @@
         'pcStudentControllers',
         'pcMessagesController',
         'pcMessagesService',
-        
+        "pcReports.controller",
+        "pcReports.service",
+    
 		'pcRoutes',
 		'pcAuthService',
         'pcAuthController',
-		'pcSearch',
+		'pcSearch.controller',
+		'pcSearch.service',
 		'pcDataService',
         'pcNotificationsController',
         'pcSchedulerController',
@@ -108,6 +113,11 @@
 					path: '/user/profile',
 					icon: 'person'
                 },
+                reports:{
+                    title:'Reports',
+                    path:"/user/reports",
+                    icon:'date_range'
+                },
 
                 notifications:{
                     title:"notifications",
@@ -130,9 +140,9 @@
 					path: '/user/profile',
 					icon: 'person'
 				},
-                upcomingAppointments:{
+                reports:{
                     title:'Upcoming Appointments',
-                    path: 'user/upcomingAppointments',
+                    path: "user/reports",
                     icon:'date_range'
                 },
                 calendar:{

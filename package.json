@@ -15,6 +15,13 @@
     "elasticsearch-browser": "^11.0.1",
     "express": "^4.13.3",
     "font-awesome": "^4.6.3",
+   
+    "angular-ui-calendar": "^1.0.1",
+    "fullcalendar": "^2.8.0",
+    "firebase-token-generator": "^2.0.0",
+    "angular-route": "^1.5.8",
+    "angular-payments": "*",
+    "angular-ui-router": "ui-router#^0.3.1",
       
     "body-parser": "^1.15.2",
     "cors": "^2.7.1",

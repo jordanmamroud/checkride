@@ -9,39 +9,43 @@
 
 <div class='toast' style='display:none'>You have a new Appointment Request</div>
 
+<!-- layout fills are needed for browser compatability !-->
 
-<!--
-<div layout="column" layout-fill layout-padding>	
-	<h2 class="pc-capitalize">{{ev.name}}</h2>
-	<div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div>
-</div>
--->
+<div layout="row" layout-fill layout-align="center center" >
+    
+	
+        <md-tabs layout-fill md-border-bottom>
 
-<div layout="row" layout-align="center center" >
-		<div layout-fill >
-			<md-tabs md-dynamic-height md-border-bottom>
-			
-				<md-tab label="schedule">
-					<div class="md-padding">
-                           <h2 class="pc-capitalize">{{ev.name.first + " "+ ev.name.last}}</h2>
-                           <div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div
-					</div>
-				</md-tab>
-             
-                <md-tab label="approved Appointments">
-                    <md-list>
-                        <md-list-item ng-repeat="apt in ev.approvedAppointments">
-                            <div class="md-list-item-text" layout="column">
-                                <h3 class="pc-capitalize" >{{"appointment with " + apt.title}}</h3>
-                                <h3>{{"Appointment Start: " + apt.start}}</h3>
-                                <h3>{{"Appointment End: " +apt.end}}</h3>
-                                <md-divider></md-divider>
-                            </div>
-                        </md-list-item>
-                    </md-list>
-                </md-tab>
-			</md-tabs>
-		</div>
+            <md-tab flex="100" label="schedule">
+                <div class="md-padding">
+                      <md-menu>
+                            <md-icon hide-gt-xs ng-click="$mdOpenMenu($event)">menu</md-icon>
+                            <md-menu-content>
+                                <md-menu-item ng-click="ev.changeView('agendaDay')">Day</md-menu-item>
+                                <md-menu-item ng-click="ev.changeView('agendaWeek')">Week</md-menu-item>
+                                <md-menu-item ng-click="ev.changeView('month')">Month</md-menu-item>
+                                <md-menu-item ng-click="ev.getAppointmentRequests()">Pending Requests</md-menu-item>
+                                <md-menu-item ng-click="ev.changeView('month')">Settings</md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                       <div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div>
+                </div>
+            </md-tab>
+
+            <md-tab label="approved Appointments">
+                <md-list>
+                    <md-list-item ng-repeat="apt in ev.approvedAppointments">
+                        <div class="md-list-item-text" layout="column">
+                            <h3 class="pc-capitalize" >{{"appointment with " + apt.name}}</h3>
+                            <h3>{{"Appointment Start: " + apt.start }}</h3>
+                            <h3>{{"Appointment End: " +apt.end }}</h3>
+                            <md-divider></md-divider>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-tab>
+        </md-tabs>
+		
 	</div>
 
     <script id='warningModal' type="text/ng-template">
@@ -108,7 +112,7 @@
 							</label>
 						</form>
                     </div>
-                    <md-button class="md-raised md-primary" ng-click="ev.createEvent()">mate</md-button>		
+                    <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>		
 				</div>
 			</md-content>
 			
@@ -130,6 +134,7 @@
 				<md-button class="md-primary md-raised" ng-click="ev.deleteSingleRecurEvent()">remove just this event</md-button>
 				<md-button class="md-primary md-raised" ng-click="ev.deleteEventSeries()">remove all events</md-button>
 			</div>
+			
 		</md-content>
 	</script> 
 

@@ -1,16 +1,89 @@
-<div class="md-toolbar-tools">
+<div class="md-toolbar-tools"  layout="row" layout-align="space-between center">
+       
 
-    <header class="nav-header">
-        <a href="/" class="cr-logo"><img src="{{logoUrl}}" alt="" style="max-width:100%;"width='auto'></a>
-    </header>
+        <a hide-gt-xs hide-xs show-gt-sm flex href="/" class="cr-logo"><img src="{{logoUrl}}" alt=""></a>
+        
+        <div hide-gt-sm>
+              <md-menu>
+                  
+                   <span ng-click="$mdOpenMenu($event)"><i class="material-icons">menu</i></span>
 
-    <button type="button" class= "md-icon-button md-button" ng-click="openMenu()" hide-gt-sm>
-        <md-icon><i class="fa fa-bars fa-2x" aria-hidden="true"></i></md-icon>
-    </button>
+                  <md-menu-content width="6">
+                      <md-menu-item ng-repeat="item in navItems(user.role)">
+                         <a href="{{item.path}}">
+                            <md-button><h3 class="md-primary" style><i class="material-icons">{{item.icon}}</i>&nbsp;&nbsp;{{item.title}}</h3>
+                        </a>
+                         </md-button>
+                      </md-menu-item>
+                  </md-menu-content>
+        </div>
     
-    
-    <span flex></span>
+        <div ng-show="!layout.isLoggedIn">
+            <a ng-href="/create-account"><md-button class="md-primary" aria-label="Sign Up">Sign Up</md-button></a>
+            <a ng-href="/log-in"><md-button class="md-raised md-primary" aria-label="Log In">log in</md-button></a>
+        </div>
+        
+      <div ng-show="layout.isLoggedIn">
 
-    <pc-session-status></pc-session-status>
+            <span ng-click="layout.showConversations()"><i class="material-icons">assistant</i></span>
+            <span ng-click="layout.showNotifications()"><i class="material-icons">layers</i></span>
+            <!-- Users Name -->
+            <span class="pc-capitalize" hide-xs>{{layout.user.name.first}} {{layout.user.name.last}}</span>	
 
+
+                <!-- Trigger element is a md-button with an icon -->
+            <md-menu>
+                <md-button 
+                    ng-click="$mdOpenMenu($event)" 
+                    class="md-icon-button" 
+                    aria-label="Open sample menu" 
+                    style="background-image:url({{layout.user.photoUrl}}); background-size: cover;">
+                </md-button>
+
+                <md-menu-content>
+
+                    <md-menu-item>
+                        <a href="../user/profile" class="md-button">My Profile</a>
+                    </md-menu-item>
+
+                    <md-menu-item>	
+
+                        <md-button ng-click="layout.logout()">Log out <span class="pc-capitalize">{{layout.user.name.first}}</span></md-button>
+                    </md-menu-item>
+                </md-menu-content>
+
+            </md-menu>
+      </div>
+ <!-- modal templates -->
+     <script id="conversationsModal" type="text/ng-template">
+            <md-list>
+                <md-list-item ng-repeat="convo in layout.conversationsList">
+                     <div class="md-list-item-text">
+                        <div layout="column" flex>
+                            
+                                <span style="background-image:url({{convo.photoUrl}}); background-size: cover;"></span>
+                                <h4 class="md-headline pc-capitalize md-block">{{convo.users.name}}</h4>
+                                <h5 class="md-subhead pc-capitalize md-block">{{convo.lastMsg}}</h5>
+                            
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+    </script>
+
+    <script id="notificationsModal" type="text/ng-template">
+        <md-list>
+                <md-list-item ng-repeat="note in layout.notifications">
+                     <div class="md-list-item-text">
+                        <div layout="column">
+                           <img src="{{note.photoUrl}}" alt="">
+                            <h4 class="md-headline pc-capitalize md-block">{{note.name}}</h4>
+                            <h5 class="md-subhead pc-capitalize md-block">{{note.sentAt}}</h5>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+    </script>
 </div>
+
+

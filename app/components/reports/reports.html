@@ -1,0 +1,43 @@
+<body>
+   <div layout="row">
+   <md-input-container layout>
+     <md-select ng-model="reports.selectedMonth">
+        <md-option ng-click="reports.drawCharts($index)" ng-value="$index" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="dateFilter in reports.dateFilterOptions track by $index">{{dateFilter}}</md-option>
+     </md-select>
+    </md-input-container>
+    
+    <md-input-container layout>
+     <md-select ng-model="reports.selectedStatus">
+        <md-option  value="confirmed">confirmed</md-option>
+        <md-option  value="pending">pending</md-option>
+        <md-option  value="deleted">cancelled</md-option>
+     </md-select>
+    </md-input-container>
+    
+   </div>
+    
+   
+    <!--Div that will hold the pie chart-->
+    <div id="pieChart"></div> 
+    <div id="barChart"></div>
+    
+<table class="table">
+          <thead>
+            <tr>
+              <th>Appointment With</th>
+              <th>Appointment Start</th>
+              <th>Appointment End</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="apt in reports.approvedAppointments | filter: reports.filterAppts">
+              <td>{{apt.name}}</td>
+              <td>{{apt.start}}</td>
+              <td>{{apt.end}}</td>
+              <td></td>
+            </tr>
+         </tbody>
+</table>
+        
+</body>

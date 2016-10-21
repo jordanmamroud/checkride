@@ -8,28 +8,28 @@
 		<h3 class="text-center">Create your free account</h3>
 		
 		<div layout>
-			<md-input-container layout>
+			<md-input-container class="md-block">
 				<input type="text" required placeholder="First" ng-model="auth.firstName">
 			</md-input-container>
 
-			<md-input-container layout>
+			<md-input-container class="md-block">
 				<input type="text" required placeholder="Last" ng-model="auth.lastName" >
 			</md-input-container>
 		</div>
 
-		<md-input-container layout>
+		<md-input-container class="md-block">
 			<input type="email" required placeholder="Email Address" ng-model="auth.emailAddress">
 		</md-input-container>
 
-		<md-input-container layout>
+		<md-input-container class="md-block">
 			 <input type="password" required placeholder="Password" ng-model="auth.password">
 		 </md-input-container>
 
-		 <md-input-container layout>
-			 <input type="text" required placeholder="phone number" ng-model="auth.phone">
+		 <md-input-container class="md-block">
+			 <input type="text" required placeholder="phonee number" ng-model="auth.phone">
 		 </md-input-container>
 
-		<md-input-container layout>
+		<md-input-container class="md-block">
 			<label for="">I am a...</label>
 			<md-select ng-model="auth.role">
 				<md-option ng-repeat="role in auth.roles" value="{{role}}">{{role}}</md-option>

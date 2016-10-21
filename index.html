@@ -9,14 +9,13 @@
 	
 		<!-- Libraries -->
 		<!-- Stylesheets -->
+		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<!-- Icons: Switch to sass later -->
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" href="assets/bower_components/fullcalendar/dist/fullcalendar.css"/>
 		<link rel="stylesheet" href="node_modules/angular-material/angular-material.css"/>
-	
-	
 	
 		<script type="text/javascript" src="assets/bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="assets/bower_components/moment/min/moment.min.js"></script>
@@ -25,7 +24,8 @@
         <script type="text/javascript" src="assets/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 		<script type="text/javascript" src="node_modules/angular-animate/angular-animate.js"></script>
 		<script type="text/javascript" src="node_modules/angular-aria/angular-aria.js"></script>            
-		<script type="text/javascript" src="node_modules/angular-material/angular-material.js"></script>     
+		<script type="text/javascript" src="node_modules/angular-material/angular-material.js"></script>    
+		<script type="text/javascript" src="node_modules/angular-bootstrap/ui-bootstrap.js"></script> 
 <!--
 		<script type="text/javascript" src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
 		<script type="text/javascript" src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
@@ -41,8 +41,13 @@
 		<script type='text/javascript' src="assets/bower_components/fullcalendar/dist/gcal.js"></script>
 		<script type="text/javascript" src="node_modules/angular-cookies/angular-cookies.js"></script>
 		<script type="text/javascript" src="app/components/notifications/notifications.controller.js"></script>
+		<script type="text/javascript" src="app/components/reports/reports.controller.js"></script>
+		<script type="text/javascript" src="app/components/reports/reports.service.js"></script>
+
 		<!--FOR DEV PURPOSES-->
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js"></script>
+		   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		   
 		<script>
          var config = {
                 apiKey: "AIzaSyCbEbePZr9ehBrO5U6lUVgDzxPeZMO7dnk",
@@ -68,7 +73,8 @@
 		<script type="text/javascript" src="app/services.js"></script>
 		<script type="text/javascript" src="app/routes.js"></script>
 		<script type="text/javascript" src="app/services/data.service.js"></script>
-		<script type="text/javascript" src="app/components/search/search.js"></script>
+		<script type="text/javascript" src="app/components/search/search.controller.js"></script>
+		<script type="text/javascript" src="app/components/search/search.service.js"></script>
 
 		<script type="text/javascript" src="app/auth/auth.service.js"></script>
 		<script type="text/javascript" src="app/auth/auth.controller.js"></script>
@@ -78,7 +84,7 @@
 		<script type="text/javascript" src="app/components/calendar/calendar.services.js"></script>
         <script type="text/javascript" src="app/components/calendar/scheduler.controller.js"></script>
         <script type="text/javascript" src="app/components/calendar/viewingCal.controller.js"></script>
-		<script type="text/javascript" src="app/components/calendar/viewingcal.Directive.js"></script> 
+		<script type="text/javascript" src="app/components/calendar/viewingcal.directive.js"></script> 
 
         <script type="text/javascript" src="node_modules/elasticsearch-browser/elasticsearch.angular.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.js"></script>
@@ -118,8 +124,10 @@
     	flex
     	style="overflow: auto; height: 100%;">
 
-		<!-- SIDEBAR -->
-		<md-sidenav 
+		  
+			<!-- SIDEBAR -->
+		<md-sidenav
+		    hide-xs hide-gt-xs show-gt-md
 			ng-show="layout.showSidebar" 
 			md-is-locked-open="true"
 			flex="15"
@@ -136,10 +144,11 @@
 		<md-content 
 			layout="column" 
 			md-scroll-y 
-			flex 
+	        flex
+	        layout-fill
+			>
 			
-			style="overflow: auto; height: 100%; background-color:white;">
-			<div id="pc-app-content" ui-view flex="noshrink"></div>
+			<div layout-fill id="pc-app-content" ui-view></div>
 		</md-content>
 	</div>
 

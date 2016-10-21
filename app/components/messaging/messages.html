@@ -1,6 +1,5 @@
 <div layout="row" layout-align="center start" layout-fill>
-
-	<sidenav flex="25">
+	<sidenav hide-xs flex="25">
 		<!-- Conversation List -->
 		
 		<md-toolbar class="md-primary" >
@@ -26,11 +25,12 @@
 		
 		<md-button class="md-raised md-primary" flex ng-click="msg.setNewConversationDialog(msg.currentConversation)" style="text-align:center;"> New Conversation </md-button>
 	</sidenav>
+	
 
 	<md-divider></md-divider>
 
 	<!-- Message List -->
-	<div layout="column" flex ng-show="msg.currentConversation != undefined">
+	<div hide-xs layout="column" flex ng-show="msg.currentConversation != undefined">
 
 		<md-toolbar layout-gt-xs="row" >
 			<div class="md-toolbar-tools">
@@ -57,16 +57,73 @@
 			</md-list>
 		</md-content>
 
+		<div md-colors="::{backgroundColor: 'default-background-300'}" layout layout-padding layout-align="center center">
+			<md-input-container flex="80" flex-offset="5">
+				<textarea id="message" rows="1" placeholder="Message..." flex ng-model="msg.body"></textarea>
+			</md-input-container>
+			<md-input-container flex>
+				<i  ng-click="msg.sendReply()" class="fa fa-paper-plane" aria-hidden="true"></i>	
+			</md-input-container>
+		</div>
+	</div>
+	
+	<!-- mobile -->
+	<div flex="100" hide-gt-xs ng-show="msg.viewingMessages == false">
+	    <md-toolbar class="md-primary" >
+			<div class="md-toolbar-tools">
+				<span class="pc-capitalize">Messages</span>
+			</div>
+		</md-toolbar>
+
+		<md-content>
+			<md-list>
+				<md-list-item 
+					ng-class="{setColor: conversation.hasNewMsg === true}" 
+					ng-click="msg.viewConvoMessages(conversation)" 
+					class="md-3-line" 
+					ng-repeat="conversation in msg.conversationsList | orderBy:'-lastMsg'"
+					ng-click="null">
+					<div class="md-list-item-text" layout="column">
+						<h3 class="pc-capitalize" >{{conversation.users.name}}</h3>
+					</div>
+				</md-list-item>
+			</md-list>
+		</md-content>
+	</div>
+	
+	<div hide-gt-xs layout="column" flex ng-show="msg.viewingMessages == true">
+		<md-toolbar layout="row" class="md-toolbar-tools">
+            <span ng-click="msg.viewingMessages= false"><i class="material-icons">chevron_left</i></span>
+            <span class="pc-capitalize">{{msg.currentConversation.users.name}}</span>
+		</md-toolbar>
+
+		<md-content layout-gt-xs="row" layout-padding>
+			<md-list layout="column" flex>
+				<md-list-item class="md-3-line" ng-repeat="message in msg.conversationMessages" flex>
+					<div class="md-list-item-text pc-message">
+						<div class="pc-msg-wrapper" ng-class="(message.sender === msg.user.name.first +' '+ msg.user.name.last) ? 'me' : 'them'">
+                            <div class="pc-msg-body">
+								<h3>{{message.body}}</h3>
+								<p class="pc-capitalize pc-msg-sender">
+                                     {{message.sender}}
+								</p>
+							</div>
+							<i ng-click="msg.deleteMessage(message)" class="material-icons">clear</i>
+						</div>
+						<div ng-show="{{message.sentAt != null}}" class="pc-msg-time">{{message.sentAt | date:'short'}}</div>
+					</div>
+				</md-list-item>
+			</md-list>
+		</md-content>
 
 		<div md-colors="::{backgroundColor: 'default-background-300'}" layout layout-padding layout-align="center center">
 			<md-input-container flex="80" flex-offset="5">
 				<textarea id="message" rows="1" placeholder="Message..." flex ng-model="msg.body"></textarea>
 			</md-input-container>
 			<md-input-container flex>
-				<md-button ng-click="msg.sendReply()" class="md-raised md-primary">Reply</md-button>			
+				<i  ng-click="msg.sendReply()" class="fa fa-paper-plane" aria-hidden="true"></i>	
 			</md-input-container>
 		</div>
-	</div>
 </div>
 
 
@@ -79,11 +136,14 @@
         </md-toolbar>
         <form action="" layout="column" layout-padding>
 
+
             <md-input-container layout>
                 <md-select ng-model="msg.newConversation.recipient">
                     <md-option ng-value="{{recipient}}" placeholder="Recipient"  class="pc-capitalize" ng-repeat="recipient in msg.recipientsList">{{recipient.name}}</md-option>
                 </ms-select>       
             </md-input-container>
+
+
 
             <md-input-container layout>
                 <textarea placeholder="Message"cols="60" rows="4" name="body" ng-model="msg.newConversation.body"></textarea>

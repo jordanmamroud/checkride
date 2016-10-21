@@ -4,11 +4,9 @@
 
     .controller('examinerListController', examinerListCtrl)
     .controller('examinerInfoController', examinerInfoCtrl)
-    .controller('upcomingAppointmentsCtrl', upcomingAppointmentsCtrl)
         
     examinerListCtrl.$inject = ["$scope",'$location','pcServices',"$sessionStorage"];
     examinerInfoCtrl.$inject = ['$scope', 'pcServices',"$sessionStorage"];
-    upcomingAppointmentsCtrl.$inject = ['$scope','pcServices'];
     
 
     function examinerListCtrl($scope, $location, pcServices, $sessionStorage){
@@ -36,11 +34,5 @@
         vm.airportList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/airports"));
         vm.certificationsList = pcServices.createFireArray(refs.accounts.child(vm.examinerInfo.$id +"/certifications"));
     }
-    
-    function upcomingAppointmentsCtrl($scope, pcServices){
-        var calendarRef = pcServices.getCommonRefs().userCalendar;
-        console.log(calendarRef.toString());
-        $scope.myAppointments = pcServices.createFireArray(calendarRef.child('approvedAppointments'));
-    }
-    
+   
 }());

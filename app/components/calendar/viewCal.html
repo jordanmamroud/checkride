@@ -1,12 +1,20 @@
 <md-input-container layout>
      
      <md-select ng-model="selectedAirport">
-        <md-option ng-click="vc.getForecast(aprt.$id)" ng-value="{{aprt.$id}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in vc.availableAirports">{{aprt.$id}}</md-option>
+        <md-option ng-click="vc.showForecast(aprt.$id)" ng-value="{{aprt.$id}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in vc.availableAirports">{{aprt.$id}}</md-option>
      </md-select>
 </md-input-container>
     
-
-<div class="calendar" ng-model="eventSources" id="cal" data-ui-calendar="uiConfig.calendar"></div>
+ <md-menu hide-gt-xs>
+    <md-icon ng-click="$mdOpenMenu($event)">menu</md-icon>
+    <md-menu-content>
+        <md-menu-item ng-click="vc.changeView('agendaDay')">Day</md-menu-item>
+        <md-menu-item ng-click="vc.changeView('agendaWeek')">Week</md-menu-item>
+        <md-menu-item ng-click="vc.changeView('month')">Month</md-menu-item>
+      
+    </md-menu-content>
+</md-menu>
+<div class="calendar" id="cal" data-ui-calendar="vc.uiConfig.calendar"></div>
 
 
 <script type="text/ng-template" id="weatherModal">
@@ -40,18 +48,18 @@
         </div>
         
         <div layout  layout-padding>
-            <p>Start: {{clickedEvent.start.toString()}}</p> <p> End: {{clickedEvent.end.toString()}}</p>
+            <p>Start: {{vc.clickedEvent.start.toString()}}</p> <p> End: {{vc.clickedEvent.end.toString()}}</p>
         </div>
        
         <div layout  layout-padding>
             <md-input-container layout>
-                <md-select ng-model="clickedEvent.category">
+                <md-select ng-model="vc.clickedEvent.category">
                     <md-option ng-value="cat" placeholder="Categories"  class="pc-capitalize" ng-repeat="cat in vc.aicrCats">{{cat.$value}}</md-option>
                 </ms-select>       
             </md-input-container>
 
              <md-input-container layout>
-                <md-select ng-model="clickedEvent.rating">
+                <md-select ng-model="vc.clickedEvent.rating">
                     <md-option ng-value="{{rate}}" placeholder="Ratings"  class="pc-capitalize"  value="" ng-repeat="rate in vc.ratings">{{rate.$value}}</md-option>
                 </ms-select>       
             </md-input-container>
