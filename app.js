@@ -15,21 +15,25 @@
 //moved sessionStatus.html form app/ auth into app/layout
 // moved all student view files from user/views into user/student 
 // moved profile.html from user/views into user/profile
+//
+
 
 (function(){
 	'use strict'
 	angular.module('checkrider',[
 		'ngCookies',
-		'ngMaterial',    
+//		'ngMaterial',    
 		'ngAnimate',
 		'ngAria',
         "ngStorage",
+        'ngTouch',
 		'ui.calendar',
-        'angularPayments',
+       
 		'firebase',
 		'ngRoute',
 		'elasticsearch',
         'ui.bootstrap',
+        'ui.router',
 		
         
         'pcLayoutController',
@@ -50,6 +54,7 @@
         'pcAuthController',
 		'pcSearch.controller',
 		'pcSearch.service',
+        'pcSearch.directives',
 		'pcDataService',
         'pcNotificationsController',
         'pcSchedulerController',
@@ -60,17 +65,9 @@
 //		'messages'    
 	])
 
-	.config(['$locationProvider','$logProvider', '$mdThemingProvider',function( $locationProvider,$logProvider,$mdThemingProvider ){
+	.config(['$locationProvider','$logProvider',function( $locationProvider,$logProvider ){
 		$locationProvider.html5Mode(true).hashPrefix('!');
 		$logProvider.debugEnabled(true);
-
-		$mdThemingProvider.theme('dark').dark();
-        
-		//Not sure where this come from---V
-		// Configure a dark theme with primary foreground yellow
-		$mdThemingProvider.theme('docs-dark', 'default')
-			.primaryPalette('yellow')
-			.dark();
 	}])
 
 
@@ -160,7 +157,7 @@
 	//FIREBASE REFERENCES
 	.constant('firebaseRefs',function(){
             var rootRef = firebase.database().ref();
-            var main =rootRef.child("temp");
+            var main = rootRef.child("temp");
 			return{
 				main: main,
 				airports: main.child('airports'),

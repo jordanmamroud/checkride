@@ -17,7 +17,7 @@
             },
             scope: false,
             transclude: false,
-            replace:true
+           
         };
     }
 

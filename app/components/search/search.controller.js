@@ -3,13 +3,38 @@
 angular.module('pcSearch.controller',[])
 
 //SEARCH CONTROLLER
-.controller('SearchCtrl', ['$filter','$scope', '$log',"$q", '$timeout', "$firebaseArray",'examiners', 'airports', 'DataService', 'pcServices', '$sessionStorage','searchService', searchCtrl ]);
+.controller('SearchCtrl', ['$location','$uibModal','$filter','$scope', '$log', '$timeout', "$firebaseArray",'examiners', 'airports', 'DataService', 'pcServices', '$sessionStorage','searchService', searchCtrl ]);
 
-function searchCtrl($filter,$scope, $log, $q, $timeout, $firebaseArray,examiners, airports, DataService, pcServices,$sessionStorage, searchService) {
+function searchCtrl($location, $uibModal, $filter,$scope, $log, $timeout, $firebaseArray,examiners, airports, DataService, pcServices,$sessionStorage, searchService) {
 	var self = this;
+    
+    self.openUrl = function(){
+        var rootRef = firebase.database().ref();
+        var main = rootRef.child("fiverr");
+        
+        var url = window.location.href ;
+        var rand = Math.floor( Math.random() * 26 ).toString();
+        var timeStamp = Date.now().toString();
+        var uniqueId = rand + timeStamp; 
+        var newUrl = url + uniqueId ;
+        main.child('urlIds').child(uniqueId).set(true);
+        
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    // end fiverr project
+    
+    
+    
 	var refs = pcServices.getCommonRefs();
 	var userRef = refs.accounts ;
-    
+    console.log('ham');
     //scope variables
 	self.airports = ''
     self.category=null;
@@ -33,24 +58,32 @@ function searchCtrl($filter,$scope, $log, $q, $timeout, $firebaseArray,examiners
     self.examiners ='';
 
     //scope functions
+    self.filtersModal= filtersModal ;
     self.filterOut = filterOut;
     self.getMatchingAirports = getMatchingAirports ; 
 	self.selectedItemChange = selectedItemChange;
-    self.setCoordinates = function(keyCode){if(keyCode==13){console.log('ham');setCoordinates(self.zipcode);};};
+    self.setCoordinates = function(keyCode){if(keyCode==13){setCoordinates(self.zipcode);};};
     self.viewProfile = viewProfile;
     
     
-    
-    function createFilterFor(query) {
+
+    function createFilterFor(query){
 		var lowercaseQuery = angular.lowercase(query);
 		return function filterFn(airports) {
 			return (airports.$id.indexOf(lowercaseQuery) === 0);
 		};
 	}
     
+    function filtersModal(){
+        $uibModal.open({
+            templateUrl:"filtersModal",
+            scope:$scope.$new()
+        });
+    };
+    
     function filterOut(prop, list){
         var filteredExaminers ;
-        
+        console.log(prop);
         if(self.categories.title == list.title){setUpList(); } ;
         if(self.ratings.title == list.title){self.rating = prop } ;
         if(self.classes.title == list.title){self.class = prop } ;   
@@ -82,8 +115,8 @@ function searchCtrl($filter,$scope, $log, $q, $timeout, $firebaseArray,examiners
                 }
             });     
         }
+        console.log($scope);
     }
-
     
     function filterSubCategories(examiner){
         self.hasSearch = false ;
@@ -106,15 +139,17 @@ function searchCtrl($filter,$scope, $log, $q, $timeout, $firebaseArray,examiners
 
     function getMatchingAirports (query) {
         searchService.getMatchingAirports(query, function(response){
-            self.airports = response.airports ;
+            self.airports = response.airports ; 
         });
+        var results = query ?  self.airports : null ;
+        return results;
 	}
 
     function selectedItemChange(item) {
 		self.hasSearch = true;
 		self.searchBoxAlign = "center start";
 		self.fullPage = "";
-
+        console.log(item);
         var ref = pcServices.getCommonRefs().main.child('airports/examiners/').child(item.code.toLowerCase()).orderByKey();
 		pcServices.createFireArray(ref).$loaded().then(function(val){
 			self.examiners = val ;
@@ -122,8 +157,10 @@ function searchCtrl($filter,$scope, $log, $q, $timeout, $firebaseArray,examiners
 	}
     
     function setCoordinates(address){
+        console.log(address);
         var addressRequest = searchService.getCoordinates(address, onReqCompletion);
         function onReqCompletion(response){
+            console.log(JSON.parse(response));
             var location = JSON.parse(response).results[0].geometry.location;
             self.lat = location.lat ;
             self.lng = location.lng;

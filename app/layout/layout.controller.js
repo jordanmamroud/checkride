@@ -5,9 +5,9 @@
 	//LAYOUT CONTROLLER
 	.controller('LayoutCtrl', layoutCtrl)
     
-    layoutCtrl.$inject = ["$scope", "$mdSidenav", 'pcServices', "AuthService", 'globalConst', "$mdDialog","crUserNavData"];
+    layoutCtrl.$inject = ["$uibModal","$scope", 'pcServices', "AuthService", 'globalConst', "crUserNavData"];
     
-    function layoutCtrl($scope, $mdSidenav, pcServices, AuthService, globalConst, $mdDialog,crUserNavData){
+    function layoutCtrl($uibModal, $scope, pcServices, AuthService, globalConst,crUserNavData){
         
         var layout = this ;
         var refs = pcServices.getCommonRefs();
@@ -64,10 +64,10 @@
         function showNotifications(){
             var notificationsRef = refs.notifications.child(layout.user.$id);
             layout.notifications - pcServices.createFireArray(notificationsRef);
-            $mdDialog.show({
+            $uibModal.open({
                 scope: $scope.$new(),
-                templateUrl:'notificationsModal',
-                clickOutsideToClose: true
+                templateUrl:'notificationsModal'
+                
             })
         };
         
@@ -75,10 +75,9 @@
             var userConversationsRef = refs.conversations.child(layout.user.$id);
             layout.conversationsList = pcServices.createFireArray(userConversationsRef);
             console.log(layout.conversationsList)
-            $mdDialog.show({
+            $uibModal.open({
                 scope:$scope.$new(),
-                templateUrl:"conversationsModal",
-                clickOutsideToClose:true
+                templateUrl:"conversationsModal"
             })
         }
 

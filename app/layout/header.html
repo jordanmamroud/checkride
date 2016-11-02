@@ -1,4 +1,106 @@
-<div class="md-toolbar-tools"  layout="row" layout-align="space-between center">
+<style>
+
+    .dropdown-menu{
+        min-width: 0px;
+        left:auto;
+    }
+</style>
+
+
+
+
+
+
+<nav class="nav navbar navbar-default no-margin">
+    
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+      <a href="#" class="hidden-sm hidden-xs"><img class="center-nav navs-brand" style="width:300px;" src="{{logoUrl}}" alt=""></a>
+      
+      <!-- mobile -->
+     <div class="btn-group center-nav" uib-dropdown is-open="status.isopen">
+
+          <span href="#" class="dropdown-toggle center-vert" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><a class="center-nav"><i class="header-btn fa fa-bars fa-lg hidden-md hidden-lg dropdown-toggle" ></i></a></span>
+          <ul class="dropdown-menu">
+            <li ng-repeat="item in navItems(user.role)"><a href="{{item.path}}"><i class="material-icons">{{item.icon}}</i>&nbsp;&nbsp;{{item.title}}</a></li>
+           
+          </ul>
+      </div>
+   
+
+ <!-- user is logged in -->
+      <div ng-show="layout.isLoggedIn" class="center-nav nav-right">
+        
+            <a class=" dropdown" ng-click="layout.showConversations()"><i class="header-btn fa fa-globe fa-lg"></i></a>
+            <a ng-click="layout.showNotifications()"><i class="header-btn fa fa-inbox fa-lg"></i></a>
+            
+           <span class="header-btn " uib-dropdown on-toggle="toggled(open)">
+
+              <a href id="simple-dropdown" uib-dropdown-toggle>
+                <img style="width:30px; height:30px;"src="{{layout.user.photoUrl}}" alt="">
+              </a>
+              <ul class="dropdown-menu" uib-dropdown aria-labelledby="simple-dropdown">
+                    <li>
+                       <a href="#"> <span class="pc-capitalize">{{layout.user.name.first }}</span></a
+                   </li>
+                    <li style="display:inline-block;" ><a href="#"> 
+                        <a href="../user/profile" class="md-button">My Profile</a></a>
+                    </li>
+                 
+                   <li>
+                         <a href="../log-in" ng-click="layout.logout()"class="md-button">Logout</a></a>
+                   </li>
+                               
+              </ul>
+            </span>
+
+    </div>
+          
+        <!-- shows when user is not logged in -->
+        <div class="nav navbar-nav navbar-right vcenter" ng-show="!layout.isLoggedIn">
+            <button class="btn btn-danger">   <a ng-href="/log-in">Log In</a></button>
+            <button class="btn btn-danger"><a ng-href="/create-account">Sign Up</a></button>
+        </div>
+        
+    </div> 
+        
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</div>
+
+
+  <script id="conversationsModal" type="text/ng-template">
+      
+      <ul class="list-group">
+          <li class="list-group-item" ng-repeat="convo in layout.conversationsList">
+                <span style="background-image:url({{convo.photoUrl}}); background-size: cover;"></span>
+                <h4 class="md-headline pc-capitalize md-block">{{convo.users.name}}</h4>
+                <h5 class="md-subhead pc-capitalize md-block">{{convo.lastMsg}}</h5>
+          </li>
+      </ul>
+            
+    </script>
+
+    <script id="notificationsModal" type="text/ng-template">
+        <ul class="list-group">
+            <li class="list-group-item"  ng-repeat="note in layout.notifications">
+                <div>
+                     <img class="col-xs-1" src="{{note.photoUrl}}" alt="">
+                     <h4 class="md-headline pc-capitalize md-block">{{note.name}}</h4>
+                     <h5 class="md-subhead pc-capitalize md-block">{{note.sentAt}}</h5>
+                </div>
+            </li>
+        </ul>
+        
+    </script>
+
+
+
+
+
+<!--
+<div class="md-toolbar-tools" layout-align="space-between center">
        
 
         <a hide-gt-xs hide-xs show-gt-sm flex href="/" class="cr-logo"><img src="{{logoUrl}}" alt=""></a>
@@ -24,14 +126,15 @@
         </div>
         
       <div ng-show="layout.isLoggedIn">
+-->
+<!--
 
             <span ng-click="layout.showConversations()"><i class="material-icons">assistant</i></span>
             <span ng-click="layout.showNotifications()"><i class="material-icons">layers</i></span>
-            <!-- Users Name -->
+            
             <span class="pc-capitalize" hide-xs>{{layout.user.name.first}} {{layout.user.name.last}}</span>	
 
 
-                <!-- Trigger element is a md-button with an icon -->
             <md-menu>
                 <md-button 
                     ng-click="$mdOpenMenu($event)" 
@@ -54,7 +157,8 @@
 
             </md-menu>
       </div>
- <!-- modal templates -->
+            
+
      <script id="conversationsModal" type="text/ng-template">
             <md-list>
                 <md-list-item ng-repeat="convo in layout.conversationsList">
@@ -85,5 +189,6 @@
             </md-list>
     </script>
 </div>
+-->
 
 

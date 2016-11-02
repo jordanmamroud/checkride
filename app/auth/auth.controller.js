@@ -1,24 +1,22 @@
 (function(){
-	angular.module('pcAuthController', ['firebase'])
+	angular.module('pcAuthController', [])
 
     
-        
 		//AUTH CONTROLLER
 		.controller("AuthCtrl", AuthCtrl)
 
-        AuthCtrl.$inject = ["$scope", "AuthService", "pcServices","$mdDialog","$localStorage"];
+        AuthCtrl.$inject = [ "$uibModal","$scope", "AuthService", "pcServices","$localStorage"];
         
-        function AuthCtrl($scope, AuthService, pcServices, $mdDialog,$localStorage){
-            console.log('fame')
+        function AuthCtrl( $uibModal,$scope, AuthService, pcServices,$localStorage){
 			var self = this;
 			self.auth = AuthService.auth;
-		
+            
             self.roles= ['student', 'instructor','examiner'];
 			self.user = null;
             
+            
             //functions
             self.login = login;
-            self.loginOnKeypress = loginOnKeypress ; 
 			self.logout = AuthService.logout;
             self.createAccountPage = createAccountPage;
             self.createAccount = createAccount;
@@ -38,11 +36,16 @@
             };
             
             function showPasswordResetModal(){
-                pcServices.showModal('passwordResetModal', true);
+               $uibModal.open({
+                animation: true,
+                   templateUrl: 'passwordResetModal.html',
+                controller: function(){},
+                show: true
+               })
             };
             
             function createAccount(){
-                var newUser = new AuthService.User({first:self.firstName,last:self.lastName}, self.emailAddress, self.phone, self.role, self.photoUrl);
+                var newUser = new AuthService.User({first: self.firstName, last:self.lastName}, self.emailAddress, self.phone, self.role, self.photoUrl);
 				AuthService.createUser(newUser, self.password);
             };
 		}
@@ -51,7 +54,7 @@
 
 
 
-
+//  <md-button ng-click="auth.sendPasswordResetEmail()">Send</md-button>
 
 
 

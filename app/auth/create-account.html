@@ -1,51 +1,40 @@
-<div layout="column" layout-align="center center" >
-  <form ng-submit="auth.createAccount()" name="pc-create-account">
+<div class="col-sm-offset-4 col-sm-4">
+    
+  <form class="form-group" ng-submit="auth.createAccount()" name="pc-create-account">
+<!--
 	   <div class="alert" ng-class="{'alert-success': message, 'alert-danger': error}" role="alert">
 		   {{error}}
 		   {{message}}
 		</div>
+-->
 
 		<h3 class="text-center">Create your free account</h3>
 		
-		<div layout>
-			<md-input-container class="md-block">
-				<input type="text" required placeholder="First" ng-model="auth.firstName">
-			</md-input-container>
+        <div class="no-pad col-sm-12">
+             <div class="no-pad col-sm-6">
+                    <input class="form-control" type="text" required placeholder="First" ng-model="auth.firstName">
+             </div>
+             
+            <div class="no-pad col-sm-6"> 
+                <input class="form-control" type="text" required placeholder="Last" ng-model="auth.lastName" >
+            </div>
+        </div>
+      
+            <input class="form-control" type="email" required placeholder="Phone Number" ng-model="auth.phone">
+            <input class="form-control" type="email" required placeholder="Email Address" ng-model="auth.emailAddress">
+            
+			<input class="form-control" type="password" required placeholder="Password" ng-model="auth.password">
+            
+            <label>I am a...</label>
+			<select ng-model="auth.role">
+				<option ng-repeat="role in auth.roles" value="{{role}}">{{role}}</option>
+			</select>
+            
+            <input class="form-control" placeholder="Profile Pictrue (url)" type="url" ng-model="auth.photoUrl">
+            
+            <button type="submit" class="md-raised md-primary">Create Account</button>
 
-			<md-input-container class="md-block">
-				<input type="text" required placeholder="Last" ng-model="auth.lastName" >
-			</md-input-container>
-		</div>
-
-		<md-input-container class="md-block">
-			<input type="email" required placeholder="Email Address" ng-model="auth.emailAddress">
-		</md-input-container>
-
-		<md-input-container class="md-block">
-			 <input type="password" required placeholder="Password" ng-model="auth.password">
-		 </md-input-container>
-
-		 <md-input-container class="md-block">
-			 <input type="text" required placeholder="phonee number" ng-model="auth.phone">
-		 </md-input-container>
-
-		<md-input-container class="md-block">
-			<label for="">I am a...</label>
-			<md-select ng-model="auth.role">
-				<md-option ng-repeat="role in auth.roles" value="{{role}}">{{role}}</md-option>
-			</md-select>
-		</md-input-container>
-		
-		<!-- Photo Url -->
-		<div layout-gt-sm="row">
-			<md-input-container class="md-block" flex-gt-md>
-				<input placeholder="Profile Pictrue (url)" type="url" ng-model="auth.photoUrl">
-			</md-input-container>
-		</div>
-
-		<md-input-container layout-align="center center" layout>
-			<md-button type="submit" class="md-raised md-primary">Create Account</md-button>
-		</md-input-container>
-
+	
 	</form>
+    
 </div>

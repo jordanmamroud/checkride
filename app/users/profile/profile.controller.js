@@ -4,9 +4,9 @@ angular.module('pcProfileController',[])
 
     .controller("profileController", profileController); 
 
-     profileController.$inject = ['$scope','profileService', 'pcServices','$localStorage','$http','$timeout','searchService'];
+     profileController.$inject = ['$uibModal','$scope','profileService', 'pcServices','$localStorage','$http','$timeout','searchService'];
 
-    function profileController($scope, profileService, pcServices, $localStorage, $http, $timeout, searchService){
+    function profileController( $uibModal,$scope, profileService, pcServices, $localStorage, $http, $timeout, searchService){
         
         var self = this ;
         var refs = pcServices.getCommonRefs();
@@ -17,6 +17,8 @@ angular.module('pcProfileController',[])
         $scope.user = pcServices.createFireObj(userRef);
         $scope.certificationsList = pcServices.createFireArray(userRef.child("certifications"));
         $scope.airportsList = pcServices.createFireArray(userRef.child("airports"));
+        console.log(   $scope.airportsList);
+        $scope.addCertificationModal= addCertificationModal ;
         $scope.saveCertification = saveCertification ;
         $scope.saveAirport= saveAirport ;
         $scope.deleteAirport = deleteAirport ;
@@ -33,7 +35,14 @@ angular.module('pcProfileController',[])
       
         $scope.updateUser = updateUser;
         $scope.querySearch= querySearch;
-
+    
+        function addCertificationModal(){
+            $uibModal.open({
+                templateUrl:"certificationsModal",
+                scope:$scope.$new()
+            })
+        }
+        
         function deleteAirport(chip){
             userRef.child("airports/" + chip.$id).remove();
             refs.airports.child("examiners/"+ chip.$id + "/" +userId).remove();
@@ -41,7 +50,6 @@ angular.module('pcProfileController',[])
 // ask josh how certs should be displayed
         function deleteCertification(chip){
             userRef.child("certifications/" + chip.$id).remove();
-            console.log(chip.$id);
             refs.certifications.child(chip.$id + "/" + userId).remove();
         }
         
@@ -51,17 +59,17 @@ angular.module('pcProfileController',[])
         }
         
         function querySearch (query) {
-            
             searchService.getMatchingAirports(query, function(response){
-                 $scope.airportOptions= response.airports
-                 console.log(response)
+                 $scope.airportOptions = response.airports
             });
-
+        
             var results = query ? $scope.airportOptions : $scope.airportOptions, deferred ; 
-            return results ;
+            return results;
         }
         
+        
         function saveAirport(val){
+            console.log(val);
            refs.airports.child("examiners/" +val+ "/" + userInfo.uid).set({
                name:{first: userInfo.name.first , last:userInfo.name.last},
                photoUrl:"https://firebasestorage.googleapis.com/v0/b/project-1750560572472647029.appspot.com/o/default-avitar.jpg?alt=media&token=e3c47907-735b-40bc-8954-164ba387c944" 

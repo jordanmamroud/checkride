@@ -1,3 +1,4 @@
+<!--
  <div layout="column" layout-align="center center">
 
  	<div layout="row" layout-padding>
@@ -7,12 +8,11 @@
 	<div layout="row">
 
 		<form name="pc-login" class="signin">
-			<!-- EMAIL -->
+		
 			<md-input-container class="md-block">
 				<input placeholder="Email" required type="email" ng-model="auth.emailAddress">
 			</md-input-container>
 
-			<!-- PASSWORD -->
 			<md-input-container class="md-block">
 					<input ng-keypress="$event.keyCode === 13 ? auth.login(): null" placeholder="Password" required type="password" ng-model="auth.password">
 			</md-input-container>
@@ -21,6 +21,7 @@
 				<md-button ng-click="auth.login()" class="md-raised md-primary">Login</md-button>
 				<md-button ng-click="auth.createAccountPage()" class="md-raised">Create account</md-button>
 			</ms-input-container>
+			
 
 			<ms-input-container layout>
 				<a ng-click="auth.showPasswordResetModal()">Forgot password?</a>
@@ -29,13 +30,51 @@
 		</form>
 	</div>
 </div>
-<!--</div>event.keyCode === 13 ? auth.login(): null-->
+-->
 
-<script type="text/ng-template" id="passwordResetModal">
+   
+<div>
+       <div class="col-sm-offset-5 col-sm-2">
+          
+
+        <h2>Account Login</h2>
+        <form >
+             
+                <input class="form-control" placeholder="Email"   required type="email" ng-model="auth.emailAddress"> 
+                <br>
+                <input  class="form-control" ng-keypress="$event.keyCode === 13 ? auth.login(): null" placeholder="Password" required type="password" ng-model="auth.password">
+  
+                <br>
+                <button ng-click="auth.login()" class="btn btn-default">Login</button>
+                <button ng-click="auth.createAccountPage()" class="btn btn-default">Create account</button>
+                <br>
+                <a ng-click="auth.showPasswordResetModal()">Forgot password?</a>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<script type="text/ng-template" id="passwordResetModal.html">
+<!--
    <h1>Password Reset Email</h1>
-   	<md-input-container layout>
+
             <input placeholder="Email" required type="email" ng-model="auth.email">
-    </md-input-container>
-    <md-button ng-click="auth.sendPasswordResetEmail()">Send</md-button>
+-->
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Item</h3>
+        </div>
+        <div class="modal-body">
+            <p>{{item}}</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </div>
+</div>
+  
     
 </script>

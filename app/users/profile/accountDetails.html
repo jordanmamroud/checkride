@@ -1,3 +1,28 @@
+<form class="form-group">
+    <label>Name</label>
+    <div class="form-inline">
+        
+        <input class="form-control" ng-model="user.name.first">
+        <input class="form-control" ng-model="user.name.last">
+    </div>
+    <label>Email Address</label>
+    <input class="form-control" ng-model="user.emailAddress"/>
+     <label>Phone Number</label>
+    <input class="form-control" type="tel" ng-model="user.phone">
+     <label>Photo Url</label>
+    <input class="form-control" placeholder="Profile Picture (url)" type="url" ng-model="user.photoUrl">
+     <label>Address</label>
+    <input class="form-control" ng-model="user.address.address">
+     <label>City</label>
+    <input class="form-control" ng-model="user.address.city">
+     <label>State</label>
+    <input class="form-control" ng-model="user.address.state">
+     <label>Zipcode</label>
+	<input class="form-control" ng-model="user.address.zipcode">
+    <textarea ng-model="user.bio" md-maxlength="1000" rows="3">{{user.bio}}</textarea>
+</form>
+
+<!--
 <form name="userForm">
 	<div layout-gt-sm="row">
 		<md-input-container class="md-block" flex-gt-md>
@@ -78,3 +103,4 @@
 		<textarea ng-model="user.bio" md-maxlength="1000" rows="3">{{user.bio}}</textarea>
 	</md-input-container>
 </form>
+-->

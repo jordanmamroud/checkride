@@ -3,16 +3,16 @@
     angular.module('pcMessagesController',[])
     .controller('messagesController',messagesCtrl)
 
-    messagesCtrl.$inject = ['$scope','messagesService','pcServices','$mdDialog'];
+    messagesCtrl.$inject = ['$scope','messagesService','pcServices','$uibModal'];
     
-    function messagesCtrl($scope,messagesService, pcServices,$mdDialog){
+    function messagesCtrl($scope,messagesService, pcServices,$uibModal){
         var refs = pcServices.getCommonRefs();
         var self = this;
         
 	    var conversationsRef = refs.userConversations;
         
         
-          self.viewingMessages = false
+        self.viewingMessages = false
         // scope variables
         self.currentConversation  ;
         self.conversationMessages =[];
@@ -38,6 +38,10 @@
             }
         })
         
+        self.test = function(){
+            console.log(self.recipientsList);
+        }
+        
         function deleteMessage(message){ 
             messagesService.deleteMessage(self.currentConversation.$id, message.$id); 
         }
@@ -61,10 +65,9 @@
 
         function setNewConversationDialog(){
             self.recipientsList = messagesService.setRecipientsList(self.user);
-            $mdDialog.show({
+            $uibModal.open({
                 scope:$scope.$new(),
-                templateUrl:"sendMessageModal",
-                clickOutsideToClose:true
+                templateUrl:"sendMessageModal"
             });
         };
         pcServices.showToastOnEvent(conversationsRef, "child_added");

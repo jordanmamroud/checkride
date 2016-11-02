@@ -2,8 +2,8 @@
 	angular.module('pcServices', [])
 
 
-	.service("pcServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray","$firebaseObject", '$filter', '$cookies','firebaseRefs',"$sessionStorage","$firebaseAuth","$mdDialog",'$localStorage',
-		function(RoutePaths,$location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies,firebaseRefs,$sessionStorage,$firebaseAuth,$mdDialog,$localStorage){
+	.service("pcServices", ['RoutePaths',"$location",'$routeParams','$timeout',"$firebaseArray","$firebaseObject", '$filter', '$cookies','firebaseRefs',"$sessionStorage","$firebaseAuth",'$localStorage',
+		function(RoutePaths,$location, $routeParams, $timeout,$firebaseArray, $firebaseObject, $filter, $cookies,firebaseRefs,$sessionStorage,$firebaseAuth,$localStorage){
 
 
             var service = {

@@ -1,79 +1,47 @@
-<div layout-align="center start" layout="row" layout-padding>
+<div class="col-sm-offset-2 col-sm-6">
+    <account-details></account-details>
+    <div ng-show="user.role == 'examiner'">                
+       <div class="row col-sm-12">
+            <!-- list of airports -->
+            <div class="col-sm-6">
+                
+                <h6> Airports</h6>
+                
+                <input type="text" ng-model="search.selected" placeholder="Search by Airport name" uib-typeahead="item.name for item in querySearch($viewValue)" typeahead-on-select="saveAirport($item.code)" typeahead-no-results="noResults" class="form-control">
 
-	<div layout="column" flex flex-gt-md="60" layout-padding>
-       
-        <account-details></account-details>
-        
-        <div ng-show="user.role == 'examiner'">
-            <div layout="row">
-                 <pc-dropdown-input optionclick="null" my-label="Category" my-select="certification.category" my-list="categories"></pc-dropdown-input>   
-
-                 <pc-dropdown-input optionclick="null" my-label="Ratings" my-select="certification.rating" my-list="ratings"></pc-dropdown-input>
-
-                 <pc-dropdown-input optionclick="null" my-label="Class" my-select="certification.class" my-list="classes"></pc-dropdown-input>
-
-                <md-button ng-click="saveCertification()">Save Certification</md-button>
+                <ul class="list-group">
+                    <li ng-repeat="arpt in airportsList" class="list-group-item">{{arpt.$id}}</li>
+                </ul>
+                
             </div>
-            
-            <md-input-container layout>
-                <md-autocomplete
-                    flex="80"
-                    ng-model="searchBox" 
-                    md-selected-item="selectedItem" 
-                    md-search-text="searchText" 
-                    md-items="airport in querySearch(searchText)"
-                    md-selected-item-change="saveAirport(airport.code)"
-                    md-item-text="airport.name"
-                    placeholder="Search by airports"
-                    ng-disabled="false"
-                    md-colors="::{backgroundColor: 'default-grey-100'}">
 
-                    <md-item-template>
-                        <span 
-                            ng-model="searchBox" 
-                            md-highlight-text="searchText"
-                            style="text-transform:uppercase; font-weight:bold;">
-                            {{airport.$id}}
-                        </span>
-                        <i> ({{airport.name}}) </i>
-                    </md-item-template>
-                    
-                </md-autocomplete>
-
-<!--
-                <md-select ng-model="mainAirport">
-                    <md-option ng-click="mainAirport(aprt)" ng-value="{{aprt}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in h.airportOptions">{{aprt.code}}</md-option>
-                </md-select>      
--->
-             </md-input-container>
-            
-             <md-input-container class="md-block" flex-gt-sm>
-                 <label>Yours Certifications</label>
-                  <md-chips md-select-on-focus read-only="true" ng-model="certificationsList" readonly="false"
-                            md-on-remove="deleteCertification($chip)" md-transform-chip="saveCertification($chip)" md-max-chips="30">
-                        <md-chip-template>
-                          <strong>{{$chip.$id}}</strong>
-                        </md-chip-template>
-                   </md-chips>
-            </md-input-container>
-            
-            <md-input-container layout>
-                <md-select ng-model="selectedAirport">
-                    <md-option ng-click="saveAirport(aprt.code)" ng-value="{{aprt.code}}" placeholder="Airport Options"  class="pc-capitalize" ng-repeat="aprt in airportOptions">{{aprt.$id}}</md-option>
-                </md-select>      
-            </md-input-container>
-            
-            <md-input-container class="md-block" flex-gt-sm>
-                <label>Airports Your Serving</label>
-                <md-chips read-only="true" md-select-on-focus  md-max-chips="5000" md-on-add="saveAirport($chip)"class="custom-chips" ng-model="airportsList" name="airport" readonly="false" md-on-remove="deleteAirport($chip)" md-transform-chip="saveAirport($chip)">
-                    <md-chip-template>
-                      <strong>{{$chip.$id}}</strong>
-                        <em></em>
-                    </md-chip-template>
-                </md-chips>
-            </md-input-container>
-            
+            <div class="col-sm-6">
+                
+                <h6> Certifications</h6>
+                
+                <button ng-click="addCertificationModal()">Add A Certification</button>
+                <!-- list of certification -->
+                <ul class="list-group">
+                    <li ng-repeat="cert in certificationsList" class="list-group-item">{{cert.$id}}</li>
+                </ul>
+                
+            </div>
         </div>
-         <md-button class='md-primary' ng-click="updateUser()">Update Account</md-button>
     </div>
 </div>
+
+<!-- certifications Modal -->
+
+<script type="text/ng-template" id="certificationsModal">
+    <div layout="row">
+
+         <pc-dropdown-input optionclick="null" my-label="Category" my-select="certification.category" my-list="categories"></pc-dropdown-input>   
+
+         <pc-dropdown-input optionclick="null" my-label="Ratings" my-select="certification.rating" my-list="ratings"></pc-dropdown-input>
+
+         <pc-dropdown-input optionclick="null" my-label="Class" my-select="certification.class" my-list="classes"></pc-dropdown-input>
+
+        <button ng-click="saveCertification()">Save Certification</button>
+        
+    </div>
+</script>

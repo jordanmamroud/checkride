@@ -1,28 +1,24 @@
 angular.module('pcCommonDirectives', [])
 
-.directive('pcDropdownInput', pcDropdownInput)
+.directive('myAutoComplete', myAutoComplete);
 
-function pcDropdownInput(){
+
+    
+function myAutoComplete(){
     return{
         scope:{
-            myLabel:"@",
-            myList:'=',
-            mySelect:'=',
-            optionclick:'&'
+            myoptions:"="
         },
+        templateUrl: function(){
+            return "example.html?"+ Date.now();
+        },
+        controller:function($firebaseAuth, $firebaseObject, $state,  $scope, $http){
+                $scope.selected = undefined;
+                $scope.states = ['Alabama', 'Alaska', 'Arizona'];
 
-        template:
-        '<md-input-container class="md-block" flex-gt-sm="">\
-            <label>{{myLabel}}</label>\
-                <md-select ng-model="mySelect">\
-                    <md-option  ng-click="optionclick()(item, myList)"></md-option>\
-                    <md-option ng-click="optionclick()(item, myList)" ng-repeat="item in myList.list" ng-value="item">\
-                        {{item}}\
-                    </md-option>\
-            </md-select>\
-        </md-input-container>' 
-
+        }
     }
 }
 
-    
+
+

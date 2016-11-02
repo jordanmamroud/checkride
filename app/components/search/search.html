@@ -1,122 +1,63 @@
-<div layout-fill layout="row" layout-align="center start">
-  
-    <sidenav flex="15" hide-xs hide-gt-xs show-gt-md>
-            <!-- Conversation List -->
 
-            <md-toolbar class="md-primary" >
-                <div class="md-toolbar-tools">
-                    <span class="pc-capitalize">Filters</span>
+
+<div class="col-sm-2 no-pad hidden-xs hidden-sm">
+    
+    <h2 class="no-margin search-bg">Filters</h2>
+      <button ng-click="search.openUrl()">bun</button>
+
+      
+      <search-filters></search-filters>
+          
+</div>
+
+
+    <div class="col-xs-12 col-sm-10 full-ht search-bg text-center">
+        
+            <form class="col-xs-12 col-sm-offset-2 col-sm-8"  name="pc-search" ng-class="{'center-vert': !search.hasSearch, 'pc-search-bar':search.hasSearch} ">
+                
+                 <h1 class="hidden-xs hidden-sm no-margin" ng-show="!search.hasSearch">Find an examiner near you</h1>
+                 
+                
+                 <input type="text" ng-model="search.selected" placeholder="Search by Airport name" uib-typeahead="item.name for item in search.getMatchingAirports($viewValue)" typeahead-on-select="search.selectedItemChange($item)" typeahead-no-results="noResults" class="pc-search-bar hidden-xs hidden-sm form-control">
+
+                 <!--mobile -->
+                <h6 class="hidden-md hidden-lg no-margin" ng-show="!search.hasSearch">Find an examiner near you</h6>
+                
+                <div class="hidden-md hidden-lg input-group">
+                    
+                    <input type="text" ng-model="search.selected" placeholder="Search by Airport name" uib-typeahead="item.name for item in search.getMatchingAirports($viewValue)" typeahead-on-select="search.selectedItemChange($item)" typeahead-no-results="noResults" class="form-control">
+                    
+                    <span class="input-group-addon"><i ng-click="search.filtersModal()" class="fa fa-adjust"></i></span>
+                    
                 </div>
-            </md-toolbar>
+                
+            </form>
+        
+        
+        <div ng-repeat="examiner in search.examiners | filter: search.filterSubCategories" 
+             class="col-sm-offset-3 col-sm-6 col-xs-12 panel panel-default">
+
+              <div class="panel-body">
+                        <img src="{{examiner.photoUrl}}" alt="" style="max-width:100px; border-radius:2px;float:left;" />
+                        <h6 class="hidden-xs hidden-sm">{{examiner.name.first }}{{examiner.name.last}}</h6> 
+                  
+                        <!--mobile-->
+                        <h6 class="hidden-md hidden-lg" >{{examiner.name.first}}  {{examiner.name.last}}</h6>
+
+                        <h6>{{examiner.distance}} miles</h6> 
+                  
+                   <button class="md-primary md-raised" ng-click="search.viewProfile(examiner)">View Profile</button>
+              </div>
             
-            <md-content>
-               <input ng-model="search.zipcode" ng-keypress="search.setCoordinates($event.keyCode)">zip code</input>
-               <pc-dropdown-input optionclick="search.filterOut" my-label="Category"my-select="search.category" my-list="search.categories"></pc-dropdown-input>
-
-               <pc-dropdown-input optionclick="search.filterOut" my-label="Rating" my-select="search.rating" my-list="search.ratings"></pc-dropdown-input>
-
-               <pc-dropdown-input optionclick="search.filterOut" my-label="Class" my-select="search.class"  my-list="search.classes"></pc-dropdown-input>
-
-            </md-content>
-            
-    </sidenav>
-        
-        
-    <div layout-fill md-colors="::{backgroundColor: 'default-primary-800'}"  layout-padding layout-align="center center" layout="column">
-        
-            <h1 hide-xs hide-gt-xs show-gt-sm class="md-display" ng-show="!search.hasSearch">Find an examiner near you</h1>
-        
-             <!--mobile -->
-            <h1 hide-gt-sm class="md-title" ng-show="!search.hasSearch">Find an examiner near you</h1>
-
-            <form style="width:70%" layout="row" layout-align="center center" name="pc-search" >
-
-                <md-autocomplete
-                    flex="100"
-                    ng-model="search.searchBox" 
-                    md-selected-item="search.selectedItem" 
-                    md-search-text="search.searchText" 
-                    md-items="airport in search.airports"
-                    md-selected-item-change="search.selectedItemChange(airport)"
-                    md-search-text-change="search.getMatchingAirports(search.searchText)"
-                    md-item-text="airport.name"
-                    placeholder="Search by airports"
-                    ng-disabled="false"
-                    md-colors="::{backgroundColor: 'default-grey-100'}">
-
-                    <md-item-template>
-                        <span 
-                            ng-model="search.searchBox" 
-                            md-highlight-text="searchText"
-                            style="text-transform:uppercase; font-weight:bold;">
-                            {{airport.$id}}
-                        </span>
-                        <i> ({{airport.name}}) </i>
-                    </md-item-template>
-
-                </md-autocomplete>
-
-                <md-menu>
-
-                     <md-icon ng-click="$mdOpenMenu($event)">sort</md-icon>
-
-                      <md-menu-content width="6">
-
-                          <md-menu-item>
-                             <pc-dropdown-input optionclick="search.filterOut" my-label="Category" my-select="search.category" my-list="search.categories"></pc-dropdown-input>
-                          </md-menu-item>
-
-                          <md-menu-item>
-                             <pc-dropdown-input optionclick="search.filterOut" my-label="Rating" my-select="search.rating" my-list="search.ratings"></pc-dropdown-input>
-                          </md-menu-item>
-
-                          <md-menu-item>
-                             <pc-dropdown-input optionclick="search.filterOut" my-label="Class" my-select="search.class" my-list="search.classes"></pc-dropdown-input>
-                          </md-menu-item>
-
-                      </md-menu-content>
-
-               </md-menu>
-
-
-    <!--
-                <div layout="row" layout-align="center center">
-                    <md-datepicker ng-model="search.startDate" md-placeholder="From"></md-datepicker>	
-                    <md-datepicker ng-model="search.endDate" md-placeholder="To"></md-datepicker>
-                </div>
-    -->
-              </form>
-
-            <md-content style="width:400px"  ng-show="search.hasSearch">
-                <md-list>
-        <!-- | filter: searchBox: user.userData.airports" orderBy: 'distance'-->
-                    <md-card layout-align="start center" layout="row" ng-repeat="examiner in search.examiners | filter: search.filterSubCategories">
-                       
-                        <md-card-title-media layout-align="start center">
-
-                            <img src="{{examiner.photoUrl}}" alt="" style="max-width:150px; border-radius:2px;" />
-                            
-                        </md-card-title-media>
-
-                        <md-card-content flex="100" layout="column">
-
-                            <md-card-title-text layout-align="start start">
-                                 <h6 hide-xs class="md-headline pc-capitalize md-block">{{examiner.name.first }}{{examiner.name.last}}</h6> 
-                                   <!--mobile-->
-                                <h6 hide-gt-xs class="md-subhead pc-capitalize" >{{examiner.name.first}}  {{examiner.name.last}}</h6>
-                                 
-                                 <h6>{{examiner.distance}} miles</h6> 
-
-                            </md-card-title-text>
-
-                            <md-card-actions layout="row" layout-align="start end">
-                                <md-button class="md-primary md-raised" ng-click="search.viewProfile(examiner)">View Profile</md-button>
-                            </md-card-actions>
-                       </md-card-content>
-
-                    </md-card>
-                </md-list>
-            </md-content>
+        </div>
         
     </div>
-</div>
+        <!-- | filter: searchBox: user.userData.airports" orderBy: 'distance'-->
+
+
+<script type="text/ng-template" id="filtersModal">
+    <h3>Filters</h3>
+
+    <search-filters></search-filters>
+
+</script>

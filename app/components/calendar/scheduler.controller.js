@@ -3,9 +3,9 @@
     
     .controller('schedulerController', scheduler);
     
-    scheduler.$inject = [ "$mdMedia","$timeout", "$scope", "calendarService", "$mdDialog", "pcServices", "AuthService", "$localStorage"];
+    scheduler.$inject = ["$timeout", "$scope", "calendarService", "$uibModal", "pcServices", "AuthService", "$localStorage"];
 
-    function scheduler($mdMedia,$timeout, $scope, calendarService, $mdDialog, pcServices, AuthService, $localStorage){
+    function scheduler($timeout, $scope, calendarService, $uibModal, pcServices, AuthService, $localStorage){
         $timeout(function(){$("#cal").fullCalendar( 'changeView', "agendaWeek" )},.1);
 
         var refs = pcServices.getCommonRefs();
@@ -49,15 +49,17 @@
         pcServices.orderArray(self.requestsList, "-sentAt");
 
         function createEvent(){
+            console.log(self.recur.end)
+            console.log(self.recur);
             self.newEvent.userId = self.user.$id ;
             calendarService.createEvent(self.newEvent, self.recur);
             self.recur.isRepeatingEvent = false ;
-            $mdDialog.cancel();
+            
         }
 
        function getAppointmentRequests(){
             if(self.requestsList.length !=0){
-                showModal("pendingRequestsModal", true);
+                showModal("pendingRequestsModal");
             }else{
                 alert('You have no appointmentRequests')
             }
@@ -65,17 +67,15 @@
 
         function deleteEvent(){
             if(self.clickedEvent.status){
-                $mdDialog.show({
+                $uibModal.open({
                     scope:$scope.$new(),
-                    template:'<md-button ng-click="ev.deleteAppointment()">Delete Appointment</md-button>',
-                    clickOutsideToClose: true
+                    template:'<button ng-click="ev.deleteAppointment()">Delete Appointment</button>'
                 })
             }else{
                 if(self.clickedEvent.recur != "once"){
                     self.recur.isRepeatingEvent = true ;
                 }else{
                     calendarService.deleteEvent(self.clickedEvent);
-                    $mdDialog.cancel();
                }
             }
         };
@@ -83,13 +83,11 @@
        function deleteSingleRecurEvent(){
             calendarService.deleteEvent(self.clickedEvent);
             self.recur.isRepeatingEvent = false ;
-            $mdDialog.cancel();
         };
 
        function deleteEventSeries(){
             calendarService.deleteEventSeries(self.clickedEvent);
             self.monthlyEvent = false ;
-            $mdDialog.cancel();
         } ;
 
         function saveCalSettings(){
@@ -102,7 +100,6 @@
 
         function confirm(){
             calendarService.confirmAppointmentChanges(self.user, self.changedEvent);
-            $mdDialog.cancel();
         };
 
         function deleteAppointment(){
@@ -111,7 +108,6 @@
 
         function reject(){
             calendarService.refreshEvents("#cal",self.events);
-            $mdDialog.cancel();
         }
 
        function updateAll(){
@@ -121,7 +117,6 @@
 
        function updateSingle(){
             calendarService.updateSingleEvent(self.changedEvent);
-            $mdDialog.cancel();
        }
 
         function setUpCalendar(){
@@ -131,21 +126,20 @@
             });
         }
 
-        function showModal(id,clickOutToClose){
-            $mdDialog.show({
+        function showModal(id){
+            $uibModal.open({
                 scope:$scope.$new(),
-                templateUrl:id,
-                clickOutsideToClose:clickOutToClose
+                templateUrl:id
             })
         }
 
         function onEventChange(event){
              if(event.hasOwnProperty('category')){
-                showModal('warningModal', false);
+                showModal('warningModal');
                 return false;
              }else{
                  if(event.recur != 'once'){
-                        showModal('updateEventsModal', false);
+                        showModal('updateEventsModal');
                     }else{
                         calendarService.updateSingleEvent(event);
                 }
@@ -180,7 +174,7 @@
                         settingsButton: {
                             text: 'Settings',
                             click: function () {
-                                showModal("settingsModal", true);
+                                showModal("settingsModal");
                             },
                             buttonIcons: false,
                             themeButtonIcons: false
@@ -199,7 +193,7 @@
                     },
                     unselectAuto: true,
                     select: function (start, end) {
-                        showModal("addEventModal", true);
+                        showModal("addEventModal");
                         self.newEvent.start = start ;
                         self.newEvent.end = end ;
                     },
@@ -208,7 +202,7 @@
                     eventClick: function (event, element) {
                         console.log(event);
                         self.clickedEvent = event ;
-                        showModal("eventDetailsModal",true);
+                        showModal("eventDetailsModal");
                     },
                     eventDrop: function ( event , element) {
                         onEventChange(event);
@@ -224,7 +218,7 @@
                     }
                 }
             }
-             if($mdMedia('xs')){
+             if($(window).width() <= 480){
                 self.uiConfig.calendar.header={  left: '',
                         center: '',
                         right: ''};

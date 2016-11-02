@@ -1,22 +1,44 @@
 <html lang="en" ng-app="checkrider">
+<style>
+    .navbar-fixed-left {
+      position: fixed;
+      height: 100%;
+    }
+
+    .navbar-fixed-left .navbar-nav > li {
+      float: none;  /* Cancel default li float: left */
+      width: auto;
+    }
+
+    .navbar-fixed-left + .container {
+      padding-left: 160px;
+    }
+
+    /* On using dropdown menu (To right shift popuped) */
+    .navbar-fixed-left .navbar-nav > li > .dropdown-menu {
+      margin-top: -50px;
+      margin-left: 140px;
+    }
+    .navbar-brand>img {
+      height: 100%;
+      padding: 15px;
+      width: auto;
+    }
+    
+</style>
 <head>
-	<!-- Metadata -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon-96x96.png">
-	<title>{{title}}</title>
-	<base href="/">
-	
-		<!-- Libraries -->
-		<!-- Stylesheets -->
-		
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{title}}</title>
+	    <base href="/">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<!-- Icons: Switch to sass later -->
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/0.3.7/awesome-bootstrap-checkbox.css">
 		<link rel="stylesheet" href="assets/bower_components/fullcalendar/dist/fullcalendar.css"/>
-		<link rel="stylesheet" href="node_modules/angular-material/angular-material.css"/>
-	
+		
+		<!-- script dependencies -->
 		<script type="text/javascript" src="assets/bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="assets/bower_components/moment/min/moment.min.js"></script>
 		<script type="text/javascript" src="node_modules/angular/angular.js"></script>
@@ -24,30 +46,35 @@
         <script type="text/javascript" src="assets/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 		<script type="text/javascript" src="node_modules/angular-animate/angular-animate.js"></script>
 		<script type="text/javascript" src="node_modules/angular-aria/angular-aria.js"></script>            
-		<script type="text/javascript" src="node_modules/angular-material/angular-material.js"></script>    
-		<script type="text/javascript" src="node_modules/angular-bootstrap/ui-bootstrap.js"></script> 
-<!--
-		<script type="text/javascript" src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
-		<script type="text/javascript" src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
--->
-       
-        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-        <script type="text/javascript" src="assets/bower_components/angular-payments/lib/angular-payments.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.2.0/ui-bootstrap.js"></script>  
         <script src="https://cdn.firebase.com/libs/angularfire/2.0.2/angularfire.min.js"></script>
         <script src="https://www.gstatic.com/firebasejs/3.0.4/firebase.js"></script>
-
+        <script src="node_modules/angular-touch/angular-touch.js"></script>
 		<script type="text/javascript" src="assets/bower_components/angular-ui-calendar/src/calendar.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js"></script>
-		<script type='text/javascript' src="assets/bower_components/fullcalendar/dist/gcal.js"></script>
+        <script type='text/javascript' src="assets/bower_components/fullcalendar/dist/gcal.js"></script>
 		<script type="text/javascript" src="node_modules/angular-cookies/angular-cookies.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script type="text/javascript" src="node_modules/elasticsearch-browser/elasticsearch.angular.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.2.0/ui-bootstrap-tpls.min.js"></script>
+
+
+	<!-- Metadata -->
+	
+        <!-- APPLICATION FILES -->
+		<!-- Stylesheets -->
+        <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon-96x96.png">
+	    <link rel="stylesheet" href="checkride.css"/>
+	    <link rel="stylesheet" href="assets/css/stylesheets/screen.css">
+	    
 		<script type="text/javascript" src="app/components/notifications/notifications.controller.js"></script>
 		<script type="text/javascript" src="app/components/reports/reports.controller.js"></script>
 		<script type="text/javascript" src="app/components/reports/reports.service.js"></script>
+        <script type="text/javascript" src="app/components/search/search.directives.js"></script>
 
-		<!--FOR DEV PURPOSES-->
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-mocks.js"></script>
-		   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-		   
 		<script>
          var config = {
                 apiKey: "AIzaSyCbEbePZr9ehBrO5U6lUVgDzxPeZMO7dnk",
@@ -55,18 +82,10 @@
                 databaseURL: "https://checkride.firebaseio.com/"
             };
             firebase.initializeApp(config);
-    </script>
+        </script>
 	
-	
-		<!-- APPLICATION FILES -->
-		<!-- Stylesheets -->
-		<link rel="stylesheet" href="assets/css/stylesheets/screen.css">
-
-		
 		<!-- Scripts -->
 		<script type="text/javascript" src="app.js"></script>
-<!--		<script type="text/javascript" src="app/controllers.js"></script>-->
-
         <script type="text/javascript" src="app/layout/layout.controller.js"></script>
         <script type="text/javascript" src="app/layout/layout.directives.js"></script>
         
@@ -86,8 +105,6 @@
         <script type="text/javascript" src="app/components/calendar/viewingCal.controller.js"></script>
 		<script type="text/javascript" src="app/components/calendar/viewingcal.directive.js"></script> 
 
-        <script type="text/javascript" src="node_modules/elasticsearch-browser/elasticsearch.angular.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.js"></script>
 		<script type="text/javascript" src="app/components/notifications/notifications.controller.js"></script>
 		
         <script type="text/javascript" src="app/directives.js"></script>
@@ -97,62 +114,32 @@
         <script type="text/javascript" src="app/users/student/student.controllers.js"></script>
         <script type="text/javascript" src="app/components/messaging/checkrider-messages.controller.js"></script>
         <script type="text/javascript" src="app/components/messaging/checkride-messages.service.js"></script>
-        		
 		<script type="text/ng-template" id="save-dialog.tmpl.html"></script>
+		
 </head>
 
 <body 
-	id="pc-main" 
-	layout="column"
+	id="pc-main"
     ng-controller='LayoutCtrl as layout'
-	flex
 	ng-cloak>
+<cr-header></cr-header>
 
 <!-- Main Wrapper -->
-
+<div ng-show="layout.isLoggedIn">
+     <cr-navigation></cr-navigation>
+</div>
 
 	<!-- HEADER -->
-	<md-toolbar md-colors="::{backgroundColor: 'default-background-200'}">
-		<cr-header></cr-header>
-	</md-toolbar>
-	
+  
 	<!-- <md-progress-linear md-mode="indeterminate" ng-disabled="true" style='height:2px;'></md-progress-linear> -->
 
     <div 
     	id="pc-app-page"  
-    	layout="row" 
-    	flex
     	style="overflow: auto; height: 100%;">
 
-		  
-			<!-- SIDEBAR -->
-		<md-sidenav
-		    hide-xs hide-gt-xs show-gt-md
-			ng-show="layout.showSidebar" 
-			md-is-locked-open="true"
-			flex="15"
-			 md-colors="::{backgroundColor: 'default-primary'}"
-			 md-theme="dark"
-			md-component-id="pc-sidenav-left">
-
-			<md-content>
-				<cr-navigation></cr-navigation>
-			</md-content>
-		</md-sidenav>
+			<div id="pc-app-content" ui-view></div>
 		
-		<!-- CONTENT -->
-		<md-content 
-			layout="column" 
-			md-scroll-y 
-	        flex
-	        layout-fill
-			>
-			
-			<div layout-fill id="pc-app-content" ui-view></div>
-		</md-content>
 	</div>
-
-
 
 </body>
 </html>

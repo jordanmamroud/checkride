@@ -1,165 +1,184 @@
 <style>
-.hide{
-	display: none;
-}
-.showing{
-	display: block;
-}
+    .hide{
+        display: none;
+    }
+    .showing{
+        display: block;
+    }
+  
 </style>
 
 <div class='toast' style='display:none'>You have a new Appointment Request</div>
 
 <!-- layout fills are needed for browser compatability !-->
 
-<div layout="row" layout-fill layout-align="center center" >
-    
-	
-        <md-tabs layout-fill md-border-bottom>
 
-            <md-tab flex="100" label="schedule">
-                <div class="md-padding">
-                      <md-menu>
-                            <md-icon hide-gt-xs ng-click="$mdOpenMenu($event)">menu</md-icon>
-                            <md-menu-content>
-                                <md-menu-item ng-click="ev.changeView('agendaDay')">Day</md-menu-item>
-                                <md-menu-item ng-click="ev.changeView('agendaWeek')">Week</md-menu-item>
-                                <md-menu-item ng-click="ev.changeView('month')">Month</md-menu-item>
-                                <md-menu-item ng-click="ev.getAppointmentRequests()">Pending Requests</md-menu-item>
-                                <md-menu-item ng-click="ev.changeView('month')">Settings</md-menu-item>
-                            </md-menu-content>
-                        </md-menu>
-                       <div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div>
-                </div>
-            </md-tab>
+<div>
+    <uib-tabset>
+    <uib-tab justified="true"; index="0" heading="Calendar">
+        
+         <div class="btn-group" uib-dropdown is-open="status.isopen">
+              <span id="single-button" type="button" uib-dropdown-toggle ng-disabled="disabled">
+                <a><i class="fa fa-bars fa-lg hidden-md hidden-lg dropdown-toggle" ></i> </a>
+              </span>
 
-            <md-tab label="approved Appointments">
-                <md-list>
-                    <md-list-item ng-repeat="apt in ev.approvedAppointments">
-                        <div class="md-list-item-text" layout="column">
-                            <h3 class="pc-capitalize" >{{"appointment with " + apt.name}}</h3>
-                            <h3>{{"Appointment Start: " + apt.start }}</h3>
-                            <h3>{{"Appointment End: " +apt.end }}</h3>
-                            <md-divider></md-divider>
-                        </div>
-                    </md-list-item>
-                </md-list>
-            </md-tab>
-        </md-tabs>
-		
-	</div>
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <li role="menuitem"><a ng-click="ev.changeView('agendaDay')">Day</a></li>
+                <li role="menuitem"><a ng-click="ev.changeView('agendaWeek')">Week</a></li>
+                <li role="menuitem"><a ng-click="ev.changeView('month')">Month</a></li>
+                <li role="menuitem"><a ng-click="ev.getAppointmentRequests()">Pending Requests</a></li>
+                <li class="divider"></li>
+                <li role="menuitem"><a href="#">Separated link</a></li>
+              </ul>
+        </div>
+
+            
+        <div class="calendar" data-ui-calendar="ev.uiConfig.calendar" id="cal"></div>
+    </uib-tab>
+        
+    <uib-tab index="1" heading="Approved Appointments">
+        
+        <ul class="list-group">
+            <li ng-repeat="apt in ev.approvedAppointments" class="list-group-item">  
+                <h3 class="pc-capitalize" >{{"appointment with " + apt.name}}</h3>
+                <h3>{{"Appointment Start: " + apt.start }}</h3>
+                <h3>{{"Appointment End: " +apt.end }}</h3>
+            </li>
+        </ul>
+    </uib-tab>
+        
+    </uib-tabset>
+</div>
 
     <script id='warningModal' type="text/ng-template">
-       <md-toolbar layout-padding>
-            <h4>Are you sure that you would like to adjust your appointment time</h2>
-        </md-toolbar>
-        <md-button ng-click="ev.confirm()">Request new appointment time</md-button>
-        <md-button ng-click="ev.reject()">Keep the same appointment time</md-button>
+     
+        <h4>Are you sure that you would like to adjust your appointment time</h2>
+        
+        <button ng-click="ev.confirm()">Request new appointment time</button>
+        <button ng-click="ev.reject()">Keep the same appointment time</button>
 
     </script>
    
     <script id="updateEventsModal" type="text/ng-template">
-        <md-button ng-click="ev.updateSingle()">Update Just this event</md-button>
+        <button ng-click="ev.updateSingle()">Update Just this event</button>
         <md-divider></md-divider>
-        <md-button ng-click="ev.updateAll()"> Update all events</md-button>
+        <button ng-click="ev.updateAll()"> Update all events</button>
     </script>
 
 	<script id="addEventModal" type="text/ng-template">
 
-		<div layout-align="center center">
+		<div>
+			<div class="text-center">
 
-			<md-content flex="100" md-panel>
-
-				<md-toolbar layout-padding>
-					<h2>Create Event</h2>
-				</md-toolbar>
-				
-				<div  layout-padding>
+                <h4 class="panel panel-heading" >Create an Event</h4>
+				<div>
 					<h4>When:</h4>
 					<p>{{ev.newEvent.start.toString()}}</p>
 					<p>{{ev.newEvent.end.toString()}}</p>
-					
-					
-					<md-input-container>
-						<input type="text" placeholder="enter Your event" ng-model="ev.newEvent.title" id="eventInput">
-<!--							<md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>-->
-					</md-input-container>
-                    <md-checkbox ng-model="ev.newEvent.isAppointmentSlot">Appointment Slot?</md-checkbox>
-					<md-checkbox ng-model="ev.recur.isRepeatingEvent">Repeating Event?</md-checkbox>
+				
+				    <input type="text" placeholder="enter Your event" ng-model="ev.newEvent.title" id="eventInput">
 
+                    <div class="checkbox">
+                        <input ng-model="ev.newEvent.isAppointmentSlot" type="checkbox">
+                        <label>
+                            Appointment Slot?
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox">
+                        <input ng-model="ev.recur.isRepeatingEvent" type="checkbox">
+                        <label>
+                            Repeating Event?
+                        </label>
+                    </div>
+            
 					<div ng-class="{hide:ev.recur.isRepeatingEvent == false}">
+                        
 						<label>Frequency</label>
-						<md-select ng-model="ev.recur.frequency" placeholder="{{ev.recur.frequency}}"name="frequency">
-							<md-option>Daily</md-option>
-							<md-option>Weekly</md-option>
-							<md-option>Monthly</md-option>
-						</md-select><br>
+						<select ng-model="ev.recur.frequency" placeholder="{{ev.recur.frequency}}"name="frequency">
+							<option>Daily</option>
+							<option>Weekly</option>
+							<option>Monthly</option>
+						<select><br>
 
-						<md-radio-group ng-model="ev.recur.end">
-							<md-radio-button value="2020/02/01" class="md-primary">Never</md-radio-button>
+						<form>
+							<input name="endDate" ng-model="ev.recur.end" type='radio' value="2020/02/01">
+                            <label>Never</label>
 							<div>
+                                <input ng-model="ev.recur.end" type="radio" value="{{ev.numOccur}}">
+                                <label> After </label>
+                                
+                                <input ng-model="ev.numOccur"  type="number">
 								<label>Occurences</label>
-								<md-radio-button value="{{ev.numOccur}}">After</md-radio-button>
-								<input ng-model="ev.numOccur" type="number">
 							</div>
-							   
-							<md-radio-button value="{{ev.endDate}}">End Date</md-radio-button>
-							<input type="date" ng-model="ev.endDate">
-						</md-radio-group>
+                            
+							<input name="endDate" ng-model="ev.recur.end"  type="radio" value="{{ev.endDate}}">   
+                            <label>End Date</label>
+							
+							<input name="endDate" type="date" ng-model="ev.endDate">
+						</form>
 
 						<form ng-class="{hide: ev.recur.frequency != 'Weekly'}">
 							<label ng-repeat="dow in ev.daysOfWeek">
-								<md-checkbox type="checkbox" ng-model="dow.selected">{{dow.day}}</md-checkbox>
+                               <div class="checkbox">
+                                    <input type="checkbox" ng-model="dow.selected">
+                                    <label for="checkbox1">
+                                        {{dow.day}}
+                                    </label>
+                                </div>
 							</label>
 						</form>
                     </div>
-                    <md-button class="md-raised md-primary" ng-click="ev.createEvent()">Create</md-button>		
+                    <button class="btn btn-primary" ng-click="ev.createEvent()">Create</button>		
 				</div>
-			</md-content>
+            </div>
 			
 		</div>
 		
 	</script>
 		
 	<script id="eventDetailsModal" type="text/ng-template">
-		<md-toolbar>
-			<h1>{{ev.clickedEvent.title}}</h1>
-		</md-toolbar>
-		<md-content>
+		
+        <h4 class="panel panel-heading" >{{ev.clickedEvent.title}}</h4>
+	
+		<div>
 			<p>Start: {{ev.clickedEvent.start.toString()}}</p>
 			<p>End: {{ev.clickedEvent.end.toString()}}</p>
 			<p ng-show="ev.clickedEvent.category">Category: {{ev.clickedEvent.category}}</p>
 			<p ng-show="ev.clickedEvent.rating">Rating: {{ev.clickedEvent.rating}}</p>
-			<md-button ng-class="{hide:ev.clickedEvent.recur !='once'}" class="md-raised md-primary" ng-click="ev.deleteEvent()">Delete Event</md-button>
+			<button ng-class="{hide:ev.clickedEvent.recur !='once'}" class="md-raised md-primary" ng-click="ev.deleteEvent()">Delete Event</button>
+            
 			<div ng-class="{hide: ev.clickedEvent.recur == 'once'}">
-				<md-button class="md-primary md-raised" ng-click="ev.deleteSingleRecurEvent()">remove just this event</md-button>
-				<md-button class="md-primary md-raised" ng-click="ev.deleteEventSeries()">remove all events</md-button>
+				<button class="btn btn-primary" ng-click="ev.deleteSingleRecurEvent()">remove just this event</button>
+				<button class="btn btn-primary" ng-click="ev.deleteEventSeries()">remove all events</button>
 			</div>
 			
-		</md-content>
+		</div>
 	</script> 
 
 	<script id="settingsModal" type="text/ng-template" >
-		<md-subheader>
-			<h3>Settings</h3>
-		</md-subheader>
-		<div layout-padding>
-			<md-input-container>
-				<label>Day Start Time</label>
-				<input ng-model="ev.calSettings.startTime">
-			</md-input-container>
+		
+        <h3>Settings</h3>
+        
+		<div>
+			
+            <label>Day Start Time</label>
+            <input ng-model="ev.calSettings.startTime">
 
-			<md-input-container>
-				<label>Day End Time</label>
-				<input ng-model="ev.calSettings.endTime">
-			</md-input-container>
+            <label>Day End Time</label>
+            <input ng-model="ev.calSettings.endTime">
+
+            <label>Gcal Id</label>
+            <input ng-model="ev.calSettings.gcalId">
 			
-			<md-input-container>
-				<label>Gcal Id</label>
-				<input ng-model="ev.calSettings.gcalId">
-			</md-input-container>
 			
-			<md-button class="md-primary md-raised" id="saveButton" ng-click="ev.saveCalSettings()">Save</md-button>
-			<md-checkbox id="googleSync">Sync with Google Calendar</md-checkbox>
+			<button class="btn btn-primary" id="saveButton" ng-click="ev.saveCalSettings()">Save</button>
+            <div class="checkbox">
+                <input type="checkbox" ng-model="">
+                <label>
+                    Sync with Google Calendar
+                </label>
+            </div>
 		</div>
 	</script> 
 
